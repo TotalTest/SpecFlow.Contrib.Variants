@@ -99,7 +99,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SpecFlow.Variants.SpecFlowPlugin\SpecFlow.Variants.SpecFlowPlugin.csproj">
+    <ProjectReference Include="..\SpecFlow.Variants.SpecFlowPlugin\SpecFlow.Variants.SpecFlowPlugin.csproj">
       <Project>{2d671486-4dd8-48b5-910c-6a01d2f80c3c}</Project>
       <Name>SpecFlow.Variants.SpecFlowPlugin</Name>
     </ProjectReference>

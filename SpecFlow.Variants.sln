@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.SpecFlowPlugin", "src\SpecFlow.Variants.SpecFlowPlugin\SpecFlow.Variants.SpecFlowPlugin.csproj", "{2D671486-4DD8-48B5-910C-6A01D2F80C3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.UnitTests", "tests\SpecFlow.Variants.UnitTests\SpecFlow.Variants.UnitTests.csproj", "{82CC2990-0DD5-41FD-B4C2-44FAB96CAF9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.UnitTests", "src\SpecFlow.Variants.UnitTests\SpecFlow.Variants.UnitTests.csproj", "{82CC2990-0DD5-41FD-B4C2-44FAB96CAF9C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.AcceptanceTests", "tests\SpecFlow.Variants.AcceptanceTests\SpecFlow.Variants.AcceptanceTests.csproj", "{4D3B56F5-01B5-4194-9EB4-72E0EF93C092}"
 EndProject
