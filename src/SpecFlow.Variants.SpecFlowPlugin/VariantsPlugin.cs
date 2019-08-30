@@ -14,9 +14,9 @@ using TechTalk.SpecFlow.Utils;
 
 namespace SpecFlow.Variants.SpecFlowPlugin //TODO: Remove appconfig if not used
 {
-    internal class VariantsPlugin : IGeneratorPlugin
+    public class VariantsPlugin : IGeneratorPlugin
     {
-        private string _variantKey = "Config";
+        private string _variantKey = "Variant";
 
         public void Initialize(GeneratorPluginEvents generatorPluginEvents, GeneratorPluginParameters generatorPluginParameters)
         {

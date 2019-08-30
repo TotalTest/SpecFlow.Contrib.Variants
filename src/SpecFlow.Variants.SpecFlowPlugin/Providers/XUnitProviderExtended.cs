@@ -9,7 +9,7 @@ using TechTalk.SpecFlow.Utils;
 
 namespace SpecFlow.Variants.SpecFlowPlugin.Providers
 {
-    internal class XUnitProviderExtended : IUnitTestGeneratorProvider
+    public class XUnitProviderExtended : IUnitTestGeneratorProvider
     {
         private readonly CodeDomHelper _codeDomHelper;
         private readonly string _variantKey;

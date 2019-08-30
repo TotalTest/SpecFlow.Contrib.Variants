@@ -18,7 +18,7 @@ using TechTalk.SpecFlow.Utils;
 
 namespace SpecFlow.Variants.SpecFlowPlugin.Generator
 {
-    internal class FeatureGeneratorExtended : IFeatureGenerator
+    public class FeatureGeneratorExtended : IFeatureGenerator
     {
         private readonly IUnitTestGeneratorProvider _testGeneratorProvider;
         private readonly CodeDomHelper _codeDomHelper;
