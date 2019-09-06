@@ -108,7 +108,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Providers
 
             // Filter arguments to build the nunit TestName attribute
             var list2 = arguments.Where(a => !a.StartsWith(_variantKey) && a != null).Select(arg => new CodeAttributeArgument(new CodePrimitiveExpression(arg))).ToList();
-            var str = string.Concat(list2.Select(arg => string.Format("\"{0}\" ,", ((CodePrimitiveExpression)arg.Value).Value))).TrimEnd(' ', ',').Replace('.', '_');
+            var str = string.Concat(list2.Select(arg => string.Format("\"{0}\", ", ((CodePrimitiveExpression)arg.Value).Value))).TrimEnd(' ', ',').Replace('.', '_');
             var testName = variant != null ? testMethod.Name + " with " + variant?.Split(':')[1] + " and " + str : testMethod.Name + " with " + str;
             list.Add(new CodeAttributeArgument("TestName", new CodePrimitiveExpression(testName)));
 

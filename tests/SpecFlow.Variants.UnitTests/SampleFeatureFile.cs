@@ -10,6 +10,7 @@
         public const string ScenarioTitle_TagsExamplesAndInlineData = "A scenario with examples, inline table and text";
 
         public static readonly string[] Variants = { "Chrome", "Firefox", "IE", "Opera" };
+
         public static readonly string FeatureFileDocument = $@"
             Feature: {FeatureTitle}
             

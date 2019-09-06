@@ -1,5 +1,7 @@
-﻿using SpecFlow.Variants.SpecFlowPlugin.Providers;
+﻿using Gherkin.Ast;
+using SpecFlow.Variants.SpecFlowPlugin.Providers;
 using System.CodeDom;
+using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow.Parser;
 using Xunit;
@@ -24,9 +26,9 @@ namespace SpecFlow.Variants.UnitTests
         [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData)]
         public void NUnitProviderExtended_CorrectNumberOfMethodsGenerated(string scenarioName)
         {
-            var scenario = _document.SpecFlowFeature.Children.FirstOrDefault(a => a.Name == scenarioName);
+            var scenario = _document.GetScenario<ScenarioDefinition>(scenarioName);
             var expectedNumOfMethods = ExpectedNumOfMethods(scenario);
-            var actualNumOfMethods = NumOfMethods(_generatedCode, scenario);
+            var actualNumOfMethods = _generatedCode.GetTestMethods(scenario).Count;
 
             Assert.Equal(expectedNumOfMethods, actualNumOfMethods);
         }
@@ -38,6 +40,104 @@ namespace SpecFlow.Variants.UnitTests
             var compilerResults = GetCompilerResults(_generatedCode, assemblies);
 
             Assert.Empty(compilerResults.Errors);
+        }
+
+        [Fact]
+        public void NUnitProviderExtended_CorrectNumberOfTestCaseAttributes()
+        {
+            TestSetupForAttributes(out var scenario, out _, out var testCaseAttributes, out _);
+
+            var expectedNumOfTestCaseAttributes = scenario.GetTagsByNameStart(SampleFeatureFile.Variant).Count
+                * scenario.GetExamplesTableBody().Count;
+
+            Assert.Equal(expectedNumOfTestCaseAttributes, testCaseAttributes.Count);
+        }
+
+        [Fact]
+        public void NUnitProviderExtended_TestCaseAttributesHaveCorrectArguments()
+        {
+            TestSetupForAttributes(out _, out _, out var testCaseAttributes, out var tableBody);
+
+            var attributeCounter = 0;
+            for (var i = 0; i < tableBody.Count; i++)
+            {
+                var cells = tableBody[i].Cells.ToList();
+                for (var j = 0; j < SampleFeatureFile.Variants.Length; j++)
+                {
+                    var attArg = testCaseAttributes[attributeCounter].Arguments.GetAttributeArguments();
+                    attributeCounter++;
+
+                    // Check third argument is the variant
+                    var variantArgumentMatches = attArg[cells.Count].GetArgumentValue() == SampleFeatureFile.Variants[j];
+                    Assert.True(variantArgumentMatches);
+
+                    // Check initial arguments are examples table row cells
+                    for (var k = 0; k < cells.Count; k++)
+                    {
+                        var exampleValueMatches = attArg[k].GetArgumentValue() == cells[k].Value;
+                        Assert.True(exampleValueMatches);
+                    }
+                }
+            }
+        }
+
+        [Fact]
+        public void NUnitProviderExtended_TestCaseAttributesHaveCorrectCategory()
+        {
+            TestSetupForAttributes(out var scenario, out var testMethod, out var testCaseAttributes, out var tableBody);
+
+            var attributeCounter = 0;
+            for (var i = 0; i < tableBody.Count; i++)
+            {
+                var cells = tableBody[i].Cells.ToList();
+                for (var j = 0; j < SampleFeatureFile.Variants.Length; j++)
+                {
+                    var attArg = testCaseAttributes[attributeCounter].Arguments.GetAttributeArguments();
+                    attributeCounter++;
+
+                    // Check forth argument is the category with the correct value
+                    var varantTag = scenario.GetTagsByNameExact($"{SampleFeatureFile.Variant}:{SampleFeatureFile.Variants[j]}").GetNameWithoutAt();
+                    var nonVariantTags = scenario.GetTagsExceptNameStart(SampleFeatureFile.Variant).Select(a => a.GetNameWithoutAt());
+                    var expCategoryValue = $"{varantTag},{string.Join(",", nonVariantTags)}";
+                    var categoryAttr = attArg[cells.Count + 2];
+
+                    Assert.Equal("Category", categoryAttr.Name);
+                    Assert.Equal(expCategoryValue, categoryAttr.GetArgumentValue());
+                }
+            }
+        }
+
+        [Fact]
+        public void NUnitProviderExtended_TestCaseAttributesHaveCorrectTestName()
+        {
+            TestSetupForAttributes(out _, out var testMethod, out var testCaseAttributes, out var tableBody);
+
+            var attributeCounter = 0;
+            for (var i = 0; i < tableBody.Count; i++)
+            {
+                var cells = tableBody[i].Cells.Select(a => a.Value).ToList();
+                for (var j = 0; j < SampleFeatureFile.Variants.Length; j++)
+                {
+                    var attArg = testCaseAttributes[attributeCounter].Arguments.GetAttributeArguments();
+                    attributeCounter++;
+
+                    // Check forth argument is the category with the correct value
+                    var currentVariant = SampleFeatureFile.Variants[j];
+                    var expTestName = $"{testMethod.Name} with {currentVariant} and {string.Join(", ", cells)}";
+                    var testNameAttr = attArg[cells.Count + 3];
+
+                    Assert.Equal("TestName", testNameAttr.Name);
+                    Assert.Equal(expTestName, testNameAttr.GetArgumentValue().Replace("\"", ""));
+                }
+            }
+        }
+
+        private void TestSetupForAttributes(out ScenarioOutline scenario, out CodeTypeMember testMethod, out IList<CodeAttributeDeclaration> testCaseAttributes, out IList<TableRow> tableBody)
+        {
+            scenario = _document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsAndExamples);
+            testMethod = _generatedCode.GetTestMethods(scenario).First();
+            testCaseAttributes = testMethod.GetMethodAttributes("NUnit.Framework.TestCaseAttribute");
+            tableBody = scenario.GetExamplesTableBody();
         }
     }
 }

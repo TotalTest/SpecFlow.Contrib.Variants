@@ -1,6 +1,6 @@
-﻿using SpecFlow.Variants.SpecFlowPlugin.Providers;
+﻿using Gherkin.Ast;
+using SpecFlow.Variants.SpecFlowPlugin.Providers;
 using System.CodeDom;
-using System.Linq;
 using TechTalk.SpecFlow.Parser;
 using Xunit;
 
@@ -24,9 +24,9 @@ namespace SpecFlow.Variants.UnitTests
         [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData)]
         public void MsTestProviderExtended_CorrectNumberOfMethodsGenerated(string scenarioName)
         {
-            var scenario = _document.SpecFlowFeature.Children.FirstOrDefault(a => a.Name == scenarioName);
+            var scenario = _document.GetScenario<ScenarioDefinition>(scenarioName);
             var expectedNumOfMethods = ExpectedNumOfMethods(scenario);
-            var actualNumOfMethods = NumOfMethods(_generatedCode, scenario);
+            var actualNumOfMethods = _generatedCode.GetTestMethods(scenario).Count;
 
             Assert.Equal(expectedNumOfMethods, actualNumOfMethods);
         }

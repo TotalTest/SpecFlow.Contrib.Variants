@@ -7,7 +7,6 @@ using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using TechTalk.SpecFlow.Configuration;
 using TechTalk.SpecFlow.Generator.UnitTestConverter;
 using TechTalk.SpecFlow.Generator.UnitTestProvider;
@@ -22,24 +21,19 @@ namespace SpecFlow.Variants.UnitTests
 
         protected SpecFlowDocument CreateSpecFlowDocument()
         {
-            return ParseDocumentFromString(SampleFeatureFile.FeatureFileDocument);
+            var parser = new SpecFlowGherkinParser(new CultureInfo("en-GB"));
+            using (var reader = new StringReader(SampleFeatureFile.FeatureFileDocument))
+            {
+                return parser.Parse(reader, null);
+            }
         }
 
         protected CodeNamespace SetupFeatureGenerator<T>(SpecFlowDocument document, string testClassName = "TestClassName", string tagetNamespace = "Target.Namespace") where T : IUnitTestGeneratorProvider
         {
             var codeDomHelper = new CodeDomHelper(CodeDomProviderLanguage.CSharp);
-            _unitTestGeneratorProvider = (IUnitTestGeneratorProvider)Activator.CreateInstance(typeof(T), codeDomHelper, SampleFeatureFile.Variant);
+            _unitTestGeneratorProvider = (T)Activator.CreateInstance(typeof(T), codeDomHelper, SampleFeatureFile.Variant);
             var featureGenerator = FeatureGenerator(codeDomHelper);
             return featureGenerator.GenerateUnitTestFixture(document, testClassName, tagetNamespace);
-        }
-
-        protected SpecFlowDocument ParseDocumentFromString(string documentSource, CultureInfo parserCultureInfo = null)
-        {
-            var parser = new SpecFlowGherkinParser(parserCultureInfo ?? new CultureInfo("en-GB"));
-            using (var reader = new StringReader(documentSource))
-            {
-                return parser.Parse(reader, null);
-            }
         }
 
         private IFeatureGenerator FeatureGenerator(CodeDomHelper codeDomHelper)
@@ -55,14 +49,7 @@ namespace SpecFlow.Variants.UnitTests
         {
             var ccu = new CodeCompileUnit();
             ccu.Namespaces.Add(generatedCode);
-            var options = new CompilerParameters(assemblies);
-            return new CSharpCodeProvider().CompileAssemblyFromDom(options, ccu);
-        }
-
-        protected int NumOfMethods(CodeNamespace generatedCode, ScenarioDefinition scenario)
-        {
-            var members = generatedCode.Types[0].Members.Cast<CodeTypeMember>().Where(a => a.Name.StartsWith(scenario.Name.Replace(" ", "").Replace(",", ""), StringComparison.InvariantCultureIgnoreCase));
-            return members.Count();
+            return new CSharpCodeProvider().CompileAssemblyFromDom(new CompilerParameters(assemblies), ccu);
         }
 
         protected int ExpectedNumOfMethods(ScenarioDefinition scenario)
@@ -72,14 +59,13 @@ namespace SpecFlow.Variants.UnitTests
             {
                 if (scenario.HasTags())
                 {
-                    var variantTags = scenario.GetTags().Count(a => a.GetNameWithoutAt().StartsWith(SampleFeatureFile.Variant));
-                    if (variantTags > 0)
-                        numOfMethods = variantTags;
+                    var variantTags = scenario.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
+                    if (variantTags > 0) numOfMethods = variantTags;
                 }
 
                 if (scenario is ScenarioOutline so)
                 {
-                    numOfMethods *= so.Examples.First().TableBody.Count();
+                    numOfMethods *= so.GetExamplesTableBody().Count;
                     numOfMethods++;
                 }
 
@@ -87,14 +73,12 @@ namespace SpecFlow.Variants.UnitTests
             }
             else
             {
-                if (scenario is ScenarioOutline so)
-                    return numOfMethods;
+                if (scenario is ScenarioOutline) return numOfMethods;
 
                 if (scenario.HasTags())
                 {
-                    var variantTags = scenario.GetTags().Count(a => a.GetNameWithoutAt().StartsWith(SampleFeatureFile.Variant));
-                    if (variantTags > 0)
-                        numOfMethods = variantTags;
+                    var variantTags = scenario.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
+                    if (variantTags > 0) numOfMethods = variantTags;
                 }
 
                 return numOfMethods;
