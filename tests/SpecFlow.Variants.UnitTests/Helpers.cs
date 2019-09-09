@@ -14,12 +14,6 @@ namespace SpecFlow.Variants.UnitTests
             return (T)document.SpecFlowFeature.Children.FirstOrDefault(a => a.Name == scenarioName);
         }
 
-        public static IList<CodeTypeMember> GetTestMethods(this CodeNamespace generatedCode, ScenarioDefinition scenario)
-        {
-            return generatedCode.Types[0].Members.Cast<CodeTypeMember>().Where(a => a.Name.StartsWith(scenario.Name.Replace(" ", "")
-                .Replace(",", ""), StringComparison.InvariantCultureIgnoreCase)).ToList();
-        }
-
         public static IList<Tag> GetTagsByNameStart(this ScenarioDefinition scenario, string tagName)
         {
             return scenario.GetTags().Where(a => a.GetNameWithoutAt().StartsWith(tagName)).ToList();
@@ -40,9 +34,25 @@ namespace SpecFlow.Variants.UnitTests
             return scenario.Examples.First().TableBody.ToList();
         }
 
+        public static IList<TableCell> GetExamplesTableHeaders(this ScenarioOutline scenario)
+        {
+            return scenario.Examples.First().TableHeader.Cells.ToList();
+        }
+
+        public static IList<CodeTypeMember> GetTestMethods(this CodeNamespace generatedCode, ScenarioDefinition scenario)
+        {
+            return generatedCode.Types[0].Members.Cast<CodeTypeMember>().Where(a => a.Name.StartsWith(scenario.Name.Replace(" ", "")
+                .Replace(",", ""), StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+
         public static IList<CodeAttributeDeclaration> GetMethodAttributes(this CodeTypeMember member, string attributeName)
         {
             return member.CustomAttributes.Cast<CodeAttributeDeclaration>().Where(a => a.Name == attributeName).ToList();
+        }
+
+        public static IList<CodeParameterDeclarationExpression> GetMethodParameters(this CodeTypeMember member)
+        {
+            return ((CodeMemberMethod)member).Parameters.Cast<CodeParameterDeclarationExpression>().ToList();
         }
 
         public static IList<CodeAttributeArgument> GetAttributeArguments(this CodeAttributeArgumentCollection args)

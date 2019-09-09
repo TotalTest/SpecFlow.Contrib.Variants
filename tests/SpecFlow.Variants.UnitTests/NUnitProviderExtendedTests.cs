@@ -67,16 +67,16 @@ namespace SpecFlow.Variants.UnitTests
                     var attArg = testCaseAttributes[attributeCounter].Arguments.GetAttributeArguments();
                     attributeCounter++;
 
-                    // Check third argument is the variant
-                    var variantArgumentMatches = attArg[cells.Count].GetArgumentValue() == SampleFeatureFile.Variants[j];
-                    Assert.True(variantArgumentMatches);
-
                     // Check initial arguments are examples table row cells
                     for (var k = 0; k < cells.Count; k++)
                     {
                         var exampleValueMatches = attArg[k].GetArgumentValue() == cells[k].Value;
                         Assert.True(exampleValueMatches);
                     }
+
+                    // Check third argument is the variant
+                    var variantArgumentMatches = attArg[cells.Count].GetArgumentValue() == SampleFeatureFile.Variants[j];
+                    Assert.True(variantArgumentMatches);
                 }
             }
         }
