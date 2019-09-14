@@ -84,7 +84,7 @@ namespace SpecFlow.Variants.UnitTests
         [Fact]
         public void NUnitProviderExtended_TestCaseAttributesHaveCorrectCategory()
         {
-            TestSetupForAttributes(out var scenario, out var testMethod, out var testCaseAttributes, out var tableBody);
+            TestSetupForAttributes(out var scenario, out _, out var testCaseAttributes, out var tableBody);
 
             var attributeCounter = 0;
             for (var i = 0; i < tableBody.Count; i++)

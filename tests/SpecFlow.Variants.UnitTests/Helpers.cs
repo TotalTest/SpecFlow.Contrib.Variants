@@ -45,6 +45,16 @@ namespace SpecFlow.Variants.UnitTests
                 .Replace(",", ""), StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
 
+        public static IList<CodeTypeMember> GetRowTestMethods(this CodeNamespace generatedCode, ScenarioDefinition scenario)
+        {
+            return generatedCode.GetTestMethods(scenario).Where(a => a.CustomAttributes.Count > 0).ToList();
+        }
+
+        public static CodeTypeMember GetRowTestBaseMethod(this CodeNamespace generatedCode, ScenarioDefinition scenario)
+        {
+            return generatedCode.GetTestMethods(scenario).FirstOrDefault(a => a.CustomAttributes.Count == 0);
+        }
+
         public static IList<CodeAttributeDeclaration> GetMethodAttributes(this CodeTypeMember member, string attributeName)
         {
             return member.CustomAttributes.Cast<CodeAttributeDeclaration>().Where(a => a.Name == attributeName).ToList();

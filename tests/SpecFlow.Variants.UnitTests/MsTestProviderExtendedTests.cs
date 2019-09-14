@@ -46,10 +46,9 @@ namespace SpecFlow.Variants.UnitTests
         [Fact]
         public void MsTestProviderExtended_BaseTestMethodHasCorrectArguments()
         {
-            var scenario = _document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsAndExamples);
-            var baseTestMethod = GetRowTestMethods(scenario, true).First();
+            TestSetupForAttributes(out var scenario, out _, out var tableHeaders, out _);
+            var baseTestMethod = _generatedCode.GetRowTestBaseMethod(scenario);
             var methodParams = baseTestMethod.GetMethodParameters();
-            var tableHeaders = scenario.GetExamplesTableHeaders();
 
             for (var i = 0; i < tableHeaders.Count; i++)
             {
@@ -60,10 +59,7 @@ namespace SpecFlow.Variants.UnitTests
         [Fact]
         public void MsTestProviderExtended_TestMethodsHaveCorrectProperties()
         {
-            var scenario = _document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsAndExamples);
-            var testMethods = GetRowTestMethods(scenario);
-            var tableHeaders = scenario.GetExamplesTableHeaders();
-            var tableBody = scenario.GetExamplesTableBody();
+            TestSetupForAttributes(out _, out var testMethods, out var tableHeaders, out var tableBody);
 
             var rowCounter = 0;
             var variantCounter = 0;
@@ -110,8 +106,7 @@ namespace SpecFlow.Variants.UnitTests
         [Fact]
         public void MsTestProviderExtended_TestMethodsHaveCorrectCategories()
         {
-            var scenario = _document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsAndExamples);
-            var testMethods = GetRowTestMethods(scenario);
+            TestSetupForAttributes(out var scenario, out var testMethods, out _, out _);
 
             var variantCounter = 0;
             for (var i = 0; i < testMethods.Count; i++)
@@ -135,9 +130,7 @@ namespace SpecFlow.Variants.UnitTests
         [Fact]
         public void MsTestProviderExtended_TestMethodsHaveCorrectDescriptionAndName()
         {
-            var scenario = _document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsAndExamples);
-            var testMethods = GetRowTestMethods(scenario);
-            var tableBody = scenario.GetExamplesTableBody();
+            TestSetupForAttributes(out var scenario, out var testMethods, out _, out var tableBody);
 
             var rowCounter = 0;
             var variantCounter = 0;
@@ -164,10 +157,12 @@ namespace SpecFlow.Variants.UnitTests
             }
         }
 
-        private IList<CodeTypeMember> GetRowTestMethods(ScenarioDefinition scenario, bool isCommonMethod = false)
+        private void TestSetupForAttributes(out ScenarioOutline scenario, out IList<CodeTypeMember> testMethods, out IList<TableCell> tableHeaders, out IList<TableRow> tableBody)
         {
-            return !isCommonMethod ? _generatedCode.GetTestMethods(scenario).Where(a => a.CustomAttributes.Count > 0).ToList()
-                : _generatedCode.GetTestMethods(scenario).Where(a => a.CustomAttributes.Count == 0).ToList();
+            scenario = _document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsAndExamples);
+            testMethods = _generatedCode.GetRowTestMethods(scenario);
+            tableHeaders = scenario.GetExamplesTableHeaders();
+            tableBody = scenario.GetExamplesTableBody();
         }
     }
 }
