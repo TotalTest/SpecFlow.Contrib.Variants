@@ -33,7 +33,8 @@ steps:
     configuration: '$(buildConfiguration)'
     testSelector: testAssemblies
     testAssemblyVer2: |
-     **\tests\SpecFlow.Variants.UnitTests\*.csproj
-     **\tests\SpecFlow.Variants.UnitTests\bin\*\*test.dll
-     !**\*TestAdapter.dll
+     **\tests\SpecFlow.Variants.UnitTests\bin\$(BuildConfiguration)\*Tests.dll
+     !**\tests\SpecFlow.Variants.UnitTests\bin\$(BuildConfiguration)\*testadapter.dll
+     !**\tests\SpecFlow.Variants.UnitTests\obj\**
      !**\obj\**
+     !**\*.testadapter.dll
