@@ -32,5 +32,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     testSelector: testAssemblies
-    testAssemblyVer2: |
-     **\tests\*\bin\$(BuildConfiguration)\*Tests.dll
+	testAssemblyVer2: |
+     **\*Tests.dll
+     !**\*TestAdapter.dll
+     !**\obj\**
