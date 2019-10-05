@@ -1,7 +1,9 @@
 ﻿using Gherkin.Ast;
 using SpecFlow.Variants.SpecFlowPlugin.Providers;
+using System;
 using System.CodeDom;
 using System.Linq;
+using TechTalk.SpecFlow.Generator;
 using TechTalk.SpecFlow.Parser;
 using Xunit;
 
@@ -14,7 +16,7 @@ namespace SpecFlow.Variants.UnitTests
 
         public XUnitProviderExtendedTests()
         {
-            _document = CreateSpecFlowDocument();
+            _document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             _generatedCode = SetupFeatureGenerator<XUnitProviderExtended>(_document);
         }
 
@@ -23,17 +25,17 @@ namespace SpecFlow.Variants.UnitTests
         [InlineData(SampleFeatureFile.ScenarioTitle_Tags)]
         [InlineData(SampleFeatureFile.ScenarioTitle_TagsAndExamples)]
         [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData)]
-        public void XUnitProviderExtended_CorrectNumberOfMethodsGenerated(string scenarioName)
+        public void XUnitProviderExtended_ScenarioVariants_CorrectNumberOfMethodsGenerated(string scenarioName)
         {
             var scenario = _document.GetScenario<ScenarioDefinition>(scenarioName);
-            var expectedNumOfMethods = ExpectedNumOfMethods(scenario);
+            var expectedNumOfMethods = ExpectedNumOfMethodsForFeatureVariants(scenario);
             var actualNumOfMethods = _generatedCode.GetTestMethods(scenario).Count;
 
             Assert.Equal(expectedNumOfMethods, actualNumOfMethods);
         }
 
         [Fact]
-        public void XUnitProviderExtended_SpecflowGeneratedCodeCompiles()
+        public void XUnitProviderExtended_ScenarioVariants_SpecflowGeneratedCodeCompiles()
         {
             var assemblies = new[] { "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "xunit.core.dll", "xunit.abstractions.dll" };
             var compilerResults = GetCompilerResults(_generatedCode, assemblies);
@@ -42,7 +44,7 @@ namespace SpecFlow.Variants.UnitTests
         }
 
         [Fact]
-        public void XUnitProviderExtended_BaseTestMethodHasCorrectArguments()
+        public void XUnitProviderExtended_ScenarioVariants_BaseTestMethodHasCorrectArguments()
         {
             var scenario = _document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsAndExamples);
             var baseTestMethod = _generatedCode.GetRowTestBaseMethod(scenario);
@@ -56,7 +58,7 @@ namespace SpecFlow.Variants.UnitTests
         }
 
         [Fact]
-        public void XUnitProviderExtended_TestMethodsHasCorrectFactAttribute()
+        public void XUnitProviderExtended_ScenarioVariants_TestMethodsHasCorrectFactAttribute()
         {
             var scenario = _document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsAndExamples);
             var testMethods = _generatedCode.GetRowTestMethods(scenario);
@@ -83,7 +85,7 @@ namespace SpecFlow.Variants.UnitTests
         }
 
         [Fact]
-        public void XUnitProviderExtended_TestMethodsHaveCorrectTraits()
+        public void XUnitProviderExtended_ScenarioVariants_TestMethodsHaveCorrectTraits()
         {
             var scenario = _document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsAndExamples);
             var testMethods = _generatedCode.GetRowTestMethods(scenario);
@@ -138,6 +140,43 @@ namespace SpecFlow.Variants.UnitTests
                 if (i % 2 != 0) variantCounter++;
                 if (rowCounter == tableBody.Count) rowCounter = 0;
             }
+        }
+
+        [Fact]
+        public void XUnitProviderExtended_FeatureVariants_CorrectNumberOfMethodsGenerated()
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
+            var generatedCode = SetupFeatureGenerator<XUnitProviderExtended>(document);
+
+            foreach (var scenario in document.Feature.Children)
+            {
+                var expectedNumOfMethods = ExpectedNumOfMethodsForFeatureVariants(document.Feature, scenario);
+                var actualNumOfMethods = generatedCode.GetTestMethods(scenario).Count;
+                Assert.Equal(expectedNumOfMethods, actualNumOfMethods);
+            }
+        }
+
+        [Fact]
+        public void XUnitProviderExtended_FeatureVariants_SpecflowGeneratedCodeCompiles()
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
+            var generatedCode = SetupFeatureGenerator<XUnitProviderExtended>(document);
+
+            var assemblies = new[] { "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "xunit.core.dll", "xunit.abstractions.dll" };
+            var compilerResults = GetCompilerResults(generatedCode, assemblies);
+
+            Assert.Empty(compilerResults.Errors);
+        }
+
+        [Fact]
+        public void XUnitProviderExtended_FeatureAndScenarioVariants_SpecflowGeneratedCodeCompileFails()
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureAndScenarioVariantTags);
+
+            Action act = () => SetupFeatureGenerator<XUnitProviderExtended>(document);
+            var ex = Assert.Throws<TestGeneratorException>(act);
+
+            Assert.Equal("Variant tags were detected at feature and scenario level, please specify at one level or the other.", ex.Message);
         }
     }
 }

@@ -92,7 +92,8 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             var variantTags = _variantHelper.GetFeatureVariantTagValues(specFlowFeature);
 
             if (_variantHelper.AnyScenarioHasVariantTag(specFlowFeature) && _variantHelper.FeatureHasVariantTags)
-                throw new TestGeneratorException("Variant tags were detected at feature and scenario level, please specify at one level or the other");
+                throw new TestGeneratorException("Variant tags were detected at feature and scenario level, please specify at one level or the other.");
+            
             ////NEWCODE\\\\
 
             foreach (var scenarioDefinition in specFlowFeature.ScenarioDefinitions)

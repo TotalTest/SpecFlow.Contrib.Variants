@@ -19,10 +19,10 @@ namespace SpecFlow.Variants.UnitTests
     {
         private IUnitTestGeneratorProvider _unitTestGeneratorProvider;
 
-        protected SpecFlowDocument CreateSpecFlowDocument()
+        protected SpecFlowDocument CreateSpecFlowDocument(string document)
         {
             var parser = new SpecFlowGherkinParser(new CultureInfo("en-GB"));
-            using (var reader = new StringReader(SampleFeatureFile.FeatureFileDocument))
+            using (var reader = new StringReader(document))
             {
                 return parser.Parse(reader, null);
             }
@@ -52,7 +52,7 @@ namespace SpecFlow.Variants.UnitTests
             return new CSharpCodeProvider().CompileAssemblyFromDom(new CompilerParameters(assemblies), ccu);
         }
 
-        protected int ExpectedNumOfMethods(ScenarioDefinition scenario)
+        protected int ExpectedNumOfMethodsForFeatureVariants(ScenarioDefinition scenario)
         {
             int numOfMethods = 1;
             if (!_unitTestGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.RowTests))
@@ -78,6 +78,39 @@ namespace SpecFlow.Variants.UnitTests
                 if (scenario.HasTags())
                 {
                     var variantTags = scenario.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
+                    if (variantTags > 0) numOfMethods = variantTags;
+                }
+
+                return numOfMethods;
+            }
+        }
+
+        protected int ExpectedNumOfMethodsForFeatureVariants(Feature feature, ScenarioDefinition scenario)
+        {
+            int numOfMethods = 1;
+            if (!_unitTestGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.RowTests))
+            {
+                if (feature.HasTags())
+                {
+                    var variantTags = feature.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
+                    if (variantTags > 0) numOfMethods = variantTags;
+                }
+
+                if (scenario is ScenarioOutline so)
+                {
+                    numOfMethods *= so.GetExamplesTableBody().Count;
+                    numOfMethods++;
+                }
+
+                return numOfMethods;
+            }
+            else
+            {
+                if (scenario is ScenarioOutline) return numOfMethods;
+
+                if (feature.HasTags())
+                {
+                    var variantTags = feature.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
                     if (variantTags > 0) numOfMethods = variantTags;
                 }
 

@@ -11,7 +11,7 @@
 
         public static readonly string[] Variants = { "Chrome", "Firefox", "IE", "Opera" };
 
-        public static readonly string FeatureFileDocument = $@"
+        public static readonly string FeatureFileWithScenarioVariantTags = $@"
             Feature: {FeatureTitle}
             
             @Reg
@@ -55,6 +55,74 @@
                 And a table exists
                 | header | headerB |
                 | cell   | cellB   |
+                Then <that> is the result
+            Examples:
+                | this | that |
+                | one  | 1    |
+                | two  | 2    |";
+
+        public static readonly string FeatureFileWithFeatureVariantTags = $@"
+            @{Variant}:{Variants[0]}
+            @{Variant}:{Variants[1]}
+            @{Variant}:{Variants[2]}
+            @{Variant}:{Variants[3]}
+            Feature: {FeatureTitle}
+            
+            Scenario: {ScenarioTitle_Plain}
+                Given some setup
+                When something happens
+                Then there should be some
+
+            @Reg
+            @Config:Temp
+            Scenario: {ScenarioTitle_Tags}
+                Given some setup
+                When something happens
+                Then there should be some
+            
+            @Reg
+            @Config:Temp
+            Scenario Outline: {ScenarioTitle_TagsAndExamples}
+                Given some setup
+                When <this> happens
+                Then <that> is the result
+            Examples:
+                | this | that |
+                | one  | 1    |
+                | two  | 2    |
+
+            Scenario Outline: {ScenarioTitle_TagsExamplesAndInlineData}
+                Given some setup
+                    """"""
+                    Long text
+                    """"""
+                When <this> happens
+                And a table exists
+                | header | headerB |
+                | cell   | cellB   |
+                Then <that> is the result
+            Examples:
+                | this | that |
+                | one  | 1    |
+                | two  | 2    |";
+
+        public static readonly string FeatureFileWithFeatureAndScenarioVariantTags = $@"
+            @{Variant}:{Variants[0]}
+            @{Variant}:{Variants[1]}
+            Feature: {FeatureTitle}
+            
+            @{Variant}: Test
+            @Config:Temp
+            Scenario: {ScenarioTitle_Tags}
+                Given some setup
+                When something happens
+                Then there should be some
+            
+            @Reg
+            @Config:Temp
+            Scenario Outline: {ScenarioTitle_TagsAndExamples}
+                Given some setup
+                When <this> happens
                 Then <that> is the result
             Examples:
                 | this | that |

@@ -4,6 +4,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using TechTalk.SpecFlow.Generator;
 using TechTalk.SpecFlow.Parser;
 using Xunit;
 
@@ -16,7 +17,7 @@ namespace SpecFlow.Variants.UnitTests
 
         public MsTestProviderExtendedTests()
         {
-            _document = CreateSpecFlowDocument();
+            _document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             _generatedCode = SetupFeatureGenerator<MsTestProviderExtended>(_document);
         }
 
@@ -25,17 +26,17 @@ namespace SpecFlow.Variants.UnitTests
         [InlineData(SampleFeatureFile.ScenarioTitle_Tags)]
         [InlineData(SampleFeatureFile.ScenarioTitle_TagsAndExamples)]
         [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData)]
-        public void MsTestProviderExtended_CorrectNumberOfMethodsGenerated(string scenarioName)
+        public void MsTestProviderExtended_ScenarioVariants_CorrectNumberOfMethodsGenerated(string scenarioName)
         {
             var scenario = _document.GetScenario<ScenarioDefinition>(scenarioName);
-            var expectedNumOfMethods = ExpectedNumOfMethods(scenario);
+            var expectedNumOfMethods = ExpectedNumOfMethodsForFeatureVariants(scenario);
             var actualNumOfMethods = _generatedCode.GetTestMethods(scenario).Count;
 
             Assert.Equal(expectedNumOfMethods, actualNumOfMethods);
         }
 
         [Fact]
-        public void MsTestProviderExtended_SpecflowGeneratedCodeCompiles()
+        public void MsTestProviderExtended_ScenarioVariants_SpecflowGeneratedCodeCompiles()
         {
             var assemblies = new[] { "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll" };
             var compilerResults = GetCompilerResults(_generatedCode, assemblies);
@@ -44,7 +45,7 @@ namespace SpecFlow.Variants.UnitTests
         }
 
         [Fact]
-        public void MsTestProviderExtended_BaseTestMethodHasCorrectArguments()
+        public void MsTestProviderExtended_ScenarioVariants_BaseTestMethodHasCorrectArguments()
         {
             TestSetupForAttributes(out var scenario, out _, out var tableHeaders, out _);
             var baseTestMethod = _generatedCode.GetRowTestBaseMethod(scenario);
@@ -57,7 +58,7 @@ namespace SpecFlow.Variants.UnitTests
         }
 
         [Fact]
-        public void MsTestProviderExtended_TestMethodsHaveCorrectProperties()
+        public void MsTestProviderExtended_ScenarioVariants_TestMethodsHaveCorrectProperties()
         {
             TestSetupForAttributes(out _, out var testMethods, out var tableHeaders, out var tableBody);
 
@@ -104,7 +105,7 @@ namespace SpecFlow.Variants.UnitTests
         }
 
         [Fact]
-        public void MsTestProviderExtended_TestMethodsHaveCorrectCategories()
+        public void MsTestProviderExtended_ScenarioVariants_TestMethodsHaveCorrectCategories()
         {
             TestSetupForAttributes(out var scenario, out var testMethods, out _, out _);
 
@@ -128,7 +129,7 @@ namespace SpecFlow.Variants.UnitTests
         }
 
         [Fact]
-        public void MsTestProviderExtended_TestMethodsHaveCorrectDescriptionAndName()
+        public void MsTestProviderExtended_ScenarioVariants_TestMethodsHaveCorrectDescriptionAndName()
         {
             TestSetupForAttributes(out var scenario, out var testMethods, out _, out var tableBody);
 
@@ -143,7 +144,7 @@ namespace SpecFlow.Variants.UnitTests
                 // Check description attribute value is correct
                 var expectedDescription = $"{scenario.Name}: {cells[0].Value}_{SampleFeatureFile.Variants[variantCounter]}";
                 var actualDescription = attArg.Arguments[0].GetArgumentValue();
-                
+
                 // Check test method name is correct
                 var expectedMethodName = $"{scenario.Name.Replace(" ", "").Replace(",", "")}_{cells[0].Value}_{SampleFeatureFile.Variants[variantCounter]}";
                 var actualMethodName = testMethods[i].Name;
@@ -155,6 +156,43 @@ namespace SpecFlow.Variants.UnitTests
                 if (i % 2 != 0) variantCounter++;
                 if (rowCounter == tableBody.Count) rowCounter = 0;
             }
+        }
+
+        [Fact]
+        public void MsTestProviderExtended_FeatureVariants_CorrectNumberOfMethodsGenerated()
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
+            var generatedCode = SetupFeatureGenerator<MsTestProviderExtended>(document);
+
+            foreach (var scenario in document.Feature.Children)
+            {
+                var expectedNumOfMethods = ExpectedNumOfMethodsForFeatureVariants(document.Feature, scenario);
+                var actualNumOfMethods = generatedCode.GetTestMethods(scenario).Count;
+                Assert.Equal(expectedNumOfMethods, actualNumOfMethods);
+            }
+        }
+
+        [Fact]
+        public void MsTestProviderExtended_FeatureVariants_SpecflowGeneratedCodeCompiles()
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
+            var generatedCode = SetupFeatureGenerator<MsTestProviderExtended>(document);
+
+            var assemblies = new[] { "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll" };
+            var compilerResults = GetCompilerResults(generatedCode, assemblies);
+
+            Assert.Empty(compilerResults.Errors);
+        }
+
+        [Fact]
+        public void MsTestProviderExtended_FeatureAndScenarioVariants_SpecflowGeneratedCodeCompileFails()
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureAndScenarioVariantTags);
+
+            Action act = () => SetupFeatureGenerator<MsTestProviderExtended>(document);
+            var ex = Assert.Throws<TestGeneratorException>(act);
+
+            Assert.Equal("Variant tags were detected at feature and scenario level, please specify at one level or the other.", ex.Message);
         }
 
         private void TestSetupForAttributes(out ScenarioOutline scenario, out IList<CodeTypeMember> testMethods, out IList<TableCell> tableHeaders, out IList<TableRow> tableBody)
