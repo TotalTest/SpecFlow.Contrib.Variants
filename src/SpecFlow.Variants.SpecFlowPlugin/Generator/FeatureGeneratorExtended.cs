@@ -27,7 +27,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
         private int _tableCounter;
 
         /////NEWCODE\\\\\
-        private readonly string _variantKey;
+        private readonly VariantHelper _variantHelper;
         /////NEWCODE\\\\\
 
         public FeatureGeneratorExtended(IUnitTestGeneratorProvider testGeneratorProvider, CodeDomHelper codeDomHelper, SpecFlowConfiguration specFlowConfiguration, IDecoratorRegistry decoratorRegistry, string variantKey)
@@ -38,7 +38,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             _decoratorRegistry = decoratorRegistry;
 
             /////NEWCODE\\\\\
-            _variantKey = variantKey;
+            _variantHelper = new VariantHelper(variantKey);
             /////NEWCODE\\\\\
         }
 
@@ -87,26 +87,30 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             SetupScenarioCleanupMethod(testClassStructure);
             SetupTestInitializeMethod(testClassStructure);
             SetupTestCleanupMethod(testClassStructure);
+
+            ////NEWCODE\\\\
+            var variantTags = _variantHelper.GetFeatureVariantTagValues(specFlowFeature);
+
+            if (_variantHelper.AnyScenarioHasVariantTag(specFlowFeature) && _variantHelper.FeatureHasVariantTags)
+                throw new TestGeneratorException("Variant tags were detected at feature and scenario level, please specify at one level or the other");
+            ////NEWCODE\\\\
+
             foreach (var scenarioDefinition in specFlowFeature.ScenarioDefinitions)
             {
                 if (string.IsNullOrEmpty(scenarioDefinition.Name))
                     throw new TestGeneratorException("The scenario must have a title specified.");
 
-                /////NEWCODE\\\\\
-                var variantTags = new List<string>();
-                /////NEWCODE\\\\\
-
                 if (scenarioDefinition is ScenarioOutline scenarioOutline)
                 {
                     /////NEWCODE\\\\\
-                    scenarioOutline.Tags?.Where(a => a.Name.StartsWith($"@{_variantKey}")).ToList().ForEach(a => variantTags.Add(a.Name.Split(':')[1]));
+                    variantTags = _variantHelper.FeatureHasVariantTags ? variantTags : _variantHelper.GetScenarioVariantTagValues(scenarioDefinition);
                     GenerateScenarioOutlineTest(testClassStructure, scenarioOutline, variantTags);
                     /////NEWCODE\\\\\
                 }
                 else
                 {
                     /////NEWCODE\\\\\
-                    ((Scenario)scenarioDefinition).Tags?.Where(a => a.Name.StartsWith($"@{_variantKey}")).ToList().ForEach(a => variantTags.Add(a.Name.Split(':')[1]));
+                    variantTags = _variantHelper.FeatureHasVariantTags ? variantTags : _variantHelper.GetScenarioVariantTagValues(scenarioDefinition);
                     if (variantTags.Count > 0) { variantTags.ForEach(a => GenerateTest(testClassStructure, (Scenario)scenarioDefinition, a)); }
                     else { GenerateTest(testClassStructure, (Scenario)scenarioDefinition, null); }
                     /////NEWCODE\\\\\
@@ -116,10 +120,58 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             return codeNamespace;
         }
 
+        private void SetupTestInitializeMethod(TestClassGenerationContext generationContext)
+        {
+            var initializeMethod = generationContext.TestInitializeMethod;
+            initializeMethod.Attributes = MemberAttributes.Public;
+            initializeMethod.Name = "TestInitialize";
+            _testGeneratorProvider.SetTestInitializeMethod(generationContext);
+        }
+
+        private void SetupTestClassInitializeMethod(TestClassGenerationContext generationContext)
+        {
+            var initializeMethod = generationContext.TestClassInitializeMethod;
+            initializeMethod.Attributes = MemberAttributes.Public;
+            initializeMethod.Name = "FeatureSetup";
+            _testGeneratorProvider.SetTestClassInitializeMethod(generationContext);
+            CodeExpression[] codeExpressionArray1;
+            if (!_testGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.ParallelExecution))
+            {
+                codeExpressionArray1 = (new CodePrimitiveExpression[2]
+                {
+                    new CodePrimitiveExpression(null),
+                    new CodePrimitiveExpression(0)
+                });
+            }
+            else
+            {
+                codeExpressionArray1 = new CodeExpression[0];
+            }
+
+            var codeExpressionArray2 = codeExpressionArray1;
+            CodeExpression runnerExpression = GetTestRunnerExpression();
+            initializeMethod.Statements.Add(new CodeAssignStatement(runnerExpression, new CodeMethodInvokeExpression(new CodeTypeReferenceExpression(typeof(TestRunnerManager)), "GetTestRunner", codeExpressionArray2)));
+            initializeMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(FeatureInfo), "featureInfo", new CodeObjectCreateExpression(typeof(FeatureInfo), new CodeExpression[5]
+            {
+                new CodeObjectCreateExpression(typeof(CultureInfo), new CodeExpression[1]
+                {
+                     new CodePrimitiveExpression(generationContext.Feature.Language)
+                }),
+                new CodePrimitiveExpression(generationContext.Feature.Name),
+                new CodePrimitiveExpression(generationContext.Feature.Description),
+                new CodeFieldReferenceExpression(new CodeTypeReferenceExpression("ProgrammingLanguage"), _codeDomHelper.TargetLanguage.ToString()),
+                GetStringArrayExpression(generationContext.Feature.Tags)
+            })));
+            initializeMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, "OnFeatureStart", new CodeExpression[1]
+            {
+                new CodeVariableReferenceExpression("featureInfo")
+            }));
+        }
+
         private void SetupScenarioCleanupMethod(TestClassGenerationContext generationContext)
         {
             var scenarioCleanupMethod = generationContext.ScenarioCleanupMethod;
-            scenarioCleanupMethod.Attributes = (MemberAttributes)24576;
+            scenarioCleanupMethod.Attributes = MemberAttributes.Public;
             scenarioCleanupMethod.Name = "ScenarioCleanup";
             var runnerExpression = GetTestRunnerExpression();
             scenarioCleanupMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, "CollectScenarioErrors", new CodeExpression[0]));
@@ -137,75 +189,6 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             _testGeneratorProvider.SetTestClassCategories(generationContext, unprocessedTags);
         }
 
-        private CodeMemberField DeclareTestRunnerMember(CodeTypeDeclaration type)
-        {
-            var codeMemberField = new CodeMemberField(typeof(ITestRunner), "testRunner");
-            type.Members.Add(codeMemberField);
-            return codeMemberField;
-        }
-
-        private CodeExpression GetTestRunnerExpression()
-        {
-            return new CodeVariableReferenceExpression("testRunner");
-        }
-
-        private IEnumerable<string> GetNonIgnoreTags(IEnumerable<Tag> tags)
-        {
-            return tags.Where(t => !t.Name.Equals("@Ignore", StringComparison.InvariantCultureIgnoreCase)).Select(t => t.GetNameWithoutAt());
-        }
-
-        private bool HasIgnoreTag(IEnumerable<Tag> tags)
-        {
-            return tags.Any(t => t.Name.Equals("@Ignore", StringComparison.InvariantCultureIgnoreCase));
-        }
-
-        private void SetupTestClassInitializeMethod(TestClassGenerationContext generationContext)
-        {
-            var initializeMethod = generationContext.TestClassInitializeMethod;
-            initializeMethod.Attributes = MemberAttributes.Public;
-            initializeMethod.Name = "FeatureSetup";
-            _testGeneratorProvider.SetTestClassInitializeMethod(generationContext);
-            CodeExpression[] codeExpressionArray1;
-            if (!_testGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.ParallelExecution))
-                codeExpressionArray1 = (new CodePrimitiveExpression[2]
-                {
-                    new CodePrimitiveExpression( null),
-                    new CodePrimitiveExpression( 0)
-                });
-            else
-                codeExpressionArray1 = new CodeExpression[0];
-            var codeExpressionArray2 = codeExpressionArray1;
-            CodeExpression runnerExpression = GetTestRunnerExpression();
-            initializeMethod.Statements.Add(new CodeAssignStatement(runnerExpression, new CodeMethodInvokeExpression(new CodeTypeReferenceExpression(typeof(TestRunnerManager)), "GetTestRunner", codeExpressionArray2)));
-            initializeMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(FeatureInfo), "featureInfo", new CodeObjectCreateExpression(typeof(FeatureInfo), new CodeExpression[5]
-            {
-                new CodeObjectCreateExpression(typeof (CultureInfo), new CodeExpression[1]
-                {
-                     new CodePrimitiveExpression( generationContext.Feature.Language)
-                }),
-                new CodePrimitiveExpression(generationContext.Feature.Name),
-                new CodePrimitiveExpression(generationContext.Feature.Description),
-                new CodeFieldReferenceExpression(new CodeTypeReferenceExpression("ProgrammingLanguage"), _codeDomHelper.TargetLanguage.ToString()),
-                GetStringArrayExpression(generationContext.Feature.Tags)
-            })));
-            initializeMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, "OnFeatureStart", new CodeExpression[1]
-            {
-                new CodeVariableReferenceExpression("featureInfo")
-            }));
-        }
-
-        private CodeExpression GetStringArrayExpression(IEnumerable<Tag> tags)
-        {
-            if (!tags.Any())
-                return new CodeCastExpression(typeof(string[]), new CodePrimitiveExpression((object)null));
-            return new CodeArrayCreateExpression(typeof(string[]), tags.Select(tag => new CodePrimitiveExpression(tag.GetNameWithoutAt())).Cast<CodeExpression>().ToArray());
-        }
-
-        private CodeExpression GetStringArrayExpression(IEnumerable<string> items, ParameterSubstitution paramToIdentifier)
-        {
-            return new CodeArrayCreateExpression(typeof(string[]), items.Select(item => GetSubstitutedString(item, paramToIdentifier)).ToArray());
-        }
-
         private void SetupTestClassCleanupMethod(TestClassGenerationContext generationContext)
         {
             var classCleanupMethod = generationContext.TestClassCleanupMethod;
@@ -217,41 +200,20 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             classCleanupMethod.Statements.Add(new CodeAssignStatement(runnerExpression, new CodePrimitiveExpression(null)));
         }
 
-        private void SetupTestInitializeMethod(TestClassGenerationContext generationContext)
-        {
-            var initializeMethod = generationContext.TestInitializeMethod;
-            initializeMethod.Attributes = (MemberAttributes)24576;
-            initializeMethod.Name = "TestInitialize";
-            _testGeneratorProvider.SetTestInitializeMethod(generationContext);
-        }
-
         private void SetupTestCleanupMethod(TestClassGenerationContext generationContext)
         {
             var testCleanupMethod = generationContext.TestCleanupMethod;
-            testCleanupMethod.Attributes = (MemberAttributes)24576;
+            testCleanupMethod.Attributes = MemberAttributes.Public;
             testCleanupMethod.Name = "ScenarioTearDown";
             _testGeneratorProvider.SetTestCleanupMethod(generationContext);
             var runnerExpression = GetTestRunnerExpression();
             testCleanupMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, "OnScenarioEnd", new CodeExpression[0]));
         }
 
-        private void SetupScenarioInitializeMethod(TestClassGenerationContext generationContext)
-        {
-            var initializeMethod = generationContext.ScenarioInitializeMethod;
-            initializeMethod.Attributes = (MemberAttributes)24576;
-            initializeMethod.Name = "ScenarioInitialize";
-            initializeMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(ScenarioInfo), "scenarioInfo"));
-            var runnerExpression = GetTestRunnerExpression();
-            initializeMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, "OnScenarioInitialize", new CodeExpression[1]
-            {
-                new CodeVariableReferenceExpression("scenarioInfo")
-            }));
-        }
-
         private void SetupScenarioStartMethod(TestClassGenerationContext generationContext)
         {
             var scenarioStartMethod = generationContext.ScenarioStartMethod;
-            scenarioStartMethod.Attributes = (MemberAttributes)24576;
+            scenarioStartMethod.Attributes = MemberAttributes.Public;
             scenarioStartMethod.Name = "ScenarioStart";
             var runnerExpression = GetTestRunnerExpression();
             scenarioStartMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, "OnScenarioStart", new CodeExpression[0]));
@@ -271,23 +233,36 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             AddLineDirectiveHidden(backgroundMethod.Statements);
         }
 
+        private void SetupScenarioInitializeMethod(TestClassGenerationContext generationContext)
+        {
+            var initializeMethod = generationContext.ScenarioInitializeMethod;
+            initializeMethod.Attributes = MemberAttributes.Public;
+            initializeMethod.Name = "ScenarioInitialize";
+            initializeMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(ScenarioInfo), "scenarioInfo"));
+            var runnerExpression = GetTestRunnerExpression();
+            initializeMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, "OnScenarioInitialize", new CodeExpression[1]
+            {
+                new CodeVariableReferenceExpression("scenarioInfo")
+            }));
+        }
+
         private void GenerateScenarioOutlineTest(TestClassGenerationContext generationContext, ScenarioOutline scenarioOutline, List<string> variantTags = null)
         {
             ValidateExampleSetConsistency(scenarioOutline);
             var identifierMapping = CreateParamToIdentifierMapping(scenarioOutline);
-            var outlineTestMethod = CreateScenatioOutlineTestMethod(generationContext, scenarioOutline, identifierMapping);
+            var outlineTestMethod = CreateScenarioOutlineTestMethod(generationContext, scenarioOutline, identifierMapping);
 
             /////NEWCODE\\\\
             if (generationContext.GenerateRowTests)
             {
-                if (variantTags != null && variantTags.Count > 0)
+                if (variantTags?.Count > 0)
                     GenerateScenarioOutlineExamplesAsRowTests(generationContext, scenarioOutline, outlineTestMethod, variantTags);
                 else
                     GenerateScenarioOutlineExamplesAsRowTests(generationContext, scenarioOutline, outlineTestMethod, null);
             }
             else
             {
-                if (variantTags != null && variantTags.Count > 0)
+                if (variantTags?.Count > 0)
                     variantTags.ForEach(a => GenerateScenarioOutlineExamplesAsIndividualMethods(scenarioOutline, generationContext, outlineTestMethod, identifierMapping, a));
                 else
                     GenerateScenarioOutlineExamplesAsIndividualMethods(scenarioOutline, generationContext, outlineTestMethod, identifierMapping, null);
@@ -303,7 +278,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             int num = 0;
             foreach (var example in scenarioOutline.Examples)
             {
-                bool flag = CanUseFirstColumnAsName(example.TableBody);
+                var flag = CanUseFirstColumnAsName(example.TableBody);
                 string str;
                 if (!string.IsNullOrEmpty(example.Name))
                 {
@@ -312,7 +287,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
                 else
                 {
                     var examples = scenarioOutline.Examples;
-                    Func<Examples, bool> func = es => string.IsNullOrEmpty(es.Name);
+                    bool func(Examples es) => string.IsNullOrEmpty(es.Name);
                     str = examples.Count(func) > 1 ? string.Format("ExampleSet {0}", num).ToIdentifier() : null;
                 }
 
@@ -325,7 +300,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
                     var variantName = flag ? data.Row.Cells.First().Value : string.Format("Variant {0}", data.Index);
                     GenerateScenarioOutlineTestVariant(generationContext, scenarioOutline, scenatioOutlineTestMethod, paramToIdentifier, example.Name ?? "", str, data.Row, example.Tags, variantName, tag);
                 }
-                ++num;
+                num++;
             }
         }
 
@@ -335,12 +310,12 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             foreach (var example in scenarioOutline.Examples)
             {
                 /////NEWCODE\\\\\
-                var hasVariantTags = variantTags != null && variantTags.Count > 0;
+                var hasVariantTags = variantTags?.Count > 0;
 
                 if (hasVariantTags)
                 {
                     scenatioOutlineTestMethod.Parameters.RemoveAt(scenatioOutlineTestMethod.Parameters.Count - 1);
-                    scenatioOutlineTestMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string), _variantKey.ToLowerInvariant()));
+                    scenatioOutlineTestMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string), _variantHelper.VariantKey.ToLowerInvariant()));
                     scenatioOutlineTestMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string[]), "exampleTags"));
                 }
 
@@ -351,13 +326,13 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
                         foreach (var variant in variantTags)
                         {
                             var arguments = tableRow.Cells.Select(c => c.Value).ToList();
-                            arguments.Add($"{_variantKey}:{variant}");
+                            arguments.Add($"{_variantHelper.VariantKey}:{variant}");
                             _testGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, arguments, GetNonIgnoreTags(example.Tags), HasIgnoreTag(example.Tags));
                         }
                     }
                     else
                     {
-                        IEnumerable<string> arguments = tableRow.Cells.Select(c => c.Value).ToList();
+                        var arguments = tableRow.Cells.Select(c => c.Value).ToList();
                         _testGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, arguments, GetNonIgnoreTags(example.Tags), HasIgnoreTag(example.Tags));
                     }
                     /////NEWCODE\\\\\
@@ -365,36 +340,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             }
         }
 
-        private ParameterSubstitution CreateParamToIdentifierMapping(ScenarioOutline scenarioOutline)
-        {
-            var parameterSubstitution = new ParameterSubstitution();
-
-            foreach (var cell in scenarioOutline.Examples.First().TableHeader.Cells)
-                parameterSubstitution.Add(cell.Value, cell.Value.ToIdentifierCamelCase());
-
-            return parameterSubstitution;
-        }
-
-        private void ValidateExampleSetConsistency(ScenarioOutline scenarioOutline)
-        {
-            if (scenarioOutline.Examples.Count() <= 1)
-                return;
-            var firstExamplesHeader = scenarioOutline.Examples.First().TableHeader.Cells.Select(c => c.Value).ToArray();
-            var source = scenarioOutline.Examples.Skip(1);
-            Func<Examples, IEnumerable<string>> func = examples => examples.TableHeader.Cells.Select(c => c.Value);
-            if (source.Select(func).Any(paramNames => !paramNames.SequenceEqual(firstExamplesHeader)))
-                throw new TestGeneratorException("The example sets must provide the same parameters.");
-        }
-
-        private bool CanUseFirstColumnAsName(IEnumerable<Gherkin.Ast.TableRow> tableBody)
-        {
-            Func<Gherkin.Ast.TableRow, bool> func = r => !r.Cells.Any();
-            if (tableBody.Any(func))
-                return false;
-            return tableBody.Select(r => r.Cells.First().Value.ToIdentifier()).Distinct().Count() == tableBody.Count();
-        }
-
-        private CodeMemberMethod CreateScenatioOutlineTestMethod(TestClassGenerationContext generationContext, ScenarioOutline scenarioOutline, ParameterSubstitution paramToIdentifier)
+        private CodeMemberMethod CreateScenarioOutlineTestMethod(TestClassGenerationContext generationContext, ScenarioOutline scenarioOutline, ParameterSubstitution paramToIdentifier)
         {
             var method = CreateMethod(generationContext.TestClass);
             method.Attributes = MemberAttributes.Public;
@@ -404,7 +350,6 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             method.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string[]), "exampleTags"));
             return method;
         }
-
 
         private void GenerateScenarioOutlineTestVariant(TestClassGenerationContext generationContext, ScenarioOutline scenarioOutline, CodeMemberMethod scenatioOutlineTestMethod, IEnumerable<KeyValuePair<string, string>> paramToIdentifier, string exampleSetTitle, string exampleSetIdentifier, Gherkin.Ast.TableRow row, IEnumerable<Tag> exampleSetTags, string variantName, string tag = null)
         {
@@ -507,6 +452,83 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             _testGeneratorProvider.SetTestMethodCategories(generationContext, testMethod, unprocessedTags);
         }
 
+        private void GenerateStep(CodeMemberMethod testMethod, Step gherkinStep, ParameterSubstitution paramToIdentifier)
+        {
+            var specFlowStep = AsSpecFlowStep(gherkinStep);
+            var codeExpressionList = new List<CodeExpression> { GetSubstitutedString(specFlowStep.Text, paramToIdentifier) };
+            if (specFlowStep.Argument != null)
+                AddLineDirectiveHidden(testMethod.Statements);
+            codeExpressionList.Add(GetDocStringArgExpression(specFlowStep.Argument as DocString, paramToIdentifier));
+            codeExpressionList.Add(GetTableArgExpression(specFlowStep.Argument as DataTable, testMethod.Statements, paramToIdentifier));
+            codeExpressionList.Add(new CodePrimitiveExpression(specFlowStep.Keyword));
+            AddLineDirective(testMethod.Statements, specFlowStep);
+            var runnerExpression = GetTestRunnerExpression();
+            testMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, specFlowStep.StepKeyword.ToString(), codeExpressionList.ToArray()));
+        }
+
+        private CodeMemberField DeclareTestRunnerMember(CodeTypeDeclaration type)
+        {
+            var codeMemberField = new CodeMemberField(typeof(ITestRunner), "testRunner");
+            type.Members.Add(codeMemberField);
+            return codeMemberField;
+        }
+
+        private CodeExpression GetTestRunnerExpression()
+        {
+            return new CodeVariableReferenceExpression("testRunner");
+        }
+
+        private IEnumerable<string> GetNonIgnoreTags(IEnumerable<Tag> tags)
+        {
+            return tags.Where(t => !t.Name.Equals("@Ignore", StringComparison.InvariantCultureIgnoreCase)).Select(t => t.GetNameWithoutAt());
+        }
+
+        private bool HasIgnoreTag(IEnumerable<Tag> tags)
+        {
+            return tags.Any(t => t.Name.Equals("@Ignore", StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        private CodeExpression GetStringArrayExpression(IEnumerable<Tag> tags)
+        {
+            if (!tags.Any())
+                return new CodeCastExpression(typeof(string[]), new CodePrimitiveExpression((object)null));
+            return new CodeArrayCreateExpression(typeof(string[]), tags.Select(tag => new CodePrimitiveExpression(tag.GetNameWithoutAt())).Cast<CodeExpression>().ToArray());
+        }
+
+        private CodeExpression GetStringArrayExpression(IEnumerable<string> items, ParameterSubstitution paramToIdentifier)
+        {
+            return new CodeArrayCreateExpression(typeof(string[]), items.Select(item => GetSubstitutedString(item, paramToIdentifier)).ToArray());
+        }
+
+        private ParameterSubstitution CreateParamToIdentifierMapping(ScenarioOutline scenarioOutline)
+        {
+            var parameterSubstitution = new ParameterSubstitution();
+
+            foreach (var cell in scenarioOutline.Examples.First().TableHeader.Cells)
+                parameterSubstitution.Add(cell.Value, cell.Value.ToIdentifierCamelCase());
+
+            return parameterSubstitution;
+        }
+
+        private void ValidateExampleSetConsistency(ScenarioOutline scenarioOutline)
+        {
+            if (scenarioOutline.Examples.Count() <= 1)
+                return;
+            var firstExamplesHeader = scenarioOutline.Examples.First().TableHeader.Cells.Select(c => c.Value).ToArray();
+            var source = scenarioOutline.Examples.Skip(1);
+            IEnumerable<string> func(Examples examples) => examples.TableHeader.Cells.Select(c => c.Value);
+            if (source.Select(func).Any(paramNames => !paramNames.SequenceEqual(firstExamplesHeader)))
+                throw new TestGeneratorException("The example sets must provide the same parameters.");
+        }
+
+        private bool CanUseFirstColumnAsName(IEnumerable<Gherkin.Ast.TableRow> tableBody)
+        {
+            bool func(Gherkin.Ast.TableRow r) => !r.Cells.Any();
+            if (tableBody.Any(func))
+                return false;
+            return tableBody.Select(r => r.Cells.First().Value.ToIdentifier()).Distinct().Count() == tableBody.Count();
+        }
+
         private static string GetTestMethodName(ScenarioDefinition scenario, string variantName, string exampleSetIdentifier)
         {
             var str1 = string.Format("{0}", scenario.Name.ToIdentifier());
@@ -553,24 +575,9 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             return new CodeMethodInvokeExpression(new CodeTypeReferenceExpression(typeof(string)), "Format", codeExpressionList.ToArray());
         }
 
-        private void GenerateStep(CodeMemberMethod testMethod, Step gherkinStep, ParameterSubstitution paramToIdentifier)
-        {
-            var specFlowStep = AsSpecFlowStep(gherkinStep);
-            var codeExpressionList = new List<CodeExpression> { GetSubstitutedString(specFlowStep.Text, paramToIdentifier) };
-            if (specFlowStep.Argument != null)
-                AddLineDirectiveHidden(testMethod.Statements);
-            codeExpressionList.Add(GetDocStringArgExpression(specFlowStep.Argument as DocString, paramToIdentifier));
-            codeExpressionList.Add(GetTableArgExpression(specFlowStep.Argument as DataTable, testMethod.Statements, paramToIdentifier));
-            codeExpressionList.Add(new CodePrimitiveExpression(specFlowStep.Keyword));
-            AddLineDirective(testMethod.Statements, specFlowStep);
-            var runnerExpression = GetTestRunnerExpression();
-            testMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, specFlowStep.StepKeyword.ToString(), codeExpressionList.ToArray()));
-        }
-
         private SpecFlowStep AsSpecFlowStep(Step step)
         {
-            if (step is SpecFlowStep specFlowStep)
-                return specFlowStep;
+            if (step is SpecFlowStep specFlowStep) return specFlowStep;
             throw new TestGeneratorException("The step must be a SpecFlowStep.");
         }
 
@@ -578,7 +585,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
         {
             if (tableArg == null)
                 return new CodeCastExpression(typeof(Table), new CodePrimitiveExpression(null));
-            _tableCounter = _tableCounter + 1;
+            _tableCounter++;
             var tableRow1 = tableArg.Rows.First();
             var array = tableArg.Rows.Skip(1).ToArray();
             var referenceExpression = new CodeVariableReferenceExpression("table" + _tableCounter);
@@ -587,29 +594,29 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
                 GetStringArrayExpression(tableRow1.Cells.Select( c => c.Value), paramToIdentifier)
             })));
             foreach (Gherkin.Ast.TableRow tableRow2 in array)
+            {
                 statements.Add(new CodeMethodInvokeExpression(referenceExpression, "AddRow", new CodeExpression[1]
                 {
-                    GetStringArrayExpression(tableRow2.Cells.Select( c => c.Value), paramToIdentifier)
+                    GetStringArrayExpression(tableRow2.Cells.Select(c => c.Value), paramToIdentifier)
                 }));
+            }
             return referenceExpression;
         }
 
         private CodeExpression GetDocStringArgExpression(DocString docString, ParameterSubstitution paramToIdentifier)
         {
-            return GetSubstitutedString(docString == null ? null : docString.Content, paramToIdentifier);
+            return GetSubstitutedString(docString?.Content, paramToIdentifier);
         }
 
         private void AddLinePragmaInitial(CodeTypeDeclaration testType, string sourceFile)
         {
-            if (_specFlowConfiguration.AllowDebugGeneratedFiles)
-                return;
+            if (_specFlowConfiguration.AllowDebugGeneratedFiles) return;
             _codeDomHelper.BindTypeToSourceFile(testType, Path.GetFileName(sourceFile));
         }
 
         private void AddLineDirectiveHidden(CodeStatementCollection statements)
         {
-            if (_specFlowConfiguration.AllowDebugGeneratedFiles)
-                return;
+            if (_specFlowConfiguration.AllowDebugGeneratedFiles) return;
             _codeDomHelper.AddDisableSourceLinePragmaStatement(statements);
         }
 
@@ -630,8 +637,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
 
         private void AddLineDirective(CodeStatementCollection statements, Location location)
         {
-            if (location == null || _specFlowConfiguration.AllowDebugGeneratedFiles)
-                return;
+            if (location == null || _specFlowConfiguration.AllowDebugGeneratedFiles) return;
             _codeDomHelper.AddSourceLinePragmaStatement(statements, location.Line, location.Column);
         }
     }

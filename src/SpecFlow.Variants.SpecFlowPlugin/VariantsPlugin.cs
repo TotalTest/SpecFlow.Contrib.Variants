@@ -34,7 +34,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin //TODO: Remove appconfig if not used
             // Resolve specflow configuration to confirm custom variant key, use default if none provided
             var specflowConfiguration = objectContainer.Resolve<SpecFlowConfiguration>();
             var configParam = specflowConfiguration.Plugins.FirstOrDefault(a => a.Name == GetType().Namespace.Replace(".SpecFlowPlugin", string.Empty))?.Parameters;
-            _variantKey = !string.IsNullOrEmpty(configParam) ? configParam : _variantKey;
+            _variantKey = configParam ?? _variantKey;
 
             // Create custom unit test provider based on user defined config value
             var generatorProvider = GetGeneratorProviderFromConfig(codeDomHelper, specflowConfiguration.UnitTestProvider);

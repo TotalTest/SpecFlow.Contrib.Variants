@@ -118,7 +118,7 @@ namespace SpecFlow.Variants.UnitTests
                 // Check third argument is the variant
                 var variantArg = attArg[2];
                 var variantName = variantArg.Arguments[0].GetArgumentValue() == "Category";
-                var variantValue = variantArg.Arguments[1].GetArgumentValue() == $"Variant:{SampleFeatureFile.Variants[variantCounter]}";
+                var variantValue = variantArg.Arguments[1].GetArgumentValue() == $"{SampleFeatureFile.Variant}:{SampleFeatureFile.Variants[variantCounter]}";
 
                 Assert.True(variantName);
                 Assert.True(variantValue);
