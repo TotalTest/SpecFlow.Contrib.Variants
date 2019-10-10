@@ -5,7 +5,7 @@ using TechTalk.SpecFlow.Parser;
 
 namespace SpecFlow.Variants.SpecFlowPlugin.Generator
 {
-    public class VariantHelper
+    internal class VariantHelper
     {
         public string VariantKey { get; }
         public bool FeatureHasVariantTags { get; set; }

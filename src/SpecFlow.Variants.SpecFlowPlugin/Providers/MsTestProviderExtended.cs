@@ -7,7 +7,7 @@ using TechTalk.SpecFlow.Utils;
 
 namespace SpecFlow.Variants.SpecFlowPlugin.Providers
 {
-    public class MsTestProviderExtended : MsTestV2GeneratorProvider
+    internal class MsTestProviderExtended : MsTestV2GeneratorProvider
     {
         private readonly string _variantKey;
 

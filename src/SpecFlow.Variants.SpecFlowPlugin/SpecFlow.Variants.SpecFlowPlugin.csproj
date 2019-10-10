@@ -66,9 +66,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Generator\ClassGenerator\ClassGeneratorExtensions.cs" />
+    <Compile Include="Generator\ClassGenerator\ITestClassGenerator.cs" />
+    <Compile Include="Generator\ClassGenerator\TestClassGenerator.cs" />
     <Compile Include="Generator\FeatureGeneratorExtended.cs" />
     <Compile Include="Generator\FeatureGeneratorProviderExtended.cs" />
     <Compile Include="Generator\ParameterSubstitution.cs" />
+    <Compile Include="Generator\SpecFlowFeatureExtensions.cs" />
     <Compile Include="Generator\VariantHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\MsTestProviderExtended.cs" />
