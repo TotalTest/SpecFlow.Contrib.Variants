@@ -8,7 +8,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
     internal class VariantHelper
     {
         public string VariantKey { get; }
-        public bool FeatureHasVariantTags { get; set; }
+        public bool FeatureHasVariantTags { get; private set; }
 
         public VariantHelper(string variantKey)
         {

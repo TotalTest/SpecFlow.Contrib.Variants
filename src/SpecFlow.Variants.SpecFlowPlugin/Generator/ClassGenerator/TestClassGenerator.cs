@@ -16,8 +16,8 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator.ClassGenerator
 {
     internal class TestClassGenerator : ITestClassGenerator
     {
-        public CodeNamespace CodeNamespace { get; private set; }
-        public TestClassGenerationContext GenerationContext { get; private set; }
+        protected CodeNamespace CodeNamespace { get; private set; }
+        protected TestClassGenerationContext GenerationContext { get; private set; }
 
         private readonly IDecoratorRegistry _decoratorRegistry;
         private readonly IUnitTestGeneratorProvider _testGeneratorProvider;
@@ -36,7 +36,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator.ClassGenerator
         {
             targetNamespace = targetNamespace ?? "SpecFlowTests";
             if (!targetNamespace.StartsWith("global", StringComparison.CurrentCultureIgnoreCase) && _codeDomHelper.TargetLanguage == CodeDomProviderLanguage.VB)
-                targetNamespace = string.Format("GlobalVBNetNamespace.{0}", targetNamespace);
+                targetNamespace = $"GlobalVBNetNamespace.{targetNamespace}";
             CodeNamespace = new CodeNamespace(targetNamespace)
             {
                 Imports = { new CodeNamespaceImport("TechTalk.SpecFlow") }
@@ -83,7 +83,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator.ClassGenerator
             }
 
             var codeExpressionArray2 = codeExpressionArray1;
-            CodeExpression runnerExpression = GetTestRunnerExpression("testRunner");
+            CodeExpression runnerExpression = GetTestRunnerExpression();
             initializeMethod.Statements.Add(new CodeAssignStatement(runnerExpression, new CodeMethodInvokeExpression(new CodeTypeReferenceExpression(typeof(TestRunnerManager)), "GetTestRunner", codeExpressionArray2)));
             initializeMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(FeatureInfo), "featureInfo", new CodeObjectCreateExpression(typeof(FeatureInfo), new CodeExpression[5]
             {
@@ -116,7 +116,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator.ClassGenerator
             testCleanupMethod.Attributes = MemberAttributes.Public;
             testCleanupMethod.Name = "ScenarioTearDown";
             _testGeneratorProvider.SetTestCleanupMethod(GenerationContext);
-            var runnerExpression = GetTestRunnerExpression("testRunner");
+            var runnerExpression = GetTestRunnerExpression();
             testCleanupMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, "OnScenarioEnd", new CodeExpression[0]));
         }
 
@@ -126,14 +126,14 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator.ClassGenerator
             classCleanupMethod.Attributes = MemberAttributes.Public;
             classCleanupMethod.Name = "FeatureTearDown";
             _testGeneratorProvider.SetTestClassCleanupMethod(GenerationContext);
-            var runnerExpression = GetTestRunnerExpression("testRunner");
+            var runnerExpression = GetTestRunnerExpression();
             classCleanupMethod.Statements.Add(new CodeMethodInvokeExpression(runnerExpression, "OnFeatureEnd", new CodeExpression[0]));
             classCleanupMethod.Statements.Add(new CodeAssignStatement(runnerExpression, new CodePrimitiveExpression(null)));
         }
 
-        protected CodeExpression GetTestRunnerExpression(string name)
+        protected CodeExpression GetTestRunnerExpression()
         {
-            return new CodeVariableReferenceExpression(name);
+            return new CodeVariableReferenceExpression("testRunner");
         }
     }
 }
