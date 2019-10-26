@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.SpecFlowP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.UnitTests", "tests\SpecFlow.Variants.UnitTests\SpecFlow.Variants.UnitTests.csproj", "{82CC2990-0DD5-41FD-B4C2-44FAB96CAF9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.IntegrationTests.MsTest", "tests\Specflow.Variants.IntegrationTests.MsTest\SpecFlow.Variants.IntegrationTests.MsTest.csproj", "{B8D64DD0-5834-457F-86D2-45477E0B4CD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.IntegrationTests.XUnit", "tests\SpecFlow.Variants.IntegrationTests.Xunit\SpecFlow.Variants.IntegrationTests.XUnit.csproj", "{4BC98D97-D724-4E02-8CE8-22188CAC01F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.IntegrationTests.NUnit", "tests\SpecFlow.Variants.IntegrationTests.NUnit\SpecFlow.Variants.IntegrationTests.NUnit.csproj", "{A53BACE2-4044-4A32-BC70-B49621BD2FE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,18 @@ Global
 		{82CC2990-0DD5-41FD-B4C2-44FAB96CAF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82CC2990-0DD5-41FD-B4C2-44FAB96CAF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82CC2990-0DD5-41FD-B4C2-44FAB96CAF9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8D64DD0-5834-457F-86D2-45477E0B4CD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8D64DD0-5834-457F-86D2-45477E0B4CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8D64DD0-5834-457F-86D2-45477E0B4CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8D64DD0-5834-457F-86D2-45477E0B4CD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BC98D97-D724-4E02-8CE8-22188CAC01F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BC98D97-D724-4E02-8CE8-22188CAC01F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BC98D97-D724-4E02-8CE8-22188CAC01F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BC98D97-D724-4E02-8CE8-22188CAC01F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A53BACE2-4044-4A32-BC70-B49621BD2FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A53BACE2-4044-4A32-BC70-B49621BD2FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A53BACE2-4044-4A32-BC70-B49621BD2FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A53BACE2-4044-4A32-BC70-B49621BD2FE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
