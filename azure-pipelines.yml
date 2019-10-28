@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- master
+- develop
 
 pool:
   vmImage: 'windows-latest'
@@ -13,6 +13,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  packageVersion: '1.0.0-develop'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -33,6 +34,20 @@ steps:
     configuration: '$(buildConfiguration)'
     testSelector: testAssemblies
     testAssemblyVer2: |
-     **\*Tests.dll
+     **\*UnitTests.dll
      !**\*TestAdapter.dll
      !**\obj\**
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/*.nuspec'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: '$(packageVersion)'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
