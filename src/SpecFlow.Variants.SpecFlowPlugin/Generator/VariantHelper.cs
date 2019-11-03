@@ -17,14 +17,14 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
 
         public List<string> GetFeatureVariantTagValues(SpecFlowFeature feature)
         {
-            var tags = feature.Tags?.Where(a => a.Name.StartsWith($"@{VariantKey}")).Select(a => a.Name.Split(':')[1]).ToList();
+            var tags = feature.Tags?.Where(a => a.Name.StartsWith($"@{VariantKey}"))?.Select(a => a.Name.Split(':')[1]).ToList();
             FeatureHasVariantTags = tags.Count > 0;
             return tags;
         }
 
         public List<string> GetScenarioVariantTagValues(ScenarioDefinition scenario)
         {
-            return scenario.GetTags()?.Where(a => a.Name.StartsWith($"@{VariantKey}")).Select(a => a.Name.Split(':')[1]).ToList();
+            return scenario.GetTags()?.Where(a => a.Name.StartsWith($"@{VariantKey}"))?.Select(a => a.Name.Split(':')[1]).ToList();
         }
 
         public bool AnyScenarioHasVariantTag(SpecFlowFeature feature)
