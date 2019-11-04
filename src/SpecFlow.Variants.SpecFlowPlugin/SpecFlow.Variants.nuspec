@@ -22,9 +22,9 @@
     <summary> Extends SpecFlow to allow variants of a test to be run using tags </summary>
   </metadata>
   <files>
-    <file src="app.config.install.xdt" target="content\app.config.install.xdt" />
-    <file src="app.config.uninstall.xdt" target="content\app.config.uninstall.xdt" />
-    <file src="..\SpecFlow.Variants.SpecFlowPlugin\bin\$configuration$\SpecFlow.Variants.SpecFlowPlugin.dll" target="lib\net45" />
-    <file src="..\SpecFlow.Variants.SpecFlowPlugin\bin\$configuration$\SpecFlow.Variants.SpecFlowPlugin.pdb" target="lib\net45" />
+    <file src="Transforms\app.config.install.xdt" target="content\app.config.install.xdt" />
+    <file src="Transforms\app.config.uninstall.xdt" target="content\app.config.uninstall.xdt" />
+    <file src="bin\$configuration$\SpecFlow.Variants.SpecFlowPlugin.dll" target="lib\net45" />
+    <file src="bin\$configuration$\SpecFlow.Variants.SpecFlowPlugin.pdb" target="lib\net45" />
   </files>
 </package>

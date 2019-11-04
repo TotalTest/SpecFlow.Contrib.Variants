@@ -8,15 +8,13 @@ using TechTalk.SpecFlow.Generator.Plugins;
 using TechTalk.SpecFlow.Generator.UnitTestConverter;
 using TechTalk.SpecFlow.Generator.UnitTestProvider;
 using TechTalk.SpecFlow.Infrastructure;
-using TechTalk.SpecFlow.Plugins;
 using TechTalk.SpecFlow.Utils;
 
 [assembly: GeneratorPlugin(typeof(VariantsPlugin))]
-[assembly: RuntimePlugin(typeof(VariantsPlugin))]
 
 namespace SpecFlow.Variants.SpecFlowPlugin
 {
-    public class VariantsPlugin : IGeneratorPlugin, IRuntimePlugin
+    public class VariantsPlugin : IGeneratorPlugin
     {
         private string _variantKey = "Variant";
 
@@ -64,10 +62,6 @@ namespace SpecFlow.Variants.SpecFlowPlugin
                 default:
                     return new MsTestProviderExtended(codeDomHelper, _variantKey);
             }
-        }
-
-        public void Initialize(RuntimePluginEvents runtimePluginEvents, RuntimePluginParameters runtimePluginParameters)
-        {
         }
     }
 }
