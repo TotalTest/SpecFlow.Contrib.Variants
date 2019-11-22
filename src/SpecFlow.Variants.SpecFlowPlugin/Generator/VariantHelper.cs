@@ -17,7 +17,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
 
         public List<string> GetFeatureVariantTagValues(SpecFlowFeature feature)
         {
-            var tags = feature.Tags?.Where(a => a.Name.StartsWith($"@{VariantKey}"))?.Select(a => a.Name.Split(':')[1]).ToList();
+            var tags = FeatureTags(feature)?.Select(a => a.Name.Split(':')[1]).ToList();
             FeatureHasVariantTags = tags.Count > 0;
             return tags;
         }
@@ -30,6 +30,11 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
         public bool AnyScenarioHasVariantTag(SpecFlowFeature feature)
         {
             return feature.ScenarioDefinitions.Any(a => a.GetTags().Any(b => b.GetNameWithoutAt().StartsWith(VariantKey)));
+        }
+
+        public List<Tag> FeatureTags(SpecFlowFeature feature)
+        {
+            return feature.Tags?.Where(a => a.Name.StartsWith($"@{VariantKey}")).ToList();
         }
     }
 }

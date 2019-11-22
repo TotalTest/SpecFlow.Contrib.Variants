@@ -18,8 +18,45 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Providers
 
         public override void SetTestMethodCategories(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, IEnumerable<string> scenarioCategories)
         {
-            var filteredCategories = scenarioCategories.Where(a => a.StartsWith(_variantKey) && !a.EndsWith(testMethod.Name.Split('_').Last()));
+            var variantValue = testMethod.Name.Split('_').Last();
+
+            var filteredCategories = scenarioCategories.Where(a => a.StartsWith(_variantKey) && !a.EndsWith(variantValue));
             base.SetTestMethodCategories(generationContext, testMethod, scenarioCategories.Except(filteredCategories));
+
+            var variant = scenarioCategories.FirstOrDefault(a => a.StartsWith(_variantKey) && a.EndsWith(variantValue));
+            if (variant != null)
+            {
+                CodeDomHelper.AddAttribute(testMethod, "Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute", _variantKey, variantValue);
+            }
+
+            if (generationContext.CustomData.ContainsKey("featureCategories") 
+                && ((string[])generationContext.CustomData["featureCategories"]).Any(a => a.StartsWith(_variantKey)))
+            {
+                var dupeCounter = false;
+                testMethod.CustomAttributes.Cast<CodeAttributeDeclaration>().ToList().ForEach(a =>
+                {
+                    if (a.Name.Contains("TestCategory"))
+                    {
+                        var args = a.Arguments.Cast<CodeAttributeArgument>().Where(b => ((CodePrimitiveExpression)b.Value).Value.ToString().StartsWith(_variantKey)
+                            && !((CodePrimitiveExpression)b.Value).Value.ToString().EndsWith(variantValue));
+
+                        if (args.Any())
+                        {
+                            testMethod.CustomAttributes.Remove(a);
+                            return;
+                        }
+
+                        var args2 = a.Arguments.Cast<CodeAttributeArgument>().Where(b => ((CodePrimitiveExpression)b.Value).Value.ToString().StartsWith(_variantKey)
+                            && ((CodePrimitiveExpression)b.Value).Value.ToString().EndsWith(variantValue));
+
+                        if (args2.Any() && !dupeCounter)
+                        {
+                            testMethod.CustomAttributes.Remove(a);
+                            dupeCounter = true;
+                        }
+                    }
+                });
+            }
         }
     }
 }

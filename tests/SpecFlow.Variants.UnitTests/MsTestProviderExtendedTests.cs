@@ -79,18 +79,26 @@ namespace SpecFlow.Variants.UnitTests
 
                 var cells = tableBody[rowCounter].Cells.ToList();
 
-                // Check second argument is the variant
+                // Check second argument is the variant full name
                 var variantArg = attArg[1];
-                var variantName = variantArg.Arguments[0].GetArgumentValue() == "VariantName";
-                var variantValue = variantArg.Arguments[1].GetArgumentValue() == $"{cells[0].Value}_{SampleFeatureFile.Variants[variantCounter]}";
+                var variantKey = variantArg.Arguments[0].GetArgumentValue() == "Variant";
+                var variantValue = variantArg.Arguments[1].GetArgumentValue() == $"{SampleFeatureFile.Variants[variantCounter]}";
+
+                Assert.True(variantKey);
+                Assert.True(variantValue);
+
+                // Check third argument is the variant key and value
+                var variantNameArg = attArg[2];
+                var variantName = variantNameArg.Arguments[0].GetArgumentValue() == "VariantName";
+                var variantFullValue = variantNameArg.Arguments[1].GetArgumentValue() == $"{cells[0].Value}_{SampleFeatureFile.Variants[variantCounter]}";
 
                 Assert.True(variantName);
-                Assert.True(variantValue);
+                Assert.True(variantFullValue);
 
                 // Check the end arguments are examples table row cells
                 for (var k = 0; k < cells.Count; k++)
                 {
-                    var exampleArg = attArg[k + 2];
+                    var exampleArg = attArg[k + 3];
                     var exampleName = exampleArg.Arguments[0].GetArgumentValue() == $"Parameter:{tableHeaders[k].Value}";
                     var exampleValue = exampleArg.Arguments[1].GetArgumentValue() == $"{cells[k].Value}";
 

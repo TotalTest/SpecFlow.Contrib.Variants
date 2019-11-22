@@ -8,8 +8,8 @@
     <ProjectGuid>{B8D64DD0-5834-457F-86D2-45477E0B4CD6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpecFlow.Variants.IntegrationTests.MsTest</RootNamespace>
-    <AssemblyName>SpecFlow.Variants.IntegrationTests.MsTest</AssemblyName>
+    <RootNamespace>SpecFlow.Variants.MsTestProvider.IntegrationTests</RootNamespace>
+    <AssemblyName>SpecFlow.Variants.MsTestProvider.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -46,7 +46,7 @@
       <HintPath>..\..\packages\MSTest.TestFramework.2.0.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -58,16 +58,39 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context.cs" />
+    <Compile Include="MsTestDemoFeatureTests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MsTestDemoFeatureTests.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MsTestDemoScenarioTests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MsTestDemoScenarioTests.feature</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="MsTestDemoFeatureTests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MsTestDemoFeatureTests.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MsTestDemoScenarioTests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MsTestDemoScenarioTests.feature.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\SpecFlow.Variants.SpecFlowPlugin\SpecFlow.Variants.SpecFlowPlugin.csproj">
       <Project>{2d671486-4dd8-48b5-910c-6a01d2f80c3c}</Project>
       <Name>SpecFlow.Variants.SpecFlowPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpecFlow.Variants.IntegrationTests.SharedBindings\SpecFlow.Variants.IntegrationTests.SharedBindings.csproj">
+      <Project>{f655e690-8c6f-47b4-a916-2bb50c183495}</Project>
+      <Name>SpecFlow.Variants.IntegrationTests.SharedBindings</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

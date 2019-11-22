@@ -24,6 +24,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
         private readonly IDecoratorRegistry _decoratorRegistry;
         private int _tableCounter;
         private readonly VariantHelper _variantHelper; //NEW CODE
+        private List<Tag> _featureVariantTags;
 
         public FeatureGeneratorExtended(IUnitTestGeneratorProvider testGeneratorProvider, CodeDomHelper codeDomHelper, SpecFlowConfiguration specFlowConfiguration, IDecoratorRegistry decoratorRegistry, string variantKey)
             : base(decoratorRegistry, testGeneratorProvider, codeDomHelper, specFlowConfiguration)
@@ -56,6 +57,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
 
             //NEW CODE START
             var variantTags = _variantHelper.GetFeatureVariantTagValues(specFlowFeature);
+            _featureVariantTags = _variantHelper.FeatureTags(specFlowFeature);
 
             if (_variantHelper.AnyScenarioHasVariantTag(specFlowFeature) && _variantHelper.FeatureHasVariantTags)
                 throw new TestGeneratorException("Variant tags were detected at feature and scenario level, please specify at one level or the other.");
@@ -324,9 +326,11 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
                 _testGeneratorProvider.SetRowTest(generationContext, testMethod, str);
             else
                 _testGeneratorProvider.SetTestMethod(generationContext, testMethod, str);
-            _decoratorRegistry.DecorateTestMethod(generationContext, testMethod, scenarioDefinition.GetTags().ConcatTags(additionalTags), out List<string> unprocessedTags);
+            _decoratorRegistry.DecorateTestMethod(generationContext, testMethod, scenarioDefinition.GetTags().ConcatTags(additionalTags).ConcatTags(_featureVariantTags), out List<string> unprocessedTags);
+
             if (!unprocessedTags.Any())
                 return;
+
             _testGeneratorProvider.SetTestMethodCategories(generationContext, testMethod, unprocessedTags);
         }
 
