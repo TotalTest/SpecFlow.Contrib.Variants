@@ -90,6 +90,7 @@ namespace SpecFlow.Variants.NUnitProvider.IntegrationTests
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A single test without examples or tags", null, ((string[])(null)));
 #line 11
 this.ScenarioInitialize(scenarioInfo);
+            testRunner.ScenarioContext.Add("Browser", "Chrome");
             this.ScenarioStart();
 #line 8
 this.FeatureBackground();
@@ -110,6 +111,7 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A single test without examples or tags", null, ((string[])(null)));
 #line 11
 this.ScenarioInitialize(scenarioInfo);
+            testRunner.ScenarioContext.Add("Browser", "Firefox");
             this.ScenarioStart();
 #line 8
 this.FeatureBackground();
@@ -134,6 +136,7 @@ this.FeatureBackground();
                         "Tools"});
 #line 20
 this.ScenarioInitialize(scenarioInfo);
+            testRunner.ScenarioContext.Add("Browser", "Chrome");
             this.ScenarioStart();
 #line 8
 this.FeatureBackground();
@@ -157,6 +160,7 @@ this.FeatureBackground();
                         "Tools"});
 #line 20
 this.ScenarioInitialize(scenarioInfo);
+            testRunner.ScenarioContext.Add("Browser", "Firefox");
             this.ScenarioStart();
 #line 8
 this.FeatureBackground();
@@ -181,6 +185,7 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with variant tags and examples", null, exampleTags);
 #line 24
 this.ScenarioInitialize(scenarioInfo);
+            testRunner.ScenarioContext.Add("Browser", "Firefox");
             this.ScenarioStart();
 #line 8
 this.FeatureBackground();

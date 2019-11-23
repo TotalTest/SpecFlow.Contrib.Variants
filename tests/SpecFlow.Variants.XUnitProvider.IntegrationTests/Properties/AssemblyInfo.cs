@@ -2,11 +2,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("SpecFlow.Variants.IntegrationTests.XUnit")]
+[assembly: AssemblyTitle("SpecFlow.Variants.XUnitProvider.IntegrationTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SpecFlow.Variants.IntegrationTests.XUnit")]
+[assembly: AssemblyProduct("SpecFlow.Variants.XUnitProvider.IntegrationTests")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

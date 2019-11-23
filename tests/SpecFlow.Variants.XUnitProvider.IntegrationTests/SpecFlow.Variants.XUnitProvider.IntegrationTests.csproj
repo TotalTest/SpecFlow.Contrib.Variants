@@ -8,8 +8,8 @@
     <ProjectGuid>{4BC98D97-D724-4E02-8CE8-22188CAC01F6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpecFlow.Variants.IntegrationTests.XUnit</RootNamespace>
-    <AssemblyName>SpecFlow.Variants.IntegrationTests.XUnit</AssemblyName>
+    <RootNamespace>SpecFlow.Variants.XUnitProvider.IntegrationTests</RootNamespace>
+    <AssemblyName>SpecFlow.Variants.XUnitProvider.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -40,7 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,17 +64,40 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XUnitDemoFeatureTests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>XUnitDemoFeatureTests.feature</DependentUpon>
+    </Compile>
+    <Compile Include="XUnitDemoScenarioTests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>XUnitDemoScenarioTests.feature</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\SpecFlow.Variants.SpecFlowPlugin\SpecFlow.Variants.SpecFlowPlugin.csproj">
       <Project>{2d671486-4dd8-48b5-910c-6a01d2f80c3c}</Project>
       <Name>SpecFlow.Variants.SpecFlowPlugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SpecFlow.Variants.IntegrationTests.SharedBindings\SpecFlow.Variants.IntegrationTests.SharedBindings.csproj">
+      <Project>{f655e690-8c6f-47b4-a916-2bb50c183495}</Project>
+      <Name>SpecFlow.Variants.IntegrationTests.SharedBindings</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="XUnitDemoFeatureTests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>XUnitDemoFeatureTests.feature.cs</LastGenOutput>
+    </None>
+    <None Include="XUnitDemoScenarioTests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>XUnitDemoScenarioTests.feature.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />

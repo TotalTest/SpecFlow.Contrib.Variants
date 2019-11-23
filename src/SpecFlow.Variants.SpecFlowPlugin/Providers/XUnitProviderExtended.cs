@@ -93,10 +93,14 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Providers
 
         public void SetTestMethodCategories(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, IEnumerable<string> scenarioCategories)
         {
-            var filteredCategories = scenarioCategories.Where(a => a.StartsWith(_variantKey) && !a.EndsWith(testMethod.Name.Split('_').Last()));
+            var variantValue = testMethod.Name.Split('_').Last();
+            var filteredCategories = scenarioCategories.Where(a => a.StartsWith(_variantKey) && !a.EndsWith(variantValue));
 
             foreach (string scenarioCategory in scenarioCategories.Except(filteredCategories))
                 SetProperty(testMethod, "Category", scenarioCategory);
+
+            //testMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodeFieldReferenceExpression(null, generationContext.TestRunnerField.Name), "ScenarioContext"), "Add",
+            //    new CodeExpression[2] { new CodePrimitiveExpression(_variantHelper.VariantKey), new CodePrimitiveExpression(_variantValue) }));
         }
 
         public void SetTestMethodIgnore(TestClassGenerationContext generationContext, CodeMemberMethod testMethod)

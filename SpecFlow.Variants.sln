@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.UnitTests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.MsTestProvider.IntegrationTests", "tests\SpecFlow.Variants.MsTestProvider.IntegrationTests\SpecFlow.Variants.MsTestProvider.IntegrationTests.csproj", "{B8D64DD0-5834-457F-86D2-45477E0B4CD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.IntegrationTests.XUnit", "tests\SpecFlow.Variants.IntegrationTests.Xunit\SpecFlow.Variants.IntegrationTests.XUnit.csproj", "{4BC98D97-D724-4E02-8CE8-22188CAC01F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.XUnitProvider.IntegrationTests", "tests\SpecFlow.Variants.XUnitProvider.IntegrationTests\SpecFlow.Variants.XUnitProvider.IntegrationTests.csproj", "{4BC98D97-D724-4E02-8CE8-22188CAC01F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Variants.NUnitProvider.IntegrationTests", "tests\SpecFlow.Variants.NUnitProvider.IntegrationTests\SpecFlow.Variants.NUnitProvider.IntegrationTests.csproj", "{A53BACE2-4044-4A32-BC70-B49621BD2FE0}"
 EndProject
