@@ -185,7 +185,7 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with variant tags and examples", null, exampleTags);
 #line 24
 this.ScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.Add("Browser", "Firefox");
+            testRunner.ScenarioContext.Add("Browser", browser);
             this.ScenarioStart();
 #line 8
 this.FeatureBackground();

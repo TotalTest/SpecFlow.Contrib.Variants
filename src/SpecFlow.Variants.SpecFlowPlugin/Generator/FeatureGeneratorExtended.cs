@@ -202,6 +202,7 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
                     scenatioOutlineTestMethod.Parameters.RemoveAt(scenatioOutlineTestMethod.Parameters.Count - 1);
                     scenatioOutlineTestMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string), _variantHelper.VariantKey.ToLowerInvariant()));
                     scenatioOutlineTestMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string[]), "exampleTags"));
+                    _setVariantToContextForOutlineTest = true;
                 }
 
                 foreach (var tableRow in example.TableBody)
@@ -244,11 +245,25 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             var list1 = new List<CodeExpression>();
             list1.AddRange(row.Cells.Select(paramCell => new CodePrimitiveExpression(paramCell.Value)).Cast<CodeExpression>().ToList());
             list1.Add(exampleSetTags.GetStringArrayExpression());
+            
+            //// NEW CODE START
+            if (tag != null)
+            {
+                var s = new CodePrimitiveExpression(tag);
+                list1.Add(s);
+                _setVariantToContextForOutlineTest = true;
+            }
+            //// NEW CODE END
+
             testMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), scenatioOutlineTestMethod.Name, list1.ToArray()));
             _codeDomHelper.AddLineDirectiveHidden(testMethod.Statements, _specFlowConfiguration);
             var list2 = paramToIdentifier.Select((p2i, paramIndex) => new KeyValuePair<string, string>(p2i.Key, row.Cells.ElementAt(paramIndex).Value)).ToList();
             _testGeneratorProvider.SetTestMethodAsRow(generationContext, testMethod, scenarioOutline.Name, exampleSetTitle, variantName, list2);
         }
+
+        private bool _setVariantToContextForOutlineTest; // NEW CODE
+        private bool _setVariantToContextForTest; // NEW CODE
+        private string _variantValue; // NEW CODE
 
         private CodeMemberMethod CreateTestMethod(TestClassGenerationContext generationContext, ScenarioDefinition scenario, IEnumerable<Tag> additionalTags, string variantName = null, string exampleSetIdentifier = null)
         {
@@ -259,7 +274,16 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
 
         private void GenerateTest(TestClassGenerationContext generationContext, Scenario scenario, string tag = null)
         {
-            var variantName = string.IsNullOrEmpty(tag) ? null : $"_{tag}"; //NEW CODE
+            // NEW CODE START
+            string variantName = null;
+            if (!string.IsNullOrEmpty(tag))
+            {
+                variantName = $"_{tag}";
+                _setVariantToContextForTest = true;
+                _variantValue = tag;
+            }
+            // NEW CODE END
+
             var testMethod = CreateTestMethod(generationContext, scenario, null, variantName, null);
             GenerateTestBody(generationContext, scenario, testMethod, null, null);
         }
@@ -300,6 +324,33 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             {
                 new CodeVariableReferenceExpression("scenarioInfo")
             }));
+
+            //// NEW CODE START
+            if (_setVariantToContextForOutlineTest)
+            {
+                testMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(null, generationContext.TestRunnerField.Name), "ScenarioContext"), "Add", null), new CodeExpression[2]
+                {
+                    new CodePrimitiveExpression(_variantHelper.VariantKey),
+                    new CodeVariableReferenceExpression(_variantHelper.VariantKey.ToLowerInvariant())
+                }));
+
+                if (!generationContext.GenerateRowTests)
+                    testMethod.Parameters.Add(new CodeParameterDeclarationExpression("System.String", _variantHelper.VariantKey.ToLowerInvariant()));
+            }
+            else if (_setVariantToContextForTest)
+            {
+                testMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(new CodePropertyReferenceExpression(new CodeFieldReferenceExpression(null, generationContext.TestRunnerField.Name), "ScenarioContext"), "Add", null), new CodeExpression[2]
+                {
+                    new CodePrimitiveExpression(_variantHelper.VariantKey),
+                    new CodePrimitiveExpression(_variantValue)
+                }));
+            }
+
+            _setVariantToContextForOutlineTest = false;
+            _setVariantToContextForTest = false;
+            _variantValue = null;
+            //// NEW CODE END
+
             testMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), generationContext.ScenarioStartMethod.Name, new CodeExpression[0]));
             if (generationContext.Feature.HasFeatureBackground())
             {

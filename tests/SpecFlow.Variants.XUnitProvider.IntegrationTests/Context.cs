@@ -15,8 +15,6 @@ namespace SpecFlow.Variants.XUnitProvider.IntegrationTests
         [BeforeScenario]
         public void Before()
         {
-            var browser = _scenarioContext["Browser"];
-            _scenarioContext.Add("Browser", browser);
             _scenarioContext.Add("Namespace", GetType().Namespace);
         }
     }

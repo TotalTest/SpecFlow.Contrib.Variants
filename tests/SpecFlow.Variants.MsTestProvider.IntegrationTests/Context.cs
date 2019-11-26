@@ -18,9 +18,13 @@ namespace SpecFlow.Variants.MsTestProvider.IntegrationTests
         [BeforeScenario]
         public void Before()
         {
-            var browser = _testContext.Properties["Browser"];
-            _scenarioContext.Add("Browser", browser);
             _scenarioContext.Add("Namespace", GetType().Namespace);
+
+            /// <summary>
+            /// Example of accessing variant via MsTest TestContext
+            /// </summary>
+            //var browser = _testContext.Properties["Browser"];
+            //_scenarioContext.Add("Browser", browser);
         }
     }
 }

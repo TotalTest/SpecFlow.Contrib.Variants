@@ -129,7 +129,6 @@ this.FeatureBackground();
                         "Browser:Firefox"});
 #line 24
 this.ScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.Add("Browser", "Chrome");
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
@@ -153,7 +152,6 @@ this.FeatureBackground();
                         "Browser:Firefox"});
 #line 24
 this.ScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.Add("Browser", "Firefox");
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
@@ -187,7 +185,6 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with variant tags and examples", null, @__tags);
 #line 31
 this.ScenarioInitialize(scenarioInfo);
-            testRunner.ScenarioContext.Add("Browser", "Firefox");
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();

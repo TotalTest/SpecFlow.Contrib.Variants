@@ -139,6 +139,7 @@ this.FeatureBackground();
                         "Browser:Firefox"});
 #line 24
 this.ScenarioInitialize(scenarioInfo);
+            testRunner.ScenarioContext.Add("Browser", "Chrome");
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
@@ -163,6 +164,7 @@ this.FeatureBackground();
                         "Browser:Firefox"});
 #line 24
 this.ScenarioInitialize(scenarioInfo);
+            testRunner.ScenarioContext.Add("Browser", "Firefox");
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
@@ -176,7 +178,7 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        public virtual void ATestWithVariantTagsAndExamples(string repo, string site, string[] exampleTags)
+        public virtual void ATestWithVariantTagsAndExamples(string repo, string site, string[] exampleTags, string browser)
         {
             string[] @__tags = new string[] {
                     "Browser:Chrome",
@@ -188,6 +190,7 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with variant tags and examples", null, @__tags);
 #line 31
 this.ScenarioInitialize(scenarioInfo);
+            testRunner.ScenarioContext.Add("Browser", browser);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
@@ -208,7 +211,7 @@ this.FeatureBackground();
         public virtual void ATestWithVariantTagsAndExamples_Totaltest_Github_Io_Chrome()
         {
 #line 31
-this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/TotalTest/totaltest.github.io", ((string[])(null)));
+this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/TotalTest/totaltest.github.io", ((string[])(null)), "Chrome");
 #line hidden
         }
         
@@ -219,7 +222,7 @@ this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/
         public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Variants_Chrome()
         {
 #line 31
-this.ATestWithVariantTagsAndExamples("SpecFlow.Variants", "https://github.com/TotalTest/SpecFlow.Variants", ((string[])(null)));
+this.ATestWithVariantTagsAndExamples("SpecFlow.Variants", "https://github.com/TotalTest/SpecFlow.Variants", ((string[])(null)), "Chrome");
 #line hidden
         }
         
@@ -230,7 +233,7 @@ this.ATestWithVariantTagsAndExamples("SpecFlow.Variants", "https://github.com/To
         public virtual void ATestWithVariantTagsAndExamples_Totaltest_Github_Io_Firefox()
         {
 #line 31
-this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/TotalTest/totaltest.github.io", ((string[])(null)));
+this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/TotalTest/totaltest.github.io", ((string[])(null)), "Firefox");
 #line hidden
         }
         
@@ -241,7 +244,7 @@ this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/
         public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Variants_Firefox()
         {
 #line 31
-this.ATestWithVariantTagsAndExamples("SpecFlow.Variants", "https://github.com/TotalTest/SpecFlow.Variants", ((string[])(null)));
+this.ATestWithVariantTagsAndExamples("SpecFlow.Variants", "https://github.com/TotalTest/SpecFlow.Variants", ((string[])(null)), "Firefox");
 #line hidden
         }
         

@@ -1,6 +1,4 @@
-﻿using NUnit.Framework;
-using System.Linq;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 
 namespace SpecFlow.Variants.NUnitProvider.IntegrationTests
 {
@@ -17,12 +15,13 @@ namespace SpecFlow.Variants.NUnitProvider.IntegrationTests
         [BeforeScenario]
         public void Before()
         {
-            var cats = TestContext.CurrentContext.Test.Properties["Category"];
-            var browser = cats?.FirstOrDefault(a => a.ToString().StartsWith("Browser"))?
-                .ToString().Split(':')[1];
-
-            _scenarioContext.Add("Browser", browser);
             _scenarioContext.Add("Namespace", GetType().Namespace);
+
+            /// <summary>
+            /// Example of accessing variant via NUnit TestContext
+            /// </summary>
+            //var cats = TestContext.CurrentContext.Test.Properties["Category"];
+            //var browser = cats?.FirstOrDefault(a => a.ToString().StartsWith("Browser"))?.ToString().Split(':')[1];
         }
     }
 }
