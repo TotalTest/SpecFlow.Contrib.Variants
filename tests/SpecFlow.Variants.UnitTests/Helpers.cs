@@ -24,6 +24,16 @@ namespace SpecFlow.Variants.UnitTests
             return feature.Tags.Where(a => a.GetNameWithoutAt().StartsWith(tagName)).ToList();
         }
 
+        public static Tag GetTagsByNameExact(this Feature feature, string tagName)
+        {
+            return feature.Tags.Where(a => a.GetNameWithoutAt() == tagName).FirstOrDefault();
+        }
+
+        public static IList<Tag> GetTagsExceptNameStart(this Feature feature, string tagName)
+        {
+            return feature.Tags.Where(a => !a.GetNameWithoutAt().StartsWith(tagName)).ToList();
+        }
+
         public static Tag GetTagsByNameExact(this ScenarioDefinition scenario, string tagName)
         {
             return scenario.GetTags().Where(a => a.GetNameWithoutAt() == tagName).FirstOrDefault();

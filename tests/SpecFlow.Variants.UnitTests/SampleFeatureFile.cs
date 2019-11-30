@@ -46,6 +46,8 @@
                 | one  | 1    |
                 | two  | 2    |
 
+            @{Variant}:{Variants[0]}
+            @{Variant}:{Variants[1]}
             Scenario Outline: {ScenarioTitle_TagsExamplesAndInlineData}
                 Given some setup
                     """"""

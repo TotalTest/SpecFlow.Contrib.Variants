@@ -7,6 +7,7 @@ using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using TechTalk.SpecFlow.Configuration;
 using TechTalk.SpecFlow.Generator.UnitTestConverter;
 using TechTalk.SpecFlow.Generator.UnitTestProvider;
@@ -52,7 +53,7 @@ namespace SpecFlow.Variants.UnitTests
             return new CSharpCodeProvider().CompileAssemblyFromDom(new CompilerParameters(assemblies), ccu);
         }
 
-        protected int ExpectedNumOfMethodsForFeatureVariants(ScenarioDefinition scenario)
+        protected int ExpectedNumOfMethodsForFeatureVariants(ScenarioDefinition scenario, Feature feature = null)
         {
             int numOfMethods = 1;
             if (!_unitTestGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.RowTests))
@@ -75,12 +76,17 @@ namespace SpecFlow.Variants.UnitTests
             {
                 if (scenario is ScenarioOutline) return numOfMethods;
 
-                if (scenario.HasTags())
+                int variantTags = 0;
+                if (feature?.HasTags() == true)
                 {
-                    var variantTags = scenario.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
-                    if (variantTags > 0) numOfMethods = variantTags;
+                    variantTags += feature.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
+                }
+                else if (scenario.HasTags())
+                {
+                    variantTags += scenario.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
                 }
 
+                if (variantTags > 0) numOfMethods = variantTags;
                 return numOfMethods;
             }
         }
@@ -116,6 +122,38 @@ namespace SpecFlow.Variants.UnitTests
 
                 return numOfMethods;
             }
+        }
+
+        protected string GetScenarioContextVariantStatement(CodeTypeMember method, bool isBase = false, int statementLine = 2)
+        {
+            var statement = ((CodeMemberMethod)method).Statements.Cast<CodeStatement>().ToList()[statementLine] as CodeExpressionStatement;
+            var expression = statement.Expression as CodeMethodInvokeExpression;
+            if (!(expression.Method.TargetObject is CodePropertyReferenceExpression property))
+                return null;
+            var field = property.TargetObject as CodeFieldReferenceExpression;
+
+            string keyValue;
+            string keyName;
+            if (isBase)
+            {
+                keyName = ((CodePrimitiveExpression)expression.Parameters[0]).Value.ToString();
+                keyValue = ((CodeVariableReferenceExpression)expression.Parameters[1]).VariableName;
+            }
+            else
+            {
+                keyName = ((CodePrimitiveExpression)expression.Parameters[0]).Value.ToString();
+                keyValue = ((CodePrimitiveExpression)expression.Parameters[1]).Value.ToString();
+            }
+
+            return $"{field.FieldName}.{property.PropertyName}.{expression.Method.MethodName}(\"{keyName}\", \"{keyValue}\");";
+        }
+
+        protected string GetVariantParameterOfRowMethod(CodeTypeMember method)
+        {
+            var statement = ((CodeMemberMethod)method).Statements.Cast<CodeStatement>().ToList()[0] as CodeExpressionStatement;
+            var expression = statement.Expression as CodeMethodInvokeExpression;
+            var lastParam = expression.Parameters.Cast<CodeExpression>().Last(a => a is CodePrimitiveExpression) as CodePrimitiveExpression;
+            return lastParam.Value.ToString();
         }
     }
 }
