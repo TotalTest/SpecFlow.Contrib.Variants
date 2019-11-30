@@ -2,6 +2,9 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace SpecFlow.Variants.IntegrationTests.SharedBindings
@@ -10,6 +13,7 @@ namespace SpecFlow.Variants.IntegrationTests.SharedBindings
     public sealed class Hooks
     {
         private readonly ScenarioContext _scenarioContext;
+        private string _baseDir;
         private IWebDriver _driver;
 
         public Hooks(ScenarioContext scenarioContext)
@@ -20,10 +24,10 @@ namespace SpecFlow.Variants.IntegrationTests.SharedBindings
         [BeforeScenario]
         public void BeforeScenario()
         {
-            var browser = _scenarioContext["Browser"];
+            _scenarioContext.TryGetValue("Browser", out var browser);
             var ns = _scenarioContext["Namespace"].ToString().ToLowerInvariant();
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant();
-            var driverDir = baseDir.Replace(ns, GetType().Namespace.ToLowerInvariant());
+            _baseDir = AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant();
+            var driverDir = _baseDir.Replace(ns, GetType().Namespace.ToLowerInvariant());
 
             switch (browser)
             {
@@ -63,10 +67,24 @@ namespace SpecFlow.Variants.IntegrationTests.SharedBindings
         {
             if (_scenarioContext.TestError != null)
             {
-                ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile($@"C:\Users\prab\Desktop\{_scenarioContext.ScenarioInfo.Title}.jpg", ScreenshotImageFormat.Jpeg);
+                var path = Path.Combine(_baseDir, "Screenshots");
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile($@"{path}\{_scenarioContext.ScenarioInfo.Title}.jpg", ScreenshotImageFormat.Jpeg);
             }
-            
+
             _driver.Dispose();
+        }
+
+        [AfterTestRun]
+        public static void AfterRun()
+        {
+            var processes = Process.GetProcessesByName("geckodriver").ToList();
+            processes.AddRange(Process.GetProcessesByName("chromedriver"));
+
+            foreach (var process in processes)
+                process.Kill();
         }
     }
 }

@@ -1,4 +1,7 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
+using System.Linq;
 
 namespace SpecFlow.Variants.IntegrationTests.SharedBindings.Pages
 {
@@ -21,14 +24,13 @@ namespace SpecFlow.Variants.IntegrationTests.SharedBindings.Pages
         public void SearchFor(string searchTerm)
         {
             _driver.FindElement(_searchBox).SendKeys(searchTerm);
-            _driver.FindElement(_searchBox).SendKeys(Keys.Enter);
-
-            int i = 2;
-            while (_driver.FindElements(_searchButton).Count > 0 && i > 0)
+            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
+            wait.Until((a) =>
             {
-                _driver.FindElements(_searchButton)[1].Click();
-                i--;
-            }
+                var gs = a.FindElements(_searchButton).FirstOrDefault(el => el.Displayed);
+                if (gs == null) { return gs; }
+                return SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(gs).Invoke(a);
+            }).Click();
         }
     }
 }

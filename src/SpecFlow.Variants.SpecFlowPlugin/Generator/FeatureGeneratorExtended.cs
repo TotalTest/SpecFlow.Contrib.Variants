@@ -23,8 +23,14 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
         private readonly SpecFlowConfiguration _specFlowConfiguration;
         private readonly IDecoratorRegistry _decoratorRegistry;
         private int _tableCounter;
-        private readonly VariantHelper _variantHelper; //NEW CODE
+
+        //NEW CODE START
+        private readonly VariantHelper _variantHelper;
         private List<Tag> _featureVariantTags;
+        private bool _setVariantToContextForOutlineTest;
+        private bool _setVariantToContextForTest;
+        private string _variantValue;
+        //NEW CODE END
 
         public FeatureGeneratorExtended(IUnitTestGeneratorProvider testGeneratorProvider, CodeDomHelper codeDomHelper, SpecFlowConfiguration specFlowConfiguration, IDecoratorRegistry decoratorRegistry, string variantKey)
             : base(decoratorRegistry, testGeneratorProvider, codeDomHelper, specFlowConfiguration)
@@ -260,10 +266,6 @@ namespace SpecFlow.Variants.SpecFlowPlugin.Generator
             var list2 = paramToIdentifier.Select((p2i, paramIndex) => new KeyValuePair<string, string>(p2i.Key, row.Cells.ElementAt(paramIndex).Value)).ToList();
             _testGeneratorProvider.SetTestMethodAsRow(generationContext, testMethod, scenarioOutline.Name, exampleSetTitle, variantName, list2);
         }
-
-        private bool _setVariantToContextForOutlineTest; // NEW CODE
-        private bool _setVariantToContextForTest; // NEW CODE
-        private string _variantValue; // NEW CODE
 
         private CodeMemberMethod CreateTestMethod(TestClassGenerationContext generationContext, ScenarioDefinition scenario, IEnumerable<Tag> additionalTags, string variantName = null, string exampleSetIdentifier = null)
         {

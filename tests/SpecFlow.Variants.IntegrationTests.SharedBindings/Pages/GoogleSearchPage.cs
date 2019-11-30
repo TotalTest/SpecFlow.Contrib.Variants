@@ -1,4 +1,6 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,14 +29,8 @@ namespace SpecFlow.Variants.IntegrationTests.SharedBindings.Pages
 
         public void SelectResult(string result)
         {
-            _driver.FindElements(_searchResults)
-                .First(a => a.Text.Contains(result)).Click();
-
-            if (_driver.FindElements(_searchResults).Count > 0)
-            {
-                _driver.FindElements(_searchResults)
-                .FirstOrDefault(a => a.Text.Contains(result))?.Click();
-            }
+            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
+            wait.Until((a) => a.FindElements(_searchResults).First(b => b.Text.Contains(result))).Click();
         }
     }
 }
