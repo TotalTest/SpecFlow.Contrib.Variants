@@ -4,6 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
+#- master
 - develop
 
 pool:
@@ -14,40 +15,50 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   packageVersion: '1.0.0-develop'
+  vmImage: 'windows-latest'
 
-steps:
-- task: NuGetToolInstaller@1
+stages:
+- stage: build_test
+  jobs:
+  - job: build
+    pool:
+      vmImage: '$(vmImage)'
+    steps:
+    - task: NuGetToolInstaller@1
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+  - job: run_unit_tests
+    pool:
+      vmImage: '$(vmImage)'
+    steps:
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+        testSelector: testAssemblies
+        testAssemblyVer2: |
+          **\*UnitTests.dll
+          !**\*TestAdapter.dll
+          !**\obj\**
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+### ADD STAGE FOR NUGET PUSH PER BRANCH
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+#- task: NuGetCommand@2
+#  inputs:
+#    command: 'pack'
+#    packagesToPack: '**/*.nuspec'
+#    versioningScheme: 'byEnvVar'
+#    versionEnvVar: '$(packageVersion)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    testSelector: testAssemblies
-    testAssemblyVer2: |
-     **\*UnitTests.dll
-     !**\*TestAdapter.dll
-     !**\obj\**
-
-- task: NuGetCommand@2
-  inputs:
-    command: 'pack'
-    packagesToPack: '**/*.nuspec'
-    versioningScheme: 'byEnvVar'
-    versionEnvVar: '$(packageVersion)'
-
-- task: NuGetCommand@2
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+#- task: NuGetCommand@2
+#  inputs:
+#    command: 'push'
+#    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+#    nuGetFeedType: 'internal'
+#    publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
