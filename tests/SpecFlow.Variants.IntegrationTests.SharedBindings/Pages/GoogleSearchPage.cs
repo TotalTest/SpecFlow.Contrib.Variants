@@ -9,7 +9,7 @@ namespace SpecFlow.Variants.IntegrationTests.SharedBindings.Pages
     public class GoogleSearchPage
     {
         private readonly IWebDriver _driver;
-        private readonly By _searchResults = By.CssSelector("#search .S3Uucc");
+        private readonly By _searchResults = By.CssSelector("#search h3");
         private readonly By _links = By.CssSelector("#hdtb-msb a");
 
         public GoogleSearchPage(IWebDriver driver)
