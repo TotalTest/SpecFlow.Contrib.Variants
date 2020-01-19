@@ -45,8 +45,11 @@ stages:
         testSelector: 'testAssemblies'
         testAssemblyVer2: |
           **\*UnitTests.dll
+          **\bin\$(BuildConfiguration)\**\*UnitTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
+          !**\xunit.runner.visualstudio.testadapter.dll
+          !**\xunit.runner.visualstudio.dotnetcore.testadapter.dll
         searchFolder: '$(Build.ArtifactStagingDirectory)'
 
 - stage: deploy_package
