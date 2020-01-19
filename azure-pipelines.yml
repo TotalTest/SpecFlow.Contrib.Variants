@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-#- master
+- master
 - develop
 
 pool:
@@ -19,10 +19,10 @@ variables:
 
 stages:
 - stage: build_test
+  pool:
+    vmImage: '$(vmImage)'
   jobs:
   - job: build
-    pool:
-      vmImage: '$(vmImage)'
     steps:
     - task: NuGetToolInstaller@1
     - task: NuGetCommand@2
@@ -34,8 +34,6 @@ stages:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
   - job: run_unit_tests
-    pool:
-      vmImage: '$(vmImage)'
     steps:
     - task: VSTest@2
       inputs:
@@ -47,18 +45,24 @@ stages:
           !**\*TestAdapter.dll
           !**\obj\**
 
-### ADD STAGE FOR NUGET PUSH PER BRANCH
-
-#- task: NuGetCommand@2
-#  inputs:
-#    command: 'pack'
-#    packagesToPack: '**/*.nuspec'
-#    versioningScheme: 'byEnvVar'
-#    versionEnvVar: '$(packageVersion)'
-
-#- task: NuGetCommand@2
-#  inputs:
-#    command: 'push'
-#    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-#    nuGetFeedType: 'internal'
-#    publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+- stage: deploy_package
+  pool:
+    vmImage: '$(vmImage)'
+  jobs:
+  - job: deploy_prerelease
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
+    steps:
+    - task: NuGetCommand@2
+      inputs:
+        command: 'pack'
+        packagesToPack: '**/*.nuspec'
+        versioningScheme: 'byEnvVar'
+        versionEnvVar: '$(packageVersion)'
+    - task: NuGetCommand@2
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+#    - job: deploy_major
+#      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
