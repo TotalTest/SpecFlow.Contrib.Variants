@@ -33,10 +33,22 @@ stages:
         solution: '$(solution)'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
-    - task: CopyFiles@2
+    - task: VSTest@2
       inputs:
-        contents: '**\SpecFlow.Variants.UnitTests\bin\$(buildConfiguration)\**'
-        targetFolder: $(Build.ArtifactStagingDirectory)
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: |
+          **\*UnitTests.dll
+          **\bin\$(BuildConfiguration)\**\*UnitTests.dll
+          **\tests\SpecFlow.Variants.UnitTests\bin\Release\SpecFlow.Variants.UnitTests.dll
+          d:\a\1\a\tests\SpecFlow.Variants.UnitTests\bin\Release\SpecFlow.Variants.UnitTests.dll
+          !**\*TestAdapter.dll
+          !**\obj\**
+          !**\xunit.runner.visualstudio.testadapter.dll
+          !**\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+    #- task: CopyFiles@2
+    #  inputs:
+    #    contents: '**\SpecFlow.Variants.UnitTests\bin\$(buildConfiguration)\**'
+    #    targetFolder: $(Build.ArtifactStagingDirectory)
   - job: run_unit_tests
     dependsOn: build
     steps:
