@@ -35,12 +35,12 @@ stages:
         configuration: '$(buildConfiguration)'
     - task: CopyFiles@2
       inputs:
-        contents: '**/*.dll'
+        contents: 'SpecFlow.Variants.UnitTests\obj\Release\**'
         targetFolder: $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'drop'
         publishLocation: 'Container'
   - job: run_unit_tests
     steps:
