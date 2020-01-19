@@ -33,17 +33,13 @@ stages:
         solution: '$(solution)'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
-    - task: CopyFiles@2
-      inputs:
-        contents: '_buildOutput/**'
-        targetFolder: $(Build.ArtifactStagingDirectory)
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
   - job: run_unit_tests
     steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        downloadPath: '$(System.ArtifactsDirectory)'
     - task: VSTest@2
       inputs:
         testSelector: 'testAssemblies'
@@ -51,7 +47,7 @@ stages:
           **\*test*.dll
           !**\*TestAdapter.dll
           !**\obj\**
-        searchFolder: '$(Build.ArtifactStagingDirectory)'
+        searchFolder: '$(System.ArtifactsDirectory)'
 
 - stage: deploy_package
   pool:
