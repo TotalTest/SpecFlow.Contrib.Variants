@@ -37,13 +37,12 @@ stages:
     steps:
     - task: VSTest@2
       inputs:
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-        testSelector: testAssemblies
+        testSelector: 'testAssemblies'
         testAssemblyVer2: |
-          **\*UnitTests.dll
+          **\*test*.dll
           !**\*TestAdapter.dll
           !**\obj\**
+        searchFolder: '$(System.DefaultWorkingDirectory)'
 
 - stage: deploy_package
   pool:
