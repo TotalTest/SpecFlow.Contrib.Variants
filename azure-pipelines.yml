@@ -43,6 +43,7 @@ stages:
         artifactName: 'drop'
         publishLocation: 'Container'
   - job: run_unit_tests
+    dependsOn: build
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
