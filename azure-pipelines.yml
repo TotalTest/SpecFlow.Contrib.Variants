@@ -46,6 +46,8 @@ stages:
         testAssemblyVer2: |
           **\*UnitTests.dll
           **\bin\$(BuildConfiguration)\**\*UnitTests.dll
+          **\tests\SpecFlow.Variants.UnitTests\bin\Release\SpecFlow.Variants.UnitTests.dll
+          d:\a\1\a\tests\SpecFlow.Variants.UnitTests\bin\Release\SpecFlow.Variants.UnitTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
           !**\xunit.runner.visualstudio.testadapter.dll
