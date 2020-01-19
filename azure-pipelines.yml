@@ -35,30 +35,19 @@ stages:
         configuration: '$(buildConfiguration)'
     - task: CopyFiles@2
       inputs:
-        contents: 'SpecFlow.Variants.UnitTests\obj\Release\**'
+        contents: 'SpecFlow.Variants.UnitTests\bin\**\*.dll'
         targetFolder: $(Build.ArtifactStagingDirectory)
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: 'drop'
-        publishLocation: 'Container'
   - job: run_unit_tests
     dependsOn: build
     steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        artifactName: 'drop'
-        downloadType: 'single'
-        downloadPath: '$(System.ArtifactsDirectory)'
     - task: VSTest@2
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: |
-          **\*test*.dll
+          **\*UnitTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
-        searchFolder: '$(System.ArtifactsDirectory)'
+        searchFolder: '$(Build.ArtifactStagingDirectory)'
 
 - stage: deploy_package
   pool:
