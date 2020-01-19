@@ -33,25 +33,30 @@ stages:
         solution: '$(solution)'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
-    - task: VSTest@2
-      inputs:
-        testSelector: 'testAssemblies'
-        testAssemblyVer2: |
-          **\*UnitTests.dll
-          **\bin\$(BuildConfiguration)\**\*UnitTests.dll
-          **\tests\SpecFlow.Variants.UnitTests\bin\Release\SpecFlow.Variants.UnitTests.dll
-          d:\a\1\a\tests\SpecFlow.Variants.UnitTests\bin\Release\SpecFlow.Variants.UnitTests.dll
-          !**\*TestAdapter.dll
-          !**\obj\**
-          !**\xunit.runner.visualstudio.testadapter.dll
-          !**\xunit.runner.visualstudio.dotnetcore.testadapter.dll
-    #- task: CopyFiles@2
+    #- task: VSTest@2
     #  inputs:
-    #    contents: '**\SpecFlow.Variants.UnitTests\bin\$(buildConfiguration)\**'
-    #    targetFolder: $(Build.ArtifactStagingDirectory)
+    #    testSelector: 'testAssemblies'
+    #    testAssemblyVer2: |
+    #      **\*UnitTests.dll
+    #      !**\*TestAdapter.dll
+    #      !**\obj\**
+    - task: CopyFiles@2
+      inputs:
+        contents: '**\SpecFlow.Variants.UnitTests\bin\$(buildConfiguration)\**'
+        targetFolder: $(Build.ArtifactStagingDirectory)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: drop
   - job: run_unit_tests
     dependsOn: build
     steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
     - task: VSTest@2
       inputs:
         testSelector: 'testAssemblies'
@@ -64,7 +69,7 @@ stages:
           !**\obj\**
           !**\xunit.runner.visualstudio.testadapter.dll
           !**\xunit.runner.visualstudio.dotnetcore.testadapter.dll
-        searchFolder: '$(Build.ArtifactStagingDirectory)'
+        searchFolder: '$(System.ArtifactsDirectory)'
 
 - stage: deploy_package
   pool:
