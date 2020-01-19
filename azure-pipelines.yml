@@ -35,7 +35,7 @@ stages:
         configuration: '$(buildConfiguration)'
     - task: CopyFiles@2
       inputs:
-        contents: 'SpecFlow.Variants.UnitTests\bin\**\*.dll'
+        contents: '**\SpecFlow.Variants.UnitTests\bin\$(buildConfiguration)\**'
         targetFolder: $(Build.ArtifactStagingDirectory)
   - job: run_unit_tests
     dependsOn: build
