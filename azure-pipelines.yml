@@ -1,7 +1,5 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+# Build, test and package pipeline for SpecFlow.Variants package
+# Versioning of package currently managed by variables
 
 trigger:
 - master
@@ -33,43 +31,42 @@ stages:
         solution: '$(solution)'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
-    #- task: VSTest@2
-    #  inputs:
-    #    testSelector: 'testAssemblies'
-    #    testAssemblyVer2: |
-    #      **\*UnitTests.dll
-    #      !**\*TestAdapter.dll
-    #      !**\obj\**
-    - task: CopyFiles@2
-      inputs:
-        contents: '**\SpecFlow.Variants.UnitTests\bin\$(buildConfiguration)\**'
-        targetFolder: $(Build.ArtifactStagingDirectory)
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: drop
-  - job: run_unit_tests
-    dependsOn: build
-    steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
     - task: VSTest@2
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: |
           **\*UnitTests.dll
-          **\bin\$(BuildConfiguration)\**\*UnitTests.dll
-          **\tests\SpecFlow.Variants.UnitTests\bin\Release\SpecFlow.Variants.UnitTests.dll
-          d:\a\1\a\tests\SpecFlow.Variants.UnitTests\bin\Release\SpecFlow.Variants.UnitTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
-          !**\xunit.runner.visualstudio.testadapter.dll
-          !**\xunit.runner.visualstudio.dotnetcore.testadapter.dll
-        searchFolder: '$(System.ArtifactsDirectory)'
+
+### THE BELOW IS FOR RUNNING THE INTEGRATION TESTS AS A NEW JOB
+    #- task: CopyFiles@2
+    #  inputs:
+    #    contents: |
+    #      **\SpecFlow.Variants.*\bin\$(buildConfiguration)\**
+    #      !**\SpecFlow.Variants.UnitTests\**
+    #    targetFolder: $(Build.ArtifactStagingDirectory)
+    #- task: PublishBuildArtifacts@1
+    #  inputs:
+    #    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    #    artifactName: drop
+  #- job: run_integration_tests
+  #  dependsOn: build
+  #  steps:
+  #  - task: DownloadBuildArtifacts@0
+  #    inputs:
+  #      buildType: 'current'
+  #      downloadType: 'single'
+  #      artifactName: 'drop'
+  #      downloadPath: '$(System.ArtifactsDirectory)'
+  #  - task: VSTest@2
+  #    inputs:
+  #      testSelector: 'testAssemblies'
+  #      testAssemblyVer2: |
+  #        **\*IntegrationTests.dll
+  #        !**\*TestAdapter.dll
+  #        !**\obj\**
+  #      searchFolder: '$(System.ArtifactsDirectory)'
 
 - stage: deploy_package
   pool:
@@ -90,5 +87,7 @@ stages:
         packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+
+### ADD PUSH TO NUGET
 #    - job: deploy_major
 #      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
