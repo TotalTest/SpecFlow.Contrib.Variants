@@ -97,7 +97,7 @@ stages:
         command: 'pack'
         packagesToPack: '$(System.ArtifactsDirectory)/*.nuspec'
         versioningScheme: 'byEnvVar'
-        versionEnvVar: '$(packageVersion)'
+        versionEnvVar: 'packageVersion'
     - task: NuGetCommand@2
       inputs:
         command: 'push'
