@@ -38,6 +38,16 @@ stages:
           **\*UnitTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
+    - task: CopyFiles@2
+      inputs:
+        contents: |
+          **\SpecFlow.Variants.SpecFlowPlugin\bin\$(buildConfiguration)\**
+          **\*.nuspec
+        targetFolder: $(Build.ArtifactStagingDirectory)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: drop    
 
 ### THE BELOW IS FOR RUNNING THE INTEGRATION TESTS AS A NEW JOB
     #- task: CopyFiles@2
@@ -75,6 +85,12 @@ stages:
   - job: deploy_prerelease
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
     steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
     - task: NuGetToolInstaller@1
     - task: NuGetCommand@2
       inputs:
@@ -85,7 +101,8 @@ stages:
     - task: NuGetCommand@2
       inputs:
         command: 'push'
-        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+        #packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+        packagesToPush: '$(System.ArtifactsDirectory)/*.nupkg;!$(Build.ArtifactStagingDirectory)/*.symbols.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
 
