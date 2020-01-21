@@ -75,6 +75,7 @@ stages:
   - job: deploy_prerelease
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
     steps:
+    - task: NuGetToolInstaller@1
     - task: NuGetCommand@2
       inputs:
         command: 'pack'
