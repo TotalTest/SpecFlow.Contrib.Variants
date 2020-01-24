@@ -95,14 +95,14 @@ stages:
     - task: NuGetCommand@2
       inputs:
         command: 'pack'
-        packagesToPack: '$(System.ArtifactsDirectory)/*.nuspec'
+        packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
         versioningScheme: 'byEnvVar'
         versionEnvVar: 'packageVersion'
     - task: NuGetCommand@2
       inputs:
         command: 'push'
         #packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-        packagesToPush: '$(System.ArtifactsDirectory)/*.nupkg;!$(Build.ArtifactStagingDirectory)/*.symbols.nupkg'
+        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
 
