@@ -43,6 +43,7 @@ stages:
         contents: |
           **\SpecFlow.Variants.SpecFlowPlugin\bin\$(buildConfiguration)\**
           **\*.nuspec
+          **\*.xdt
         targetFolder: $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts@1
       inputs:
