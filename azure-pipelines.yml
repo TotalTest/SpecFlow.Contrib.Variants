@@ -112,6 +112,10 @@ stages:
         downloadType: 'single'
         artifactName: 'drop'
         downloadPath: '$(System.ArtifactsDirectory)'
+    - task: NuGetAuthenticate@0
+      inputs:
+        nuGetServiceConnections: 'Nuget'
+        forceReinstallCredentialProvider: true
     - task: NuGetToolInstaller@1
     - task: NuGetCommand@2
       inputs:
@@ -119,10 +123,6 @@ stages:
         packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
         versioningScheme: 'byEnvVar'
         versionEnvVar: 'packageVersion'
-    - task: NuGetAuthenticate@0
-      inputs:
-        nuGetServiceConnections: 'Nuget'
-        forceReinstallCredentialProvider: true
     - task: NuGetCommand@2
       inputs:
         command: 'push'
