@@ -5,13 +5,11 @@ trigger:
 - master
 - develop
 
-pool:
-  vmImage: 'windows-latest'
-
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  packageVersionPre: '1.0.0'
   packageVersion: '1.0.0-develop'
   vmImage: 'windows-latest'
 
@@ -98,15 +96,36 @@ stages:
         command: 'pack'
         packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
         versioningScheme: 'byEnvVar'
-        versionEnvVar: 'packageVersion'
+        versionEnvVar: 'packageVersionPre'
     - task: NuGetCommand@2
       inputs:
         command: 'push'
-        #packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
         packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
-
-### ADD PUSH TO NUGET
-#    - job: deploy_major
-#      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  - job: deploy_release
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))  
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    - task: NuGetToolInstaller@1
+    - task: NuGetCommand@2
+      inputs:
+        command: 'pack'
+        packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
+        versioningScheme: 'byEnvVar'
+        versionEnvVar: 'packageVersion'
+    - task: NuGetAuthenticate@0
+      inputs:
+        nuGetServiceConnections: 'Nuget'
+        forceReinstallCredentialProvider: true
+    - task: NuGetCommand@2
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+        nuGetFeedType: 'external'
+        publishFeedCredentials: 'Nuget'
