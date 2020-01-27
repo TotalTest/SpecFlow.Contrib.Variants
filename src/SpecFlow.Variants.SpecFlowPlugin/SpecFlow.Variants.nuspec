@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <package>
   <metadata>
-    <id>SpecFlow.Variants</id>
+    <id>SpecFlow.Contrib.Variants</id>
     <version>1.0.0</version>
     <title>SpecFlow Variants</title>
     <authors>Total Test Ltd</authors>

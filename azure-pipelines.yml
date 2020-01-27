@@ -9,8 +9,8 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  packageVersion: '1.0.1'
-  packageVersionPre: '1.0.1-develop'
+  packageVersion: '1.0.2'
+  packageVersionPre: '1.0.2-develop'
   vmImage: 'windows-latest'
 
 stages:
@@ -112,10 +112,6 @@ stages:
         downloadType: 'single'
         artifactName: 'drop'
         downloadPath: '$(System.ArtifactsDirectory)'
-    #- task: NuGetAuthenticate@0
-    #  inputs:
-    #    nuGetServiceConnections: 'Nuget'
-    #    forceReinstallCredentialProvider: true
     - task: NuGetToolInstaller@1
     - task: NuGetCommand@2
       inputs:
