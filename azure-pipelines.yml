@@ -1,4 +1,4 @@
-# Build, test and package pipeline for SpecFlow.Variants package
+# Build, test and package pipeline for SpecFlow.Contrib.Variants package
 # Versioning of package currently managed by variables
 
 trigger:
@@ -39,7 +39,7 @@ stages:
     - task: CopyFiles@2
       inputs:
         contents: |
-          **\SpecFlow.Variants.SpecFlowPlugin\bin\$(buildConfiguration)\**
+          **\SpecFlow.Contrib.Variants.SpecFlowPlugin\bin\$(buildConfiguration)\**
           **\*.nuspec
           **\*.xdt
         targetFolder: $(Build.ArtifactStagingDirectory)
@@ -52,8 +52,8 @@ stages:
     #- task: CopyFiles@2
     #  inputs:
     #    contents: |
-    #      **\SpecFlow.Variants.*\bin\$(buildConfiguration)\**
-    #      !**\SpecFlow.Variants.UnitTests\**
+    #      **\SpecFlow.Contrib.Variants.*\bin\$(buildConfiguration)\**
+    #      !**\SpecFlow.Contrib.Variants.UnitTests\**
     #    targetFolder: $(Build.ArtifactStagingDirectory)
     #- task: PublishBuildArtifacts@1
     #  inputs:
