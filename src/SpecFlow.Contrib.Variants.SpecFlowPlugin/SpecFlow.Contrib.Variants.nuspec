@@ -7,7 +7,7 @@
     <authors>Total Test Ltd</authors>
     <owners>Prab Gahir</owners>
     <license type="expression">Apache-2.0</license>
-    <projectUrl>https://github.com/TotalTest/SpecFlow.Variants</projectUrl>
+    <projectUrl>https://github.com/TotalTest/SpecFlow.Contrib.Variants</projectUrl>
     <iconUrl>https://avatars3.githubusercontent.com/u/10982432?s=400&amp;u=93827ac9a93861ea734e5fb2d4655e6d9e0e342f&amp;v=4</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Extends SpecFlow to allow variants of a test to be run using tags - for example running scenarios against different browsers.</description>

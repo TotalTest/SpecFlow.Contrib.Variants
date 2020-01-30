@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace SpecFlow.Variants.MsTestProvider.IntegrationTests
+namespace SpecFlow.Contrib.Variants.MsTestProvider.IntegrationTests
 {
     using TechTalk.SpecFlow;
     
@@ -64,7 +64,7 @@ namespace SpecFlow.Variants.MsTestProvider.IntegrationTests
             if (((testRunner.FeatureContext != null) 
                         && (testRunner.FeatureContext.FeatureInfo.Title != "MsTestDemoFeatureTests")))
             {
-                global::SpecFlow.Variants.MsTestProvider.IntegrationTests.MsTestDemoFeatureTestsFeature.FeatureSetup(null);
+                global::SpecFlow.Contrib.Variants.MsTestProvider.IntegrationTests.MsTestDemoFeatureTestsFeature.FeatureSetup(null);
             }
         }
         
@@ -231,17 +231,17 @@ this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: SpecFlow.Variants_Chrome")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: SpecFlow.Contrib.Variants_Chrome")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MsTestDemoFeatureTests")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Browser:Chrome")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Browser", "Chrome")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "SpecFlow.Variants_Chrome")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Repo", "SpecFlow.Variants")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://github.com/TotalTest/SpecFlow.Variants")]
-        public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Variants_Chrome()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "SpecFlow.Contrib.Variants_Chrome")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Repo", "SpecFlow.Contrib.Variants")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://github.com/TotalTest/SpecFlow.Contrib.Variants")]
+        public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Contrib_Variants_Chrome()
         {
 #line 24
-this.ATestWithVariantTagsAndExamples("SpecFlow.Variants", "https://github.com/TotalTest/SpecFlow.Variants", ((string[])(null)), "Chrome");
+this.ATestWithVariantTagsAndExamples("SpecFlow.Contrib.Variants", "https://github.com/TotalTest/SpecFlow.Contrib.Variants", ((string[])(null)), "Chrome");
 #line hidden
         }
         
@@ -261,17 +261,17 @@ this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: SpecFlow.Variants_Firefox")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: SpecFlow.Contrib.Variants_Firefox")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MsTestDemoFeatureTests")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Browser:Firefox")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Browser", "Firefox")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "SpecFlow.Variants_Firefox")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Repo", "SpecFlow.Variants")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://github.com/TotalTest/SpecFlow.Variants")]
-        public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Variants_Firefox()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "SpecFlow.Contrib.Variants_Firefox")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Repo", "SpecFlow.Contrib.Variants")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://github.com/TotalTest/SpecFlow.Contrib.Variants")]
+        public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Contrib_Variants_Firefox()
         {
 #line 24
-this.ATestWithVariantTagsAndExamples("SpecFlow.Variants", "https://github.com/TotalTest/SpecFlow.Variants", ((string[])(null)), "Firefox");
+this.ATestWithVariantTagsAndExamples("SpecFlow.Contrib.Variants", "https://github.com/TotalTest/SpecFlow.Contrib.Variants", ((string[])(null)), "Firefox");
 #line hidden
         }
     }

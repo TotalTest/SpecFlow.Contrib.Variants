@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace SpecFlow.Variants.NUnitProvider.IntegrationTests
+namespace SpecFlow.Contrib.Variants.NUnitProvider.IntegrationTests
 {
     using TechTalk.SpecFlow;
     
@@ -176,10 +176,10 @@ this.FeatureBackground();
             "ithub_com/TotalTest/totaltest_github_io\"")]
         [NUnit.Framework.TestCaseAttribute("totaltest.github.io", "https://github.com/TotalTest/totaltest.github.io", "Firefox", null, Category="Browser:Firefox", TestName="ATestWithVariantTagsAndExamples with Firefox and \"totaltest_github_io\", \"https://" +
             "github_com/TotalTest/totaltest_github_io\"")]
-        [NUnit.Framework.TestCaseAttribute("SpecFlow.Variants", "https://github.com/TotalTest/SpecFlow.Variants", "Chrome", null, Category="Browser:Chrome", TestName="ATestWithVariantTagsAndExamples with Chrome and \"SpecFlow_Variants\", \"https://git" +
-            "hub_com/TotalTest/SpecFlow_Variants\"")]
-        [NUnit.Framework.TestCaseAttribute("SpecFlow.Variants", "https://github.com/TotalTest/SpecFlow.Variants", "Firefox", null, Category="Browser:Firefox", TestName="ATestWithVariantTagsAndExamples with Firefox and \"SpecFlow_Variants\", \"https://gi" +
-            "thub_com/TotalTest/SpecFlow_Variants\"")]
+        [NUnit.Framework.TestCaseAttribute("SpecFlow.Contrib.Variants", "https://github.com/TotalTest/SpecFlow.Contrib.Variants", "Chrome", null, Category="Browser:Chrome", TestName="ATestWithVariantTagsAndExamples with Chrome and \"SpecFlow_Contrib_Variants\", \"htt" +
+            "ps://github_com/TotalTest/SpecFlow_Contrib_Variants\"")]
+        [NUnit.Framework.TestCaseAttribute("SpecFlow.Contrib.Variants", "https://github.com/TotalTest/SpecFlow.Contrib.Variants", "Firefox", null, Category="Browser:Firefox", TestName="ATestWithVariantTagsAndExamples with Firefox and \"SpecFlow_Contrib_Variants\", \"ht" +
+            "tps://github_com/TotalTest/SpecFlow_Contrib_Variants\"")]
         public virtual void ATestWithVariantTagsAndExamples(string repo, string site, string browser, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with variant tags and examples", null, exampleTags);

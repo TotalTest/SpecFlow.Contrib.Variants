@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace SpecFlow.Variants.XUnitProvider.IntegrationTests
+namespace SpecFlow.Contrib.Variants.XUnitProvider.IntegrationTests
 {
     using TechTalk.SpecFlow;
     
@@ -213,14 +213,14 @@ this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/
 #line hidden
         }
         
-        [Xunit.FactAttribute(DisplayName="A test with variant tags and examples: SpecFlow.Variants_Chrome")]
+        [Xunit.FactAttribute(DisplayName="A test with variant tags and examples: SpecFlow.Contrib.Variants_Chrome")]
         [Xunit.TraitAttribute("FeatureTitle", "XUnitDemoFeatureTests")]
-        [Xunit.TraitAttribute("Description", "A test with variant tags and examples: SpecFlow.Variants_Chrome")]
+        [Xunit.TraitAttribute("Description", "A test with variant tags and examples: SpecFlow.Contrib.Variants_Chrome")]
         [Xunit.TraitAttribute("Category", "Browser:Chrome")]
-        public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Variants_Chrome()
+        public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Contrib_Variants_Chrome()
         {
 #line 24
-this.ATestWithVariantTagsAndExamples("SpecFlow.Variants", "https://github.com/TotalTest/SpecFlow.Variants", ((string[])(null)), "Chrome");
+this.ATestWithVariantTagsAndExamples("SpecFlow.Contrib.Variants", "https://github.com/TotalTest/SpecFlow.Contrib.Variants", ((string[])(null)), "Chrome");
 #line hidden
         }
         
@@ -235,14 +235,14 @@ this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/
 #line hidden
         }
         
-        [Xunit.FactAttribute(DisplayName="A test with variant tags and examples: SpecFlow.Variants_Firefox")]
+        [Xunit.FactAttribute(DisplayName="A test with variant tags and examples: SpecFlow.Contrib.Variants_Firefox")]
         [Xunit.TraitAttribute("FeatureTitle", "XUnitDemoFeatureTests")]
-        [Xunit.TraitAttribute("Description", "A test with variant tags and examples: SpecFlow.Variants_Firefox")]
+        [Xunit.TraitAttribute("Description", "A test with variant tags and examples: SpecFlow.Contrib.Variants_Firefox")]
         [Xunit.TraitAttribute("Category", "Browser:Firefox")]
-        public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Variants_Firefox()
+        public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Contrib_Variants_Firefox()
         {
 #line 24
-this.ATestWithVariantTagsAndExamples("SpecFlow.Variants", "https://github.com/TotalTest/SpecFlow.Variants", ((string[])(null)), "Firefox");
+this.ATestWithVariantTagsAndExamples("SpecFlow.Contrib.Variants", "https://github.com/TotalTest/SpecFlow.Contrib.Variants", ((string[])(null)), "Firefox");
 #line hidden
         }
         

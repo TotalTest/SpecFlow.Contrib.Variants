@@ -33,6 +33,6 @@ Scenario Outline: A test with variant tags and examples
 	When I drill into the '<Repo>' repository
 	Then I should be on the website '<Site>'
 	Examples:
-	| Repo                | Site                                             |
-	| totaltest.github.io | https://github.com/TotalTest/totaltest.github.io |
-	| SpecFlow.Variants   | https://github.com/TotalTest/SpecFlow.Variants   |
+	| Repo                      | Site                                                   |
+	| totaltest.github.io       | https://github.com/TotalTest/totaltest.github.io       |
+	| SpecFlow.Contrib.Variants | https://github.com/TotalTest/SpecFlow.Contrib.Variants |
