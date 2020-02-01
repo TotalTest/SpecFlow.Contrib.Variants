@@ -54,7 +54,7 @@ Scenario: Simple scenario
 ```
 
 ### 3. App.config
-Specify the plugin name and ensure the type is set to 'Generator'. The variant key can also be a custom value, the default is 'Variant' is none is specified.
+Specify the plugin name and ensure the type is set to 'Generator'. The variant key can also be a custom value, the default is 'Variant' if none is specified.
 
 e.g. 
 ```XML
@@ -69,8 +69,10 @@ The above will ensure the plugin is used and that 'Browser' is set as the varian
 
 A colon should be used as the seperator between the variant key and value. For example `@Browser:Chrome` will mean 'Chrome' is the variant value.
 
+The unitTestProvider can either be xunit, mstest or nunit.
+
 ## 4. Access the variant
-The variant key/value can be access via the ScenarioContext static or injected class. This decision was made to cater for all supported test frameworks (NUnit, MsTest and XUnit).
+The variant key/value can then be accessed via the ScenarioContext static or injected class. This decision was made to cater for all supported test frameworks (NUnit, MsTest and XUnit).
 
 ```csharp
 [Binding]
@@ -107,7 +109,7 @@ public sealed class Hooks
 }
 ```
 
-It's possible to also use the in built contexts per test framework if desired (doesn't apply to XUnit, which is why scenario context is recommended):
+It's also possible to use the in built contexts per test framework if desired (doesn't apply to XUnit, which is why ScenarioContext is recommended):
 
 __MsTest__
 ```csharp
