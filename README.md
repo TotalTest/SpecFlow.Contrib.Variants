@@ -54,7 +54,7 @@ Scenario: Simple scenario
 ```
 
 ### 3. App.config
-Specify the plugin name and ensure the type is set to 'Generator'. The variant key can also be a custom value, the default is 'Variant' if none is specified.
+Specify the plugin name and ensure the type is set to 'Generator'. The variant key can also be a custom value, the default key is 'Variant' if no parameters value is specified.
 
 e.g. 
 ```XML
@@ -115,7 +115,7 @@ __MsTest__
 ```csharp
 var browser = TestContext.Properties["Browser"];
 ```
-
+\
 __NUnit__
 ```csharp
 var categories = TestContext.CurrentContext.Test.Properties["Category"];
