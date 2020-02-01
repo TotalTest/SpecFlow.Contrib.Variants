@@ -16,7 +16,7 @@
     <tags>specflow bdd gherkin cucumber</tags>
     <dependencies>
       <group targetFramework="net45">
-        <dependency id="SpecFlow" version="[2,3)" />
+        <dependency id="SpecFlow" version="[2.4,3)" />
       </group>
     </dependencies>
     <summary> Extends SpecFlow to allow variants of a test to be run using tags </summary>
