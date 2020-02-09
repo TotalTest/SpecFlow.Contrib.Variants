@@ -76,7 +76,8 @@ stages:
         downloadPath: '$(System.ArtifactsDirectory)\test'
   - job: run_tests
     strategy:
-      parallel: 3  
+      parallel: 3
+    steps:
     - task: VSTest@2
       inputs:
         testSelector: 'testAssemblies'
