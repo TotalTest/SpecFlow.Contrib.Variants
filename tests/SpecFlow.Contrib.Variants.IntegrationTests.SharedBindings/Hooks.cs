@@ -49,7 +49,6 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         private IWebDriver SetupChromeDriver(string driverDir)
         {
             var co = new ChromeOptions();
-            //co.AddArguments("--incognito");
             co.AddArgument("headless");
             return new ChromeDriver(driverDir, co);
         }
@@ -59,7 +58,6 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
             var fo = new FirefoxOptions();
             fo.SetPreference("marionette", true);
             fo.AddArgument("--headless");
-            //fo.AddArgument("--private");
             return new FirefoxDriver(driverDir, fo);
         }
 
