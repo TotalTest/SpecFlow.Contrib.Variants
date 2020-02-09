@@ -78,7 +78,7 @@ stages:
     vmImage: '$(vmImage)'
   jobs:
   - job: deploy_prerelease
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs\heads\develop'))  
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
@@ -98,9 +98,9 @@ stages:
         command: 'push'
         packagesToPush: '$(Build.ArtifactStagingDirectory)\**\*.nupkg;!$(Build.ArtifactStagingDirectory)\**\*.symbols.nupkg'
         nuGetFeedType: 'internal'
-        publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896\ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+        publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
   - job: deploy_release
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs\heads\release'))  
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))  
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
