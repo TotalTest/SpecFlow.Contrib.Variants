@@ -82,7 +82,7 @@ stages:
           !**\*TestAdapter.dll
           !**\obj\**
         searchFolder: '$(System.ArtifactsDirectory)\test'
-        uiTests: true
+        #uiTests: true
 
 
 #- stage: deploy_package

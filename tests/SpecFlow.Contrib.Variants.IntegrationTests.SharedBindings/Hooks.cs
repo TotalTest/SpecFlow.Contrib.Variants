@@ -76,6 +76,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
             }
 
             _driver.Dispose();
+            _scenarioContext.ScenarioContainer.Dispose();
         }
 
         [AfterTestRun]
