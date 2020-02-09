@@ -50,7 +50,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         {
             var co = new ChromeOptions();
             //co.AddArguments("--incognito");
-            //co.AddArgument("headless");
+            co.AddArgument("headless");
             return new ChromeDriver(driverDir, co);
         }
 
@@ -58,7 +58,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         {
             var fo = new FirefoxOptions();
             fo.SetPreference("marionette", true);
-            //fo.AddArgument("--headless");
+            fo.AddArgument("--headless");
             //fo.AddArgument("--private");
             return new FirefoxDriver(driverDir, fo);
         }
