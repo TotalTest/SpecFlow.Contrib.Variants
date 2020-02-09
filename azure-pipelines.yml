@@ -85,7 +85,7 @@ stages:
         uiTests: true
 
 
--# stage: deploy_package
+#- stage: deploy_package
  # pool:
  #   vmImage: '$(vmImage)'
  # jobs:
