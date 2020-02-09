@@ -52,10 +52,10 @@ stages:
         contents: |
           **\SpecFlow.Contrib.Variants.*\bin\$(buildConfiguration)\**
           !**\SpecFlow.Contrib.Variants.UnitTests\**
-        targetFolder: $(Build.ArtifactStagingDirectory)\test
+        targetFolder: $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts@1
       inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)\test'
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
         artifactName: test
 
 
@@ -73,7 +73,7 @@ stages:
         buildType: 'current'
         downloadType: 'single'
         artifactName: 'test'
-        downloadPath: '$(System.ArtifactsDirectory)\test'
+        downloadPath: '$(System.ArtifactsDirectory)'
   - job: run_tests
     dependsOn: pull_integrationtests
     strategy:
@@ -86,7 +86,7 @@ stages:
           **\*IntegrationTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
-        searchFolder: '$(System.ArtifactsDirectory)\test'
+        searchFolder: '$(System.ArtifactsDirectory)'
         distributionBatchType: 'basedOnAssembly'
         #uiTests: true
 
