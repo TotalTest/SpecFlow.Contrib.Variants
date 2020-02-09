@@ -66,6 +66,8 @@ stages:
     vmImage: '$(vmImage)'
   jobs:
   - job: run_tests
+    strategy:
+      parallel: 3
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
     steps:
     - task: DownloadBuildArtifacts@0
@@ -82,6 +84,7 @@ stages:
           !**\*TestAdapter.dll
           !**\obj\**
         searchFolder: '$(System.ArtifactsDirectory)\test'
+        distributionBatchType: 'basedOnAssembly'
         #uiTests: true
 
 
