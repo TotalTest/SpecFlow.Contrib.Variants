@@ -75,14 +75,14 @@ stages:
         artifactName: 'test'
         downloadPath: '$(System.ArtifactsDirectory)\test'
     - task: VSTest@2
-          inputs:
-            testSelector: 'testAssemblies'
-            testAssemblyVer2: |
-              **\*IntegrationTests.dll
-              !**\*TestAdapter.dll
-              !**\obj\**
-            searchFolder: '$(System.ArtifactsDirectory)\test'
-            uiTests: true
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: |
+          **\*IntegrationTests.dll
+          !**\*TestAdapter.dll
+          !**\obj\**
+        searchFolder: '$(System.ArtifactsDirectory)\test'
+        uiTests: true
 
 
 -# stage: deploy_package
