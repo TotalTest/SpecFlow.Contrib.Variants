@@ -64,11 +64,9 @@ stages:
 - stage: integration_tests
   pool:
     vmImage: '$(vmImage)'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
   jobs:
-  - job: run_tests
-    strategy:
-      parallel: 3
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
+  - job: pull_integrationtests
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
@@ -76,6 +74,9 @@ stages:
         downloadType: 'single'
         artifactName: 'test'
         downloadPath: '$(System.ArtifactsDirectory)\test'
+  - job: run_tests
+    strategy:
+      parallel: 3  
     - task: VSTest@2
       inputs:
         testSelector: 'testAssemblies'
