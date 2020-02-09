@@ -36,49 +36,31 @@ stages:
           **\*UnitTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
-    #- task: CopyFiles@2
-    #  inputs:
-    #    contents: |
-    #      **\SpecFlow.Contrib.Variants.SpecFlowPlugin\bin\$(buildConfiguration)\**
-    #      **\*.nuspec
-    #      **\*.xdt
-    #    targetFolder: $(Build.ArtifactStagingDirectory)
-    #- task: PublishBuildArtifacts@1
-    #  inputs:
-    #    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    #    artifactName: drop    
     - task: CopyFiles@2
       inputs:
         contents: |
           **\SpecFlow.Contrib.Variants.*\bin\$(buildConfiguration)\**
-          !**\SpecFlow.Contrib.Variants.UnitTests\**
+          **\*.nuspec
+          **\*.xdt
         targetFolder: $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts@1
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: test
+        artifactName: drop
 
-
-
-## THE BELOW IS FOR RUNNING THE INTEGRATION TESTS AS A NEW JOB
 - stage: integration_tests
   pool:
     vmImage: '$(vmImage)'
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
   jobs:
-  - job: pull_integrationtests
+  - job: run_tests
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'test'
+        artifactName: 'drop'
         downloadPath: '$(System.ArtifactsDirectory)'
-  - job: run_tests
-    dependsOn: pull_integrationtests
-    strategy:
-      parallel: 3
-    steps:
     - task: VSTest@2
       inputs:
         testSelector: 'testAssemblies'
@@ -88,7 +70,7 @@ stages:
           !**\obj\**
         searchFolder: '$(System.ArtifactsDirectory)'
         distributionBatchType: 'basedOnAssembly'
-        #uiTests: true
+        uiTests: true
 
 
 #- stage: deploy_package
