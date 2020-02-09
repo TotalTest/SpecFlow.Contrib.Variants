@@ -75,7 +75,7 @@ stages:
         artifactName: 'test'
         downloadPath: '$(System.ArtifactsDirectory)\test'
   - job: run_tests
-    dependson: pull_integrationtests
+    dependsOn: pull_integrationtests
     strategy:
       parallel: 3
     steps:
