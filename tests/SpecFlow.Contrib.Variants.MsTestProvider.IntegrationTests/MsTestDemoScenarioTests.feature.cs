@@ -92,7 +92,7 @@ namespace SpecFlow.Contrib.Variants.MsTestProvider.IntegrationTests
         {
 #line 6
 #line 7
- testRunner.Given("I am on the Google home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I am on the input forms page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
         }
         
@@ -108,10 +108,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line 10
- testRunner.When("I search for \'totaltest github\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
+ testRunner.When("check the checkbox", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
- testRunner.Then("the following result should be listed:", "TotalTest (Prab) · GitHub", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the checkbox text is \'Success - Check box is checked\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -119,22 +118,26 @@ this.FeatureBackground();
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with non-variant tags")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MsTestDemoScenarioTests")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Settings")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Tools")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Option_1")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Option_2")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Option_3")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Option_4")]
         public virtual void ATestWithNon_VariantTags()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with non-variant tags", null, new string[] {
-                        "Settings",
-                        "Tools"});
-#line 18
+                        "Option_1",
+                        "Option_2",
+                        "Option_3",
+                        "Option_4"});
+#line 17
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
+#line 18
+ testRunner.When("I check all the option check boxes", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 19
- testRunner.When("I search for \'totaltest github\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 20
- testRunner.Then("there should be links to the tags specified", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the tags check boxes should be checked", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -149,18 +152,16 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with variant tags", null, new string[] {
                         "Browser:Chrome",
                         "Browser:Firefox"});
-#line 24
+#line 23
 this.ScenarioInitialize(scenarioInfo);
             testRunner.ScenarioContext.Add("Browser", "Chrome");
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
+#line 24
+ testRunner.When("check the checkbox", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 25
- testRunner.When("I search for \'totaltest github\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 26
- testRunner.And("I select the result \'TotalTest (Prab) · GitHub\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 27
- testRunner.Then("I should be on the website \'https://github.com/totaltest\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the checkbox text is \'Success - Check box is checked\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -175,23 +176,21 @@ this.FeatureBackground();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with variant tags", null, new string[] {
                         "Browser:Chrome",
                         "Browser:Firefox"});
-#line 24
+#line 23
 this.ScenarioInitialize(scenarioInfo);
             testRunner.ScenarioContext.Add("Browser", "Firefox");
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
+#line 24
+ testRunner.When("check the checkbox", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 25
- testRunner.When("I search for \'totaltest github\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 26
- testRunner.And("I select the result \'TotalTest (Prab) · GitHub\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 27
- testRunner.Then("I should be on the website \'https://github.com/totaltest\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the checkbox text is \'Success - Check box is checked\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        public virtual void ATestWithVariantTagsAndExamples(string repo, string site, string[] exampleTags, string browser)
+        public virtual void ATestWithVariantTagsAndExamples(string link, string sublink, string site, string[] exampleTags, string browser)
         {
             string[] @__tags = new string[] {
                     "Browser:Chrome",
@@ -201,79 +200,83 @@ this.FeatureBackground();
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with variant tags and examples", null, @__tags);
-#line 31
+#line 29
 this.ScenarioInitialize(scenarioInfo);
             testRunner.ScenarioContext.Add("Browser", browser);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
+#line 30
+ testRunner.And(string.Format("I drill into the \'{0}\' link", link), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 31
+ testRunner.When(string.Format("I drill into the \'{0}\' link", sublink), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 32
- testRunner.And("I navigate to the \'TotalTest\' Github page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 33
- testRunner.When(string.Format("I drill into the \'{0}\' repository", repo), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 34
- testRunner.Then(string.Format("I should be on the website \'{0}\'", site), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("the page should be \'{0}\'", site), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: totaltest.github.io_Chrome")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: Input Forms_Chrome")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MsTestDemoScenarioTests")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Browser:Chrome")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Browser", "Chrome")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "totaltest.github.io_Chrome")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Repo", "totaltest.github.io")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://github.com/TotalTest/totaltest.github.io")]
-        public virtual void ATestWithVariantTagsAndExamples_Totaltest_Github_Io_Chrome()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "Input Forms_Chrome")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Link", "Input Forms")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Sublink", "Simple Form Demo")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://www.seleniumeasy.com/test/basic-first-form-demo.html")]
+        public virtual void ATestWithVariantTagsAndExamples_InputForms_Chrome()
         {
-#line 31
-this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/TotalTest/totaltest.github.io", ((string[])(null)), "Chrome");
+#line 29
+this.ATestWithVariantTagsAndExamples("Input Forms", "Simple Form Demo", "https://www.seleniumeasy.com/test/basic-first-form-demo.html", ((string[])(null)), "Chrome");
 #line hidden
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: SpecFlow.Contrib.Variants_Chrome")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: Date pickers_Chrome")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MsTestDemoScenarioTests")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Browser:Chrome")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Browser", "Chrome")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "SpecFlow.Contrib.Variants_Chrome")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Repo", "SpecFlow.Contrib.Variants")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://github.com/TotalTest/SpecFlow.Contrib.Variants")]
-        public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Contrib_Variants_Chrome()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "Date pickers_Chrome")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Link", "Date pickers")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Sublink", "Bootstrap Date Picker")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://www.seleniumeasy.com/test/bootstrap-date-picker-demo.html")]
+        public virtual void ATestWithVariantTagsAndExamples_DatePickers_Chrome()
         {
-#line 31
-this.ATestWithVariantTagsAndExamples("SpecFlow.Contrib.Variants", "https://github.com/TotalTest/SpecFlow.Contrib.Variants", ((string[])(null)), "Chrome");
+#line 29
+this.ATestWithVariantTagsAndExamples("Date pickers", "Bootstrap Date Picker", "https://www.seleniumeasy.com/test/bootstrap-date-picker-demo.html", ((string[])(null)), "Chrome");
 #line hidden
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: totaltest.github.io_Firefox")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: Input Forms_Firefox")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MsTestDemoScenarioTests")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Browser:Firefox")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Browser", "Firefox")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "totaltest.github.io_Firefox")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Repo", "totaltest.github.io")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://github.com/TotalTest/totaltest.github.io")]
-        public virtual void ATestWithVariantTagsAndExamples_Totaltest_Github_Io_Firefox()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "Input Forms_Firefox")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Link", "Input Forms")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Sublink", "Simple Form Demo")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://www.seleniumeasy.com/test/basic-first-form-demo.html")]
+        public virtual void ATestWithVariantTagsAndExamples_InputForms_Firefox()
         {
-#line 31
-this.ATestWithVariantTagsAndExamples("totaltest.github.io", "https://github.com/TotalTest/totaltest.github.io", ((string[])(null)), "Firefox");
+#line 29
+this.ATestWithVariantTagsAndExamples("Input Forms", "Simple Form Demo", "https://www.seleniumeasy.com/test/basic-first-form-demo.html", ((string[])(null)), "Firefox");
 #line hidden
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: SpecFlow.Contrib.Variants_Firefox")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("A test with variant tags and examples: Date pickers_Firefox")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MsTestDemoScenarioTests")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Browser:Firefox")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Browser", "Firefox")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "SpecFlow.Contrib.Variants_Firefox")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Repo", "SpecFlow.Contrib.Variants")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://github.com/TotalTest/SpecFlow.Contrib.Variants")]
-        public virtual void ATestWithVariantTagsAndExamples_SpecFlow_Contrib_Variants_Firefox()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "Date pickers_Firefox")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Link", "Date pickers")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Sublink", "Bootstrap Date Picker")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:Site", "https://www.seleniumeasy.com/test/bootstrap-date-picker-demo.html")]
+        public virtual void ATestWithVariantTagsAndExamples_DatePickers_Firefox()
         {
-#line 31
-this.ATestWithVariantTagsAndExamples("SpecFlow.Contrib.Variants", "https://github.com/TotalTest/SpecFlow.Contrib.Variants", ((string[])(null)), "Firefox");
+#line 29
+this.ATestWithVariantTagsAndExamples("Date pickers", "Bootstrap Date Picker", "https://www.seleniumeasy.com/test/bootstrap-date-picker-demo.html", ((string[])(null)), "Firefox");
 #line hidden
         }
     }

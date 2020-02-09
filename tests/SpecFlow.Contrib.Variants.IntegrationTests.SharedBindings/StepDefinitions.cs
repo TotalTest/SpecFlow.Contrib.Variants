@@ -9,72 +9,62 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
     public sealed class StepDefinitions
     {
         private readonly ScenarioContext _scenarioContext;
-        private readonly GoogleHomePage _googleHomePage;
-        private readonly GoogleSearchPage _googleSearchPage;
-        private readonly GitHubAccountPage _gitHubPage;
+        private readonly InputFormsPage _inputFormsPage;
+        private readonly CommonsPage _commonsPage;
 
-        public StepDefinitions(ScenarioContext scenarioContext, GoogleHomePage googleHomePage, GoogleSearchPage googleSearchPage, GitHubAccountPage gitHubPage)
+        public StepDefinitions(ScenarioContext scenarioContext, InputFormsPage inputFormsPage, CommonsPage commonsPage)
         {
-            _googleHomePage = googleHomePage;
-            _gitHubPage = gitHubPage;
             _scenarioContext = scenarioContext;
-            _googleSearchPage = googleSearchPage;
+            _inputFormsPage = inputFormsPage;
+            _commonsPage = commonsPage;
         }
 
-        [Given(@"I am on the Google home page")]
-        public void GivenIAmOnTheGoogleHomePage()
+        [Given("I am on the input forms page")]
+        public void GivenIAmOnTheInputFormsPage()
         {
-            _googleHomePage.Navigate();
+            _inputFormsPage.Navigate();
         }
 
-        [Given(@"I navigate to the '(.*)' Github page")]
-        public void GivenINavigateToTheTotalTestGithubPage(string account)
+        [When("check the checkbox")]
+        public void WhenCheckTheCheckbox()
         {
-            _gitHubPage.Navigate(account);
+            _inputFormsPage.CheckBox();
         }
 
-        [When(@"I search for '(.*)'")]
-        public void WhenISearchFor(string searchTerm)
+        [Then("the checkbox text is '(.*)'")]
+        public void ThenTheCheckboxTextIs(string text)
         {
-            _googleHomePage.SearchFor(searchTerm);
+            if (!string.Equals(_inputFormsPage.CheckedText(), text, StringComparison.InvariantCultureIgnoreCase))
+                throw new Exception("Checked text was incorrect");
         }
 
-        [When(@"I select the result '(.*)'")]
-        public void WhenISelectTheResult(string result)
+        [When("I check all the option check boxes")]
+        public void WhenICheckAllTheOptionCheckBoxes()
         {
-            _googleSearchPage.SelectResult(result);
+            _inputFormsPage.CheckAll();
         }
 
-        [When(@"I drill into the '(.*)' repository")]
-        public void WhenIDrillIntoTheRepository(string repo)
+        [Then("the tags check boxes should be checked")]
+        public void ThenTheTagsCheckBoxesShouldBeChecked()
         {
-            _gitHubPage.SelectRepo(repo);
+            var tags = _scenarioContext.ScenarioInfo.Tags.Select(a => a.Replace("_", " ")).ToList();
+            if (!tags.All(a => _inputFormsPage.CheckboxByName(a)))
+                throw new Exception("One or more checkboxes were not checked");
         }
 
-        [Then(@"the following result should be listed:")]
-        public void ThenTheFollowingResultShouldBeListed(string multilineText)
+        [Given("I drill into the '(.*)' link")]
+        [When("I drill into the '(.*)' link")]
+        public void GivenIDrillIntoTheLink(string link)
         {
-            var searchResult = _googleSearchPage.GetSearchResults();
-            var result = searchResult.Any(a => a.IndexOf(multilineText, StringComparison.InvariantCultureIgnoreCase) >= 0);
-
-            if (!result) { throw new Exception("Test Failed"); }
+            _commonsPage.NavigateSidebar(link);
         }
 
-        [Then(@"there should be links to the tags specified")]
-        public void ThenThereShouldBeLinksToTheTagsSpecified()
+        [Then(@"the page should be '(.*)'")]
+        public void ThenThePageShouldBe(string site)
         {
-            var tags = _scenarioContext.ScenarioInfo.Tags.ToList();
-            var pageLinks = _googleSearchPage.GetLinks();
-
-            if (tags.Except(pageLinks).Any()) { throw new Exception("Test Failed"); }
+            if (!string.Equals(_commonsPage.Url, site, StringComparison.InvariantCultureIgnoreCase))
+                throw new Exception("The expected url was wrong");
         }
 
-        [Then(@"I should be on the website '(.*)'")]
-        public void ThenIShouldBeOnTheWebsite(string site)
-        {
-            var page = _gitHubPage.CurrentUrl;
-
-            if (page != site) { throw new Exception($"Expected '{site}'. Actual '{page}'"); }
-        }
     }
 }

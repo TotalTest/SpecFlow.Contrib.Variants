@@ -42,7 +42,6 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
                     break;
             }
 
-            _driver.Manage().Window.Maximize();
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
             _scenarioContext.ScenarioContainer.RegisterInstanceAs(_driver);
         }

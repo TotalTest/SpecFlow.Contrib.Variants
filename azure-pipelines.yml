@@ -36,92 +36,100 @@ stages:
           **\*UnitTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
-    - task: CopyFiles@2
-      inputs:
-        contents: |
-          **\SpecFlow.Contrib.Variants.SpecFlowPlugin\bin\$(buildConfiguration)\**
-          **\*.nuspec
-          **\*.xdt
-        targetFolder: $(Build.ArtifactStagingDirectory)
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: drop    
-
-### THE BELOW IS FOR RUNNING THE INTEGRATION TESTS AS A NEW JOB
     #- task: CopyFiles@2
     #  inputs:
     #    contents: |
-    #      **\SpecFlow.Contrib.Variants.*\bin\$(buildConfiguration)\**
-    #      !**\SpecFlow.Contrib.Variants.UnitTests\**
+    #      **\SpecFlow.Contrib.Variants.SpecFlowPlugin\bin\$(buildConfiguration)\**
+    #      **\*.nuspec
+    #      **\*.xdt
     #    targetFolder: $(Build.ArtifactStagingDirectory)
     #- task: PublishBuildArtifacts@1
     #  inputs:
     #    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    #    artifactName: drop
-  #- job: run_integration_tests
-  #  dependsOn: build
-  #  steps:
-  #  - task: DownloadBuildArtifacts@0
-  #    inputs:
-  #      buildType: 'current'
-  #      downloadType: 'single'
-  #      artifactName: 'drop'
-  #      downloadPath: '$(System.ArtifactsDirectory)'
-  #  - task: VSTest@2
-  #    inputs:
-  #      testSelector: 'testAssemblies'
-  #      testAssemblyVer2: |
-  #        **\*IntegrationTests.dll
-  #        !**\*TestAdapter.dll
-  #        !**\obj\**
-  #      searchFolder: '$(System.ArtifactsDirectory)'
+    #    artifactName: drop    
+    - task: CopyFiles@2
+      inputs:
+        contents: |
+          **\SpecFlow.Contrib.Variants.*\bin\$(buildConfiguration)\**
+          !**\SpecFlow.Contrib.Variants.UnitTests\**
+        targetFolder: $(Build.ArtifactStagingDirectory)\test
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)\test'
+        artifactName: test
 
-- stage: deploy_package
+
+
+## THE BELOW IS FOR RUNNING THE INTEGRATION TESTS AS A NEW JOB
+- stage: integration_tests
   pool:
     vmImage: '$(vmImage)'
   jobs:
-  - job: deploy_prerelease
+  - job: run_tests
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
     steps:
     - task: DownloadBuildArtifacts@0
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-    - task: NuGetToolInstaller@1
-    - task: NuGetCommand@2
-      inputs:
-        command: 'pack'
-        packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
-        versioningScheme: 'byEnvVar'
-        versionEnvVar: 'packageVersionPre'
-    - task: NuGetCommand@2
-      inputs:
-        command: 'push'
-        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-        nuGetFeedType: 'internal'
-        publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
-  - job: deploy_release
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))  
-    steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-    - task: NuGetToolInstaller@1
-    - task: NuGetCommand@2
-      inputs:
-        command: 'pack'
-        packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
-        versioningScheme: 'byEnvVar'
-        versionEnvVar: 'packageVersion'
-    - task: NuGetCommand@2
-      inputs:
-        command: 'push'
-        packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-        nuGetFeedType: 'external'
-        publishFeedCredentials: 'Nuget'
+        artifactName: 'test'
+        downloadPath: '$(System.ArtifactsDirectory)\test'
+    - task: VSTest@2
+          inputs:
+            testSelector: 'testAssemblies'
+            testAssemblyVer2: |
+              **\*IntegrationTests.dll
+              !**\*TestAdapter.dll
+              !**\obj\**
+            searchFolder: '$(System.ArtifactsDirectory)\test'
+            uiTests: true
+
+
+-# stage: deploy_package
+ # pool:
+ #   vmImage: '$(vmImage)'
+ # jobs:
+ # - job: deploy_prerelease
+ #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
+ #   steps:
+ #   - task: DownloadBuildArtifacts@0
+ #     inputs:
+ #       buildType: 'current'
+ #       downloadType: 'single'
+ #       artifactName: 'drop'
+ #       downloadPath: '$(System.ArtifactsDirectory)'
+ #   - task: NuGetToolInstaller@1
+ #   - task: NuGetCommand@2
+ #     inputs:
+ #       command: 'pack'
+ #       packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
+ #       versioningScheme: 'byEnvVar'
+ #       versionEnvVar: 'packageVersionPre'
+ #   - task: NuGetCommand@2
+ #     inputs:
+ #       command: 'push'
+ #       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+ #       nuGetFeedType: 'internal'
+ #       publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+ # - job: deploy_release
+ #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))  
+ #   steps:
+ #   - task: DownloadBuildArtifacts@0
+ #     inputs:
+ #       buildType: 'current'
+ #       downloadType: 'single'
+ #       artifactName: 'drop'
+ #       downloadPath: '$(System.ArtifactsDirectory)'
+ #   - task: NuGetToolInstaller@1
+ #   - task: NuGetCommand@2
+ #     inputs:
+ #       command: 'pack'
+ #       packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
+ #       versioningScheme: 'byEnvVar'
+ #       versionEnvVar: 'packageVersion'
+ #   - task: NuGetCommand@2
+ #     inputs:
+ #       command: 'push'
+ #       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+ #       nuGetFeedType: 'external'
+ #       publishFeedCredentials: 'Nuget'

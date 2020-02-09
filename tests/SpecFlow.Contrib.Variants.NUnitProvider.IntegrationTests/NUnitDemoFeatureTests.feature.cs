@@ -78,7 +78,7 @@ namespace SpecFlow.Contrib.Variants.NUnitProvider.IntegrationTests
         {
 #line 8
 #line 9
- testRunner.Given("I am on the Google home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I am on the input forms page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
         }
         
@@ -95,10 +95,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 8
 this.FeatureBackground();
 #line 12
- testRunner.When("I search for \'totaltest github\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
+ testRunner.When("check the checkbox", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 13
- testRunner.Then("the following result should be listed:", "TotalTest (Prab) · GitHub", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the checkbox text is \'Success - Check box is checked\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -116,10 +115,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 8
 this.FeatureBackground();
 #line 12
- testRunner.When("I search for \'totaltest github\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
+ testRunner.When("check the checkbox", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 13
- testRunner.Then("the following result should be listed:", "TotalTest (Prab) · GitHub", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the checkbox text is \'Success - Check box is checked\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -127,23 +125,27 @@ this.FeatureBackground();
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("A test with non-variant tags: Chrome")]
         [NUnit.Framework.CategoryAttribute("Browser:Chrome")]
-        [NUnit.Framework.CategoryAttribute("Settings")]
-        [NUnit.Framework.CategoryAttribute("Tools")]
+        [NUnit.Framework.CategoryAttribute("Option_1")]
+        [NUnit.Framework.CategoryAttribute("Option_2")]
+        [NUnit.Framework.CategoryAttribute("Option_3")]
+        [NUnit.Framework.CategoryAttribute("Option_4")]
         public virtual void ATestWithNon_VariantTags_Chrome()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with non-variant tags", null, new string[] {
-                        "Settings",
-                        "Tools"});
-#line 20
+                        "Option_1",
+                        "Option_2",
+                        "Option_3",
+                        "Option_4"});
+#line 19
 this.ScenarioInitialize(scenarioInfo);
             testRunner.ScenarioContext.Add("Browser", "Chrome");
             this.ScenarioStart();
 #line 8
 this.FeatureBackground();
+#line 20
+ testRunner.When("I check all the option check boxes", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 21
- testRunner.When("I search for \'totaltest github\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 22
- testRunner.Then("there should be links to the tags specified", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the tags check boxes should be checked", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -151,50 +153,54 @@ this.FeatureBackground();
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("A test with non-variant tags: Firefox")]
         [NUnit.Framework.CategoryAttribute("Browser:Firefox")]
-        [NUnit.Framework.CategoryAttribute("Settings")]
-        [NUnit.Framework.CategoryAttribute("Tools")]
+        [NUnit.Framework.CategoryAttribute("Option_1")]
+        [NUnit.Framework.CategoryAttribute("Option_2")]
+        [NUnit.Framework.CategoryAttribute("Option_3")]
+        [NUnit.Framework.CategoryAttribute("Option_4")]
         public virtual void ATestWithNon_VariantTags_Firefox()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with non-variant tags", null, new string[] {
-                        "Settings",
-                        "Tools"});
-#line 20
+                        "Option_1",
+                        "Option_2",
+                        "Option_3",
+                        "Option_4"});
+#line 19
 this.ScenarioInitialize(scenarioInfo);
             testRunner.ScenarioContext.Add("Browser", "Firefox");
             this.ScenarioStart();
 #line 8
 this.FeatureBackground();
+#line 20
+ testRunner.When("I check all the option check boxes", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 21
- testRunner.When("I search for \'totaltest github\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 22
- testRunner.Then("there should be links to the tags specified", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the tags check boxes should be checked", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestCaseAttribute("totaltest.github.io", "https://github.com/TotalTest/totaltest.github.io", "Chrome", null, Category="Browser:Chrome", TestName="ATestWithVariantTagsAndExamples with Chrome and \"totaltest_github_io\", \"https://g" +
-            "ithub_com/TotalTest/totaltest_github_io\"")]
-        [NUnit.Framework.TestCaseAttribute("totaltest.github.io", "https://github.com/TotalTest/totaltest.github.io", "Firefox", null, Category="Browser:Firefox", TestName="ATestWithVariantTagsAndExamples with Firefox and \"totaltest_github_io\", \"https://" +
-            "github_com/TotalTest/totaltest_github_io\"")]
-        [NUnit.Framework.TestCaseAttribute("SpecFlow.Contrib.Variants", "https://github.com/TotalTest/SpecFlow.Contrib.Variants", "Chrome", null, Category="Browser:Chrome", TestName="ATestWithVariantTagsAndExamples with Chrome and \"SpecFlow_Contrib_Variants\", \"htt" +
-            "ps://github_com/TotalTest/SpecFlow_Contrib_Variants\"")]
-        [NUnit.Framework.TestCaseAttribute("SpecFlow.Contrib.Variants", "https://github.com/TotalTest/SpecFlow.Contrib.Variants", "Firefox", null, Category="Browser:Firefox", TestName="ATestWithVariantTagsAndExamples with Firefox and \"SpecFlow_Contrib_Variants\", \"ht" +
-            "tps://github_com/TotalTest/SpecFlow_Contrib_Variants\"")]
-        public virtual void ATestWithVariantTagsAndExamples(string repo, string site, string browser, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("Input Forms", "Simple Form Demo", "https://www.seleniumeasy.com/test/basic-first-form-demo.html", "Chrome", null, Category="Browser:Chrome", TestName="ATestWithVariantTagsAndExamples with Chrome and \"Input Forms\", \"Simple Form Demo\"" +
+            ", \"https://www_seleniumeasy_com/test/basic-first-form-demo_html\"")]
+        [NUnit.Framework.TestCaseAttribute("Input Forms", "Simple Form Demo", "https://www.seleniumeasy.com/test/basic-first-form-demo.html", "Firefox", null, Category="Browser:Firefox", TestName="ATestWithVariantTagsAndExamples with Firefox and \"Input Forms\", \"Simple Form Demo" +
+            "\", \"https://www_seleniumeasy_com/test/basic-first-form-demo_html\"")]
+        [NUnit.Framework.TestCaseAttribute("Date pickers", "Bootstrap Date Picker", "https://www.seleniumeasy.com/test/bootstrap-date-picker-demo.html", "Chrome", null, Category="Browser:Chrome", TestName="ATestWithVariantTagsAndExamples with Chrome and \"Date pickers\", \"Bootstrap Date P" +
+            "icker\", \"https://www_seleniumeasy_com/test/bootstrap-date-picker-demo_html\"")]
+        [NUnit.Framework.TestCaseAttribute("Date pickers", "Bootstrap Date Picker", "https://www.seleniumeasy.com/test/bootstrap-date-picker-demo.html", "Firefox", null, Category="Browser:Firefox", TestName="ATestWithVariantTagsAndExamples with Firefox and \"Date pickers\", \"Bootstrap Date " +
+            "Picker\", \"https://www_seleniumeasy_com/test/bootstrap-date-picker-demo_html\"")]
+        public virtual void ATestWithVariantTagsAndExamples(string link, string sublink, string site, string browser, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("A test with variant tags and examples", null, exampleTags);
-#line 24
+#line 23
 this.ScenarioInitialize(scenarioInfo);
             testRunner.ScenarioContext.Add("Browser", browser);
             this.ScenarioStart();
 #line 8
 this.FeatureBackground();
+#line 24
+ testRunner.And(string.Format("I drill into the \'{0}\' link", link), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 25
- testRunner.And("I navigate to the \'TotalTest\' Github page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When(string.Format("I drill into the \'{0}\' link", sublink), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 26
- testRunner.When(string.Format("I drill into the \'{0}\' repository", repo), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 27
- testRunner.Then(string.Format("I should be on the website \'{0}\'", site), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("the page should be \'{0}\'", site), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -5,27 +5,26 @@ Feature: XUnitDemoFeatureTests
 	As a developer
 	I want to be able to run integration tests to validate the plugin
 
-Background:
-	Given I am on the Google home page
+Background: 
+	Given I am on the input forms page
 
 Scenario: A single test without examples or tags
-	When I search for 'totaltest github'
-	Then the following result should be listed:
-	"""
-	TotalTest (Prab) · GitHub
-	"""
+	When check the checkbox
+	Then the checkbox text is 'Success - Check box is checked'
 
-@Settings
-@Tools
+@Option_1
+@Option_2
+@Option_3
+@Option_4
 Scenario: A test with non-variant tags
-	When I search for 'totaltest github'
-	Then there should be links to the tags specified
+	When I check all the option check boxes
+	Then the tags check boxes should be checked
 
 Scenario Outline: A test with variant tags and examples
-	And I navigate to the 'TotalTest' Github page
-	When I drill into the '<Repo>' repository
-	Then I should be on the website '<Site>'
+	And I drill into the '<Link>' link
+	When I drill into the '<Sublink>' link
+	Then the page should be '<Site>'
 	Examples:
-	| Repo                      | Site                                                   |
-	| totaltest.github.io       | https://github.com/TotalTest/totaltest.github.io       |
-	| SpecFlow.Contrib.Variants | https://github.com/TotalTest/SpecFlow.Contrib.Variants |
+	| Link         | Sublink               | Site                                                              |
+	| Input Forms  | Simple Form Demo      | https://www.seleniumeasy.com/test/basic-first-form-demo.html      |
+	| Date pickers | Bootstrap Date Picker | https://www.seleniumeasy.com/test/bootstrap-date-picker-demo.html |
