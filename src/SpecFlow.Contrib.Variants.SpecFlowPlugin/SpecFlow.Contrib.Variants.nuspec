@@ -11,7 +11,7 @@
     <iconUrl>https://avatars3.githubusercontent.com/u/10982432?s=400&amp;u=93827ac9a93861ea734e5fb2d4655e6d9e0e342f&amp;v=4</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Extends SpecFlow to allow variants of a test to be run using tags - for example running scenarios against different browsers.</description>
-    <releaseNotes>Initial release</releaseNotes>
+    <releaseNotes>Support for SpecFlow v2.4 and v2.4.1</releaseNotes>
     <copyright>Copyright 2020 Total Test Ltd</copyright>
     <tags>specflow bdd gherkin cucumber</tags>
     <dependencies>
