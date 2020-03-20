@@ -42,19 +42,17 @@ stages:
         command: 'pack'
         packagesToPack: '**/SpecFlow.Contrib.Variants.csproj'
         versioningScheme: 'byEnvVar'
-        packDirectory: '$(System.ArtifactsDirectory)\pre'
+        packDirectory: '$(Build.ArtifactStagingDirectory)'
         versionEnvVar: 'packageVersionPre'
-
-# UNCOMMENT TO RUN NEW CORE INTEGRATION TESTS
-#    - task: CopyFiles@2
-#      inputs:
-#        contents: |
-#          **\SpecFlow.Contrib.Variants\bin\$(buildConfiguration)\net471\**
-#        targetFolder: $(Build.ArtifactStagingDirectory)
-#    - task: PublishBuildArtifacts@1
-#      inputs:
-#        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-#        artifactName: drop
+ #   - task: CopyFiles@2
+ #     inputs:
+ #       contents: |
+ #         **\SpecFlow.Contrib.Variants\bin\$(buildConfiguration)\net471\**
+ #       targetFolder: $(Build.ArtifactStagingDirectory)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: pre
 
 # UNCOMMENT AND SORT WHEN NEW INTEGRATION TESTS ARE ADDED
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/package/nuget?view=azure-devops
@@ -89,12 +87,12 @@ stages:
   - job: deploy_prerelease
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
     steps:
-#    - task: DownloadBuildArtifacts@0
-#      inputs:
-#        buildType: 'current'
-#        downloadType: 'single'
-#        artifactName: 'drop'
-#        downloadPath: '$(System.ArtifactsDirectory)'
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'pre'
+        downloadPath: '$(System.ArtifactsDirectory)\pre'
     - task: NuGetToolInstaller@1
 #    - task: NuGetCommand@2
 #      inputs:
@@ -105,7 +103,7 @@ stages:
     - task: NuGetCommand@2
       inputs:
         command: 'push'
-        packagesToPush: '$(System.ArtifactsDirectory)\**\*.nupkg;!$(System.ArtifactsDirectory)\**\*.symbols.nupkg'
+        packagesToPush: '$(System.ArtifactsDirectory)\pre\*.nupkg;!$(System.ArtifactsDirectory)\pre\*.symbols.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
         allowPackageConflicts: true
