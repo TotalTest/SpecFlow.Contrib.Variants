@@ -105,7 +105,7 @@ stages:
     - task: NuGetCommand@2
       inputs:
         command: 'push'
-        packagesToPush: '$(System.ArtifactsDirectory)\pre\*.nupkg;!$(System.ArtifactsDirectory)\pre*.symbols.nupkg'
+        packagesToPush: '$(System.ArtifactsDirectory)\pre\**\*.nupkg;!$(System.ArtifactsDirectory)\pre\**\*.symbols.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
         allowPackageConflicts: true
