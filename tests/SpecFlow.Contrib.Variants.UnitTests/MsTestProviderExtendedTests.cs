@@ -1,5 +1,5 @@
 ﻿using Gherkin.Ast;
-using SpecFlow.Contrib.Variants.SpecFlowPlugin.Providers;
+using SpecFlow.Contrib.Variants.Providers;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<MsTestProviderExtended>(document);
-            var scenario = document.GetScenario<ScenarioDefinition>(scenarioName);
+            var scenario = document.GetScenario<Scenario>(scenarioName);
 
             var expectedNumOfMethods = ExpectedNumOfMethodsForFeatureVariants(scenario);
             var actualNumOfMethods = generatedCode.GetTestMethods(scenario).Count;
@@ -35,7 +35,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<MsTestProviderExtended>(document);
-            var assemblies = new[] { "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll" };
+            var assemblies = new[] { "BoDi.dll", "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll" };
 
             var compilerResults = GetCompilerResults(generatedCode, assemblies);
 
@@ -172,7 +172,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<MsTestProviderExtended>(document);
-            var scenario = document.GetScenario<ScenarioDefinition>(scenarioName);
+            var scenario = document.GetScenario<Scenario>(scenarioName);
 
             if (isoutline)
             {
@@ -223,7 +223,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
             var generatedCode = SetupFeatureGenerator<MsTestProviderExtended>(document);
 
-            foreach (var scenario in document.Feature.Children)
+            foreach (var scenario in document.Feature.Children.Cast<Scenario>())
             {
                 var expectedNumOfMethods = ExpectedNumOfMethodsForFeatureVariants(document.Feature, scenario);
                 var actualNumOfMethods = generatedCode.GetTestMethods(scenario).Count;
@@ -236,7 +236,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
             var generatedCode = SetupFeatureGenerator<MsTestProviderExtended>(document);
-            var assemblies = new[] { "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll" };
+            var assemblies = new[] { "BoDi.dll", "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.dll", "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll" };
 
             var compilerResults = GetCompilerResults(generatedCode, assemblies);
 
@@ -374,7 +374,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
             var generatedCode = SetupFeatureGenerator<MsTestProviderExtended>(document);
-            var scenario = document.GetScenario<ScenarioDefinition>(scenarioName);
+            var scenario = document.GetScenario<Scenario>(scenarioName);
 
             if (isoutline)
             {

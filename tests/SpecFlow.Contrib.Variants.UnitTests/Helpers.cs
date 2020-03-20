@@ -9,12 +9,12 @@ namespace SpecFlow.Contrib.Variants.UnitTests
 {
     internal static class Helpers
     {
-        public static T GetScenario<T>(this SpecFlowDocument document, string scenarioName) where T : ScenarioDefinition
+        public static T GetScenario<T>(this SpecFlowDocument document, string scenarioName) where T : Scenario
         {
-            return (T)document.SpecFlowFeature.Children.FirstOrDefault(a => a.Name == scenarioName);
+            return (T)document.SpecFlowFeature.ScenarioDefinitions.FirstOrDefault(a => a.Name == scenarioName);
         }
 
-        public static IList<Tag> GetTagsByNameStart(this ScenarioDefinition scenario, string tagName)
+        public static IList<Tag> GetTagsByNameStart(this Scenario scenario, string tagName)
         {
             return scenario.GetTags().Where(a => a.GetNameWithoutAt().StartsWith(tagName)).ToList();
         }
@@ -34,12 +34,12 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             return feature.Tags.Where(a => !a.GetNameWithoutAt().StartsWith(tagName)).ToList();
         }
 
-        public static Tag GetTagsByNameExact(this ScenarioDefinition scenario, string tagName)
+        public static Tag GetTagsByNameExact(this Scenario scenario, string tagName)
         {
             return scenario.GetTags().Where(a => a.GetNameWithoutAt() == tagName).FirstOrDefault();
         }
 
-        public static IList<Tag> GetTagsExceptNameStart(this ScenarioDefinition scenario, string tagName)
+        public static IList<Tag> GetTagsExceptNameStart(this Scenario scenario, string tagName)
         {
             return scenario.GetTags().Where(a => !a.GetNameWithoutAt().StartsWith(tagName)).ToList();
         }
@@ -54,18 +54,18 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             return scenario.Examples.First().TableHeader.Cells.ToList();
         }
 
-        public static IList<CodeTypeMember> GetTestMethods(this CodeNamespace generatedCode, ScenarioDefinition scenario)
+        public static IList<CodeTypeMember> GetTestMethods(this CodeNamespace generatedCode, Scenario scenario)
         {
             return generatedCode.Types[0].Members.Cast<CodeTypeMember>().Where(a => a.Name.StartsWith(scenario.Name.Replace(" ", "")
                 .Replace(",", ""), StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
 
-        public static IList<CodeTypeMember> GetRowTestMethods(this CodeNamespace generatedCode, ScenarioDefinition scenario)
+        public static IList<CodeTypeMember> GetRowTestMethods(this CodeNamespace generatedCode, Scenario scenario)
         {
             return generatedCode.GetTestMethods(scenario).Where(a => a.CustomAttributes.Count > 0).ToList();
         }
 
-        public static CodeTypeMember GetRowTestBaseMethod(this CodeNamespace generatedCode, ScenarioDefinition scenario)
+        public static CodeTypeMember GetRowTestBaseMethod(this CodeNamespace generatedCode, Scenario scenario)
         {
             return generatedCode.GetTestMethods(scenario).FirstOrDefault(a => a.CustomAttributes.Count == 0);
         }

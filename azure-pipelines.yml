@@ -9,8 +9,8 @@ variables:
   solution: '**\*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  packageVersion: '2.0.0'
-  packageVersionPre: '2.0.0-develop'
+  packageVersion: '3.0.0'
+  packageVersionPre: '3.0.0-pre-1'
   vmImage: 'windows-latest'
 
 stages:
@@ -36,41 +36,50 @@ stages:
           **\*UnitTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
-    - task: CopyFiles@2
+    - task: NuGetCommand@2
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
       inputs:
-        contents: |
-          **\SpecFlow.Contrib.Variants.*\bin\$(buildConfiguration)\**
-          **\*.nuspec
-          **\*.xdt
-        targetFolder: $(Build.ArtifactStagingDirectory)
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: drop
+        versioningScheme: 'byEnvVar'
+        versionEnvVar: 'packageVersionPre'
+        command: 'pack'
+        packagesToPack: '**/SpecFlow.Contrib.Variants.csproj'
+        packDestination: '$(Build.ArtifactStagingDirectory)'
 
+# UNCOMMENT TO RUN NEW CORE INTEGRATION TESTS
+#    - task: CopyFiles@2
+#      inputs:
+#        contents: |
+#          **\SpecFlow.Contrib.Variants\bin\$(buildConfiguration)\net471\**
+#        targetFolder: $(Build.ArtifactStagingDirectory)
+#    - task: PublishBuildArtifacts@1
+#      inputs:
+#        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#        artifactName: drop
 
-- stage: integration_tests
-  pool:
-    vmImage: '$(vmImage)'
-  jobs:
-  - job: run_tests
-    steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-    - task: VSTest@2
-      inputs:
-        testSelector: 'testAssemblies'
-        testAssemblyVer2: |
-          **\*IntegrationTests.dll
-          !**\*TestAdapter.dll
-          !**\obj\**
-        searchFolder: '$(System.ArtifactsDirectory)'
-        distributionBatchType: 'basedOnAssembly'
-        uiTests: true
+# UNCOMMENT AND SORT WHEN NEW INTEGRATION TESTS ARE ADDED
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/package/nuget?view=azure-devops
+#- stage: integration_tests
+#  pool:
+#    vmImage: '$(vmImage)'
+#  jobs:
+#  - job: run_tests
+#    steps:
+#    - task: DownloadBuildArtifacts@0
+#      inputs:
+#        buildType: 'current'
+#        downloadType: 'single'
+#        artifactName: 'drop'
+#        downloadPath: '$(System.ArtifactsDirectory)'
+#    - task: VSTest@2
+#      inputs:
+#        testSelector: 'testAssemblies'
+#        testAssemblyVer2: |
+#          **\*IntegrationTests.dll
+#          !**\*TestAdapter.dll
+#          !**\obj\**
+#        searchFolder: '$(System.ArtifactsDirectory)'
+#        distributionBatchType: 'basedOnAssembly'
+#        uiTests: true
 
 
 - stage: deploy_package
@@ -80,25 +89,26 @@ stages:
   - job: deploy_prerelease
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
     steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
-    - task: NuGetToolInstaller@1
-    - task: NuGetCommand@2
-      inputs:
-        command: 'pack'
-        packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
-        versioningScheme: 'byEnvVar'
-        versionEnvVar: 'packageVersionPre'
+#    - task: DownloadBuildArtifacts@0
+#      inputs:
+#        buildType: 'current'
+#        downloadType: 'single'
+#        artifactName: 'drop'
+#        downloadPath: '$(System.ArtifactsDirectory)'
+#    - task: NuGetToolInstaller@1
+#    - task: NuGetCommand@2
+#      inputs:
+#        command: 'pack'
+#        packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
+#        versioningScheme: 'byEnvVar'
+#        versionEnvVar: 'packageVersionPre'
     - task: NuGetCommand@2
       inputs:
         command: 'push'
         packagesToPush: '$(Build.ArtifactStagingDirectory)\**\*.nupkg;!$(Build.ArtifactStagingDirectory)\**\*.symbols.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+        allowPackageConflicts: true
   - job: deploy_release
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))  
     steps:
@@ -121,3 +131,4 @@ stages:
         packagesToPush: '$(Build.ArtifactStagingDirectory)\**\*.nupkg;!$(Build.ArtifactStagingDirectory)\**\*.symbols.nupkg'
         nuGetFeedType: 'external'
         publishFeedCredentials: 'Nuget'
+        allowPackageConflicts: true

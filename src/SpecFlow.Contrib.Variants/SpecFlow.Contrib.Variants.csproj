@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net471;netstandard2.0</TargetFrameworks>
+    <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+    <IsPackable>true</IsPackable>
+    <AssemblyName>SpecFlow.Contrib.Variants.SpecFlowPlugin</AssemblyName>
+    <PackageId>SpecFlow.Contrib.Variants</PackageId>
+    <Version>3.0.0</Version>
+    <Authors>Total Test Ltd;Prab Gahir</Authors>
+    <Copyright>Copyright 2020 Total Test Ltd</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/TotalTest/SpecFlow.Contrib.Variants</PackageProjectUrl>
+    <PackageIcon>Logo.png</PackageIcon>
+    <Description>Extends SpecFlow to allow variants of a test to be run using tags</Description>
+    <PackageReleaseNotes>Initial support for SpecFlow 3 and Core</PackageReleaseNotes>
+    <PackageTags>specflow;bdd;gherkin;cucumber</PackageTags>
+    <RepositoryUrl>https://github.com/TotalTest/SpecFlow.Contrib.Variants</RepositoryUrl>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <NoWarn>NU5128</NoWarn>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SpecFlow" Version="[3.1.62,3.1.86)" />
+    <PackageReference Include="SpecFlow.CustomPlugin" Version="[3.1.62,3.1.86)" PrivateAssets="All" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="[3.1.62,3.1.86)" PrivateAssets="All" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="build\**" Pack="true" PackagePath="build" />
+    <None Include="bin\$(Configuration)\net471\SpecFlow.Contrib.Variants.SpecFlowPlugin.*" Pack="true" PackagePath="build\net471" />
+    <None Include="bin\$(Configuration)\netstandard2.0\SpecFlow.Contrib.Variants.SpecFlowPlugin.dll" Pack="true" PackagePath="build\netstandard2.0" />
+    <None Include="bin\$(Configuration)\netstandard2.0\SpecFlow.Contrib.Variants.SpecFlowPlugin.pdb" Pack="true" PackagePath="build\netstandard2.0" />
+    <None Include="images\Logo.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+</Project>

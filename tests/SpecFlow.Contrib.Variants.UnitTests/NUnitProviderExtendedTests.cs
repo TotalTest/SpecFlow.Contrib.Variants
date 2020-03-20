@@ -1,5 +1,5 @@
 ﻿using Gherkin.Ast;
-using SpecFlow.Contrib.Variants.SpecFlowPlugin.Providers;
+using SpecFlow.Contrib.Variants.Providers;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
-            var scenario = document.GetScenario<ScenarioDefinition>(scenarioName);
+            var scenario = document.GetScenario<Scenario>(scenarioName);
 
             var expectedNumOfMethods = ExpectedNumOfMethodsForFeatureVariants(scenario);
             var actualNumOfMethods = generatedCode.GetTestMethods(scenario).Count;
@@ -35,7 +35,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
-            var assemblies = new[] { "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "nunit.framework.dll" };
+            var assemblies = new[] { "BoDi.dll", "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "nunit.framework.dll" };
 
             var compilerResults = GetCompilerResults(generatedCode, assemblies);
 
@@ -140,7 +140,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
-            var scenario = document.GetScenario<ScenarioDefinition>(scenarioName);
+            var scenario = document.GetScenario<Scenario>(scenarioName);
 
             if (isoutline)
             {
@@ -178,7 +178,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
             var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
-            var assemblies = new[] { "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "nunit.framework.dll" };
+            var assemblies = new[] { "BoDi.dll", "System.Core.dll", "TechTalk.SpecFlow.dll", "System.dll", "System.Runtime.dll", "nunit.framework.dll" };
 
             var compilerResults = GetCompilerResults(generatedCode, assemblies);
 
@@ -194,7 +194,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
             var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
-            var scenario = document.GetScenario<ScenarioDefinition>(scenarioName);
+            var scenario = document.GetScenario<Scenario>(scenarioName);
 
             var expectedNumOfMethods = ExpectedNumOfMethodsForFeatureVariants(scenario, document.Feature);
             var actualNumOfMethods = generatedCode.GetTestMethods(scenario).Count;
@@ -300,7 +300,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
             var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
-            var scenario = document.GetScenario<ScenarioDefinition>(scenarioName);
+            var scenario = document.GetScenario<Scenario>(scenarioName);
 
             if (isoutline)
             {

@@ -1,7 +1,7 @@
 ﻿using BoDi;
 using Gherkin.Ast;
 using Microsoft.CSharp;
-using SpecFlow.Contrib.Variants.SpecFlowPlugin.Generator;
+using SpecFlow.Contrib.Variants.Generator;
 using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
@@ -9,10 +9,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using TechTalk.SpecFlow.Configuration;
+using TechTalk.SpecFlow.Generator.CodeDom;
 using TechTalk.SpecFlow.Generator.UnitTestConverter;
 using TechTalk.SpecFlow.Generator.UnitTestProvider;
 using TechTalk.SpecFlow.Parser;
-using TechTalk.SpecFlow.Utils;
 
 namespace SpecFlow.Contrib.Variants.UnitTests
 {
@@ -53,12 +53,12 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             return new CSharpCodeProvider().CompileAssemblyFromDom(new CompilerParameters(assemblies), ccu);
         }
 
-        protected int ExpectedNumOfMethodsForFeatureVariants(ScenarioDefinition scenario, Feature feature = null)
+        protected int ExpectedNumOfMethodsForFeatureVariants(Scenario scenario, Feature feature = null)
         {
             int numOfMethods = 1;
             if (!_unitTestGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.RowTests))
             {
-                if (scenario.HasTags())
+                if (scenario.Tags.Any())
                 {
                     var variantTags = scenario.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
                     if (variantTags > 0) numOfMethods = variantTags;
@@ -81,7 +81,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
                 {
                     variantTags += feature.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
                 }
-                else if (scenario.HasTags())
+                else if (scenario.Tags.Any())
                 {
                     variantTags += scenario.GetTagsByNameStart(SampleFeatureFile.Variant).Count;
                 }
@@ -91,7 +91,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             }
         }
 
-        protected int ExpectedNumOfMethodsForFeatureVariants(Feature feature, ScenarioDefinition scenario)
+        protected int ExpectedNumOfMethodsForFeatureVariants(Feature feature, Scenario scenario)
         {
             int numOfMethods = 1;
             if (!_unitTestGeneratorProvider.GetTraits().HasFlag(UnitTestGeneratorTraits.RowTests))
