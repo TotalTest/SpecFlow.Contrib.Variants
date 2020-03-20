@@ -92,7 +92,7 @@ stages:
         buildType: 'current'
         downloadType: 'single'
         artifactName: 'pre'
-        downloadPath: '$(System.ArtifactsDirectory)\pre'
+        downloadPath: '$(System.ArtifactsDirectory)'
     - task: NuGetToolInstaller@1
 #    - task: NuGetCommand@2
 #      inputs:
