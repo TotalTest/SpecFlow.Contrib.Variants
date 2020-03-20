@@ -95,7 +95,7 @@ stages:
 #        downloadType: 'single'
 #        artifactName: 'drop'
 #        downloadPath: '$(System.ArtifactsDirectory)'
-#    - task: NuGetToolInstaller@1
+    - task: NuGetToolInstaller@1
 #    - task: NuGetCommand@2
 #      inputs:
 #        command: 'pack'
