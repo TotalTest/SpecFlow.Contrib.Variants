@@ -20,7 +20,6 @@ stages:
   jobs:
   - job: build
     steps:
-    - task: NuGetToolInstaller@1
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
@@ -36,23 +35,34 @@ stages:
           **\*UnitTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
+  - job: pack_prerelease
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    steps:
     - task: DotNetCoreCLI@2
       inputs:
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
         command: 'pack'
         packagesToPack: '**/SpecFlow.Contrib.Variants.csproj'
         versioningScheme: 'byEnvVar'
         packDirectory: '$(Build.ArtifactStagingDirectory)'
         versionEnvVar: 'packageVersionPre'
- #   - task: CopyFiles@2
- #     inputs:
- #       contents: |
- #         **\SpecFlow.Contrib.Variants\bin\$(buildConfiguration)\net471\**
- #       targetFolder: $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts@1
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: pre
+        artifactName: prerelease
+  - job: pack_release
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'pack'
+        packagesToPack: '**/SpecFlow.Contrib.Variants.csproj'
+        versioningScheme: 'byEnvVar'
+        packDirectory: '$(Build.ArtifactStagingDirectory)'
+        versionEnvVar: 'packageVersion'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: release
 
 # UNCOMMENT AND SORT WHEN NEW INTEGRATION TESTS ARE ADDED
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/package/nuget?view=azure-devops
@@ -91,19 +101,12 @@ stages:
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'pre'
+        artifactName: 'prerelease'
         downloadPath: '$(System.ArtifactsDirectory)'
-    - task: NuGetToolInstaller@1
-#    - task: NuGetCommand@2
-#      inputs:
-#        command: 'pack'
-#        packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
-#        versioningScheme: 'byEnvVar'
-#        versionEnvVar: 'packageVersionPre'
     - task: NuGetCommand@2
       inputs:
         command: 'push'
-        packagesToPush: '$(System.ArtifactsDirectory)\pre\*.nupkg;!$(System.ArtifactsDirectory)\pre\*.symbols.nupkg'
+        packagesToPush: '$(System.ArtifactsDirectory)\prerelease\*.nupkg;!$(System.ArtifactsDirectory)\prerelease\*.symbols.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
         allowPackageConflicts: true
@@ -114,19 +117,12 @@ stages:
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'drop'
+        artifactName: 'release'
         downloadPath: '$(System.ArtifactsDirectory)'
-    - task: NuGetToolInstaller@1
-    - task: NuGetCommand@2
-      inputs:
-        command: 'pack'
-        packagesToPack: '$(System.ArtifactsDirectory)\**\*.nuspec'
-        versioningScheme: 'byEnvVar'
-        versionEnvVar: 'packageVersion'
     - task: NuGetCommand@2
       inputs:
         command: 'push'
-        packagesToPush: '$(Build.ArtifactStagingDirectory)\**\*.nupkg;!$(Build.ArtifactStagingDirectory)\**\*.symbols.nupkg'
+        packagesToPush: '$(Build.ArtifactStagingDirectory)\release\*.nupkg;!$(Build.ArtifactStagingDirectory)\release\*.symbols.nupkg'
         nuGetFeedType: 'external'
         publishFeedCredentials: 'Nuget'
         allowPackageConflicts: true
