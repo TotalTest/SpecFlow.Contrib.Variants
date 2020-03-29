@@ -39,7 +39,7 @@ stages:
     - task: NuGetCommand@2
       inputs:
         command: 'restore'
-        restoreSolution: '**\SpecFlow.Contrib.Variants.UnitTests.csproj'
+        restoreSolution: '**/SpecFlow.Contrib.Variants.UnitTests/packages.config'
         feedsToUse: 'select'
         vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
     - task: DotNetCoreCLI@2
