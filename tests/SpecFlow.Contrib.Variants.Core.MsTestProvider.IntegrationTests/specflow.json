@@ -1,0 +1,15 @@
+﻿{
+  "bindingCulture": {
+    "language" :"en-gb"
+  },
+  "language": {
+    "feature": "en-gb"
+  },
+  "pluginparameters": {
+    "variantkey": "Browser",
+    "unittestprovider": "mstest"
+  },
+  "stepAssemblies": [
+    { "assembly": "SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings" }
+  ]
+}

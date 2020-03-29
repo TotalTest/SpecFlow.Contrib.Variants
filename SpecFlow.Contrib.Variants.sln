@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Contrib.Variants.I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlow.Contrib.Variants", "src\SpecFlow.Contrib.Variants\SpecFlow.Contrib.Variants.csproj", "{59BD7EEC-4F82-482F-86F3-B5D8164805D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Contrib.Variants.Core.MsTestProvider.IntegrationTests", "tests\SpecFlow.Contrib.Variants.Core.MsTestProvider.IntegrationTests\SpecFlow.Contrib.Variants.Core.MsTestProvider.IntegrationTests.csproj", "{5B588966-2E60-4FD2-A739-A4B81823769A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{59BD7EEC-4F82-482F-86F3-B5D8164805D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59BD7EEC-4F82-482F-86F3-B5D8164805D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59BD7EEC-4F82-482F-86F3-B5D8164805D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B588966-2E60-4FD2-A739-A4B81823769A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B588966-2E60-4FD2-A739-A4B81823769A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B588966-2E60-4FD2-A739-A4B81823769A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B588966-2E60-4FD2-A739-A4B81823769A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -76,7 +76,7 @@ namespace SpecFlow.Contrib.Variants
         private string GetJsonValueByRegex(string config, string key)
         {
             var reg = new Regex($@"(?<={key}\""\:\"").+?(?=\"")", RegexOptions.IgnoreCase);
-            var match = reg.Match(config.Replace(" ", ""));
+            var match = reg.Match(config?.Replace(" ", "") ?? "");
             return match.Success ? match.Value : "";
         }
 

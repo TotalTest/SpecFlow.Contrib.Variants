@@ -9,8 +9,8 @@ variables:
   solution: '**\*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  packageVersion: '3.0.0'
-  packageVersionPre: '3.0.0-pre-1'
+  packageVersion: '3.1.0-pre'
+  packageVersionPre: '3.1.0-develop'
   vmImage: 'windows-latest'
 
 stages:
@@ -49,9 +49,24 @@ stages:
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)'
         artifactName: prerelease
-  - job: pack_release
+  - job: pack_test_release
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
     steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: '**\*Core.*.IntegrationTests.csproj'
+        feedsToUse: 'select'
+        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+    - task: VSTest@2
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: |
+          **\*Core.*.IntegrationTests.dll
+          !**\*TestAdapter.dll
+          !**\obj\**
+        distributionBatchType: 'basedOnAssembly'
+        uiTests: true
     - task: DotNetCoreCLI@2
       inputs:
         command: 'pack'

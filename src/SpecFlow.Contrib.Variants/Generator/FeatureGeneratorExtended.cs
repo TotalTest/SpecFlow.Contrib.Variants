@@ -92,6 +92,8 @@ namespace SpecFlow.Contrib.Variants.Generator
                 }
             }
             _testGeneratorProvider.FinalizeTestClass(GenerationContext);
+
+            CodeNamespace.Comments.Add(new CodeCommentStatement(new CodeComment("Generation customised by SpecFlow.Contrib.Variants")));
             return CodeNamespace;
         }
 

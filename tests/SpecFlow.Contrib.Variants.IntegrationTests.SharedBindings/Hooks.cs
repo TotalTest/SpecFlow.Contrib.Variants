@@ -28,6 +28,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
             var ns = _scenarioContext["Namespace"].ToString().ToLowerInvariant();
             _baseDir = AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant();
             var driverDir = _baseDir.Replace(ns, GetType().Namespace.ToLowerInvariant());
+            driverDir = Directory.GetParent(Directory.GetParent(driverDir).FullName).FullName;
 
             switch (browser)
             {
@@ -50,7 +51,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         {
             var co = new ChromeOptions();
             co.AddArgument("headless");
-            return new ChromeDriver(driverDir, co);
+            return new ChromeDriver(driverDir);
         }
 
         private IWebDriver SetupFirefoxDriver(string driverDir)
