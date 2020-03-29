@@ -38,6 +38,7 @@ stages:
           !**\*TestAdapter.dll
           !**\obj\**
   - job: pack_prerelease
+    dependsOn: build
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
     steps:
     - task: DotNetCoreCLI@2
@@ -52,6 +53,7 @@ stages:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)'
         artifactName: prerelease
   - job: pack_test_release
+    dependsOn: build
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
     steps:
     - task: DotNetCoreCLI@2
