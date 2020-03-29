@@ -20,11 +20,10 @@ stages:
   jobs:
   - job: build
     steps:
-    - task: NuGetCommand@2
+    - task: DotNetCoreCLI@2
       inputs:
-        restoreSolution: |
-          **\*.sln
-          !**\*Core.*.csproj
+        command: 'restore'
+        projects: '**\*.csproj'
         feedsToUse: 'select'
         vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
     - task: VSBuild@1
