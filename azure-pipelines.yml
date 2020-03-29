@@ -29,7 +29,7 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
-        projects: '**\*.csproj;!**\*SpecFlowPlugin.csproj;!**\*SharedBindings.csproj;!**\*IntegrationTests.csproj'
+        projects: '**\SpecFlow.Contrib.Variants.csproj'
     - task: VSTest@2
       inputs:
         testSelector: 'testAssemblies'
