@@ -30,6 +30,10 @@ stages:
       inputs:
         command: 'build'
         projects: '**\SpecFlow.Contrib.Variants.csproj'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: '**\SpecFlow.Contrib.Variants.UnitTests.csproj'
     - task: VSTest@2
       inputs:
         testSelector: 'testAssemblies'
