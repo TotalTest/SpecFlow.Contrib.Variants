@@ -24,13 +24,12 @@ stages:
       inputs:
         command: 'build'
         projects: '**\SpecFlow.Contrib.Variants.csproj'
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: 'restore'
-        projects: '**\SpecFlow.Contrib.Variants.UnitTests.csproj'
-        feedsToUse: 'select'
-        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
-    #- task: NuGetToolInstaller@1
+    #- task: DotNetCoreCLI@2
+    #  inputs:
+    #    command: 'restore'
+    #    projects: '**\SpecFlow.Contrib.Variants.UnitTests.csproj'
+    #    feedsToUse: 'select'
+    #    vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '**/SpecFlow.Contrib.Variants.UnitTests/packages.config'
@@ -93,32 +92,6 @@ stages:
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)'
         artifactName: release
-
-# UNCOMMENT AND SORT WHEN NEW INTEGRATION TESTS ARE ADDED
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/package/nuget?view=azure-devops
-#- stage: integration_tests
-#  pool:
-#    vmImage: '$(vmImage)'
-#  jobs:
-#  - job: run_tests
-#    steps:
-#    - task: DownloadBuildArtifacts@0
-#      inputs:
-#        buildType: 'current'
-#        downloadType: 'single'
-#        artifactName: 'drop'
-#        downloadPath: '$(System.ArtifactsDirectory)'
-#    - task: VSTest@2
-#      inputs:
-#        testSelector: 'testAssemblies'
-#        testAssemblyVer2: |
-#          **\*IntegrationTests.dll
-#          !**\*TestAdapter.dll
-#          !**\obj\**
-#        searchFolder: '$(System.ArtifactsDirectory)'
-#        distributionBatchType: 'basedOnAssembly'
-#        uiTests: true
-
 
 - stage: deploy_package
   pool:
