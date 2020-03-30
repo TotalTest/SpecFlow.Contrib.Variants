@@ -20,12 +20,6 @@ stages:
   jobs:
   - job: build
     steps:
-    - task: NuGetToolInstaller@1
-    - task: NuGetCommand@2
-      inputs:
-        restoreSolution: '$(solution)'
-        feedsToUse: 'select'
-        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
@@ -34,6 +28,13 @@ stages:
       inputs:
         command: 'restore'
         projects: '**\SpecFlow.Contrib.Variants.UnitTests.csproj'
+        feedsToUse: 'select'
+        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+    - task: NuGetToolInstaller@1
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '**/SpecFlow.Contrib.Variants.UnitTests/packages.config'
+        restoreDirectory: '$(Build.Repository.LocalPath)\packages'
         feedsToUse: 'select'
         vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
     - task: DotNetCoreCLI@2
