@@ -38,8 +38,7 @@ stages:
       displayName: "Build unit tests cproj"
       inputs:
         command: 'build'
-        #projects: '**\SpecFlow.Contrib.Variants.UnitTests.csproj'
-        projects: '**\*.csproj'
+        projects: '**\SpecFlow.Contrib.Variants.UnitTests.csproj'
     - task: VSTest@2
       displayName: "Run unit tests"
       inputs:
