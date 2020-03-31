@@ -22,27 +22,24 @@ stages:
   - job: build
     displayName: "Build & run unit tests"
     steps:
-    - task: NuGetCommand@2
-      displayName: "Restore packages"
-      inputs:
-        restoreSolution: '$(solution)'
-        feedsToUse: 'select'
-        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
-    - task: DotNetCoreCLI@2
-      displayName: "Dotnet build projects"
-      inputs:
-        command: 'build'
-        projects: '**\*.csproj'
     #- task: DotNetCoreCLI@2
     #  displayName: "Dotnet build main cproj"
     #  inputs:
     #    command: 'build'
     #    projects: '**\SpecFlow.Contrib.Variants.csproj'
-    #- task: DotNetCoreCLI@2
-    #  displayName: "Build unit tests cproj"
-    #  inputs:
-    #    command: 'build'
-    #    projects: '**\SpecFlow.Contrib.Variants.UnitTests.csproj'
+    - task: NuGetCommand@2
+      displayName: "Restore UnitTests packages"
+      inputs:
+        restoreSolution: '**/SpecFlow.Contrib.Variants.UnitTests/packages.config'
+        restoreDirectory: '$(Build.Repository.LocalPath)\packages'
+        feedsToUse: 'select'
+        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+    - task: DotNetCoreCLI@2
+      displayName: "Build unit tests cproj"
+      inputs:
+        command: 'build'
+        #projects: '**\SpecFlow.Contrib.Variants.UnitTests.csproj'
+        projects: '**\*.csproj'
     - task: VSTest@2
       displayName: "Run unit tests"
       inputs:
@@ -81,6 +78,13 @@ stages:
     #    projects: '**\*Core.*.IntegrationTests.csproj'
     #    feedsToUse: 'select'
     #    vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+    - task: NuGetCommand@2
+      displayName: "Restore UnitTests packages"
+      inputs:
+        restoreSolution: '**/SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings/packages.config'
+        restoreDirectory: '$(Build.Repository.LocalPath)\packages'
+        feedsToUse: 'select'
+        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
     - task: DotNetCoreCLI@2
       displayName: "Build integration tests projects"
       inputs:
