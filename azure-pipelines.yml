@@ -22,11 +22,6 @@ stages:
   - job: build
     displayName: "Build & run unit tests"
     steps:
-    #- task: DotNetCoreCLI@2
-    #  displayName: "Dotnet build main cproj"
-    #  inputs:
-    #    command: 'build'
-    #    projects: '**\SpecFlow.Contrib.Variants.csproj'
     - task: NuGetCommand@2
       displayName: "Restore UnitTests packages"
       inputs:
@@ -70,18 +65,18 @@ stages:
     dependsOn: build
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
     steps:
-    #- task: DotNetCoreCLI@2
-    #  displayName: "Restore integration tests projects"
-    #  inputs:
-    #    command: 'restore'
-    #    projects: '**\*Core.*.IntegrationTests.csproj'
-    #    feedsToUse: 'select'
-    #    vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
     - task: NuGetCommand@2
-      displayName: "Restore UnitTests packages"
+      displayName: "Restore SharedBindings packages"
       inputs:
         restoreSolution: '**/SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings/packages.config'
         restoreDirectory: '$(Build.Repository.LocalPath)\packages'
+        feedsToUse: 'select'
+        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+    - task: DotNetCoreCLI@2
+      displayName: "Restore integration tests projects"
+      inputs:
+        command: 'restore'
+        projects: '**\*Core.*.IntegrationTests.csproj'
         feedsToUse: 'select'
         vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
     - task: DotNetCoreCLI@2
@@ -155,4 +150,3 @@ stages:
         packagesToPush: '$(Build.ArtifactStagingDirectory)\release\*.nupkg;!$(Build.ArtifactStagingDirectory)\release\*.symbols.nupkg'
         nuGetFeedType: 'external'
         publishFeedCredentials: 'Nuget'
-        allowPackageConflicts: true
