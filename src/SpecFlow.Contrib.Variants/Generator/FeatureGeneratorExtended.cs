@@ -33,6 +33,7 @@ namespace SpecFlow.Contrib.Variants.Generator
         private bool _setVariantToContextForOutlineTest;
         private bool _setVariantToContextForTest;
         private string _variantValue;
+        public const string CustomGeneratedComment = "Generation customised by SpecFlow.Contrib.Variants";
         //NEW CODE END
 
         public FeatureGeneratorExtended(IUnitTestGeneratorProvider testGeneratorProvider, CodeDomHelper codeDomHelper, SpecFlowConfiguration specFlowConfiguration, IDecoratorRegistry decoratorRegistry, string variantKey)
@@ -93,7 +94,7 @@ namespace SpecFlow.Contrib.Variants.Generator
             }
             _testGeneratorProvider.FinalizeTestClass(GenerationContext);
 
-            CodeNamespace.Comments.Add(new CodeCommentStatement(new CodeComment("Generation customised by SpecFlow.Contrib.Variants")));
+            CodeNamespace.Comments.Add(new CodeCommentStatement(new CodeComment(CustomGeneratedComment))); //NEW CODE
             return CodeNamespace;
         }
 

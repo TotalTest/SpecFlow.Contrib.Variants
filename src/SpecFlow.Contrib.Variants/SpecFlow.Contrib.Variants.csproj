@@ -30,10 +30,16 @@
   
   <ItemGroup>
     <None Include="build\**" Pack="true" PackagePath="build" />
+    <None Include="images\Logo.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="bin\$(Configuration)\net471\SpecFlow.Contrib.Variants.SpecFlowPlugin.*" Pack="true" PackagePath="build\net471" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="bin\$(Configuration)\netstandard2.0\SpecFlow.Contrib.Variants.SpecFlowPlugin.dll" Pack="true" PackagePath="build\netstandard2.0" />
     <None Include="bin\$(Configuration)\netstandard2.0\SpecFlow.Contrib.Variants.SpecFlowPlugin.pdb" Pack="true" PackagePath="build\netstandard2.0" />
-    <None Include="images\Logo.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>

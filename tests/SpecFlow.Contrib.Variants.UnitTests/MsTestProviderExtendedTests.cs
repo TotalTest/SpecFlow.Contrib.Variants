@@ -1,4 +1,5 @@
 ﻿using Gherkin.Ast;
+using SpecFlow.Contrib.Variants.Generator;
 using SpecFlow.Contrib.Variants.Providers;
 using System;
 using System.CodeDom;
@@ -420,6 +421,25 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             Assert.Equal("Variant tags were detected at feature and scenario level, please specify at one level or the other.", ex.Message);
         }
         #endregion
+
+        [Fact]
+        public void MsTestProviderExtended_Generation_CustomGenerationApplied()
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
+            var generatedCode = SetupFeatureGenerator<MsTestProviderExtended>(document);
+
+            var document2 = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
+            var generatedCode2 = SetupFeatureGenerator<MsTestProviderExtended>(document2);
+
+            var customComment = generatedCode.Comments.Cast<CodeCommentStatement>()
+                .Count(a => a.Comment.Text == FeatureGeneratorExtended.CustomGeneratedComment);
+
+            var customComment2 = generatedCode2.Comments.Cast<CodeCommentStatement>()
+                .Count(a => a.Comment.Text == FeatureGeneratorExtended.CustomGeneratedComment);
+
+            Assert.Equal(1, customComment);
+            Assert.Equal(1, customComment2);
+        }
 
         private void TestSetupForAttributes(out CodeNamespace generatedCode, out ScenarioOutline scenario, out IList<CodeTypeMember> testMethods, out IList<TableCell> tableHeaders, out IList<TableRow> tableBody)
         {
