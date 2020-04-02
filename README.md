@@ -1,6 +1,6 @@
 [![Build Status](https://dev.azure.com/totaltestltd/Total%20Test/_apis/build/status/TotalTest.SpecFlow.Contrib.Variants?branchName=release)](https://dev.azure.com/totaltestltd/Total%20Test/_build/latest?definitionId=5&branchName=release)
 ![Azure DevOps tests](https://img.shields.io/azure-devops/tests/totaltestltd/Total%20Test/5)
-[![NuGet](https://img.shields.io/nuget/v/specflow.contrib.variants.svg)](https://nuget.org/packages/specflow.contrib.variants)
+![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/specflow.contrib.variants)
 
 # SpecFlow.Contrib.Variants
 SpecFlow plugin to allow variants of a test to be run using tags.
