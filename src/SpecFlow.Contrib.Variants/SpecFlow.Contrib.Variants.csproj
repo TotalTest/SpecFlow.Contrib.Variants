@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net471;netstandard2.0</TargetFrameworks>
-    <!--<GeneratePackageOnBuild>true</GeneratePackageOnBuild>-->
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <IsPackable>true</IsPackable>
     <AssemblyName>SpecFlow.Contrib.Variants.SpecFlowPlugin</AssemblyName>
     <PackageId>SpecFlow.Contrib.Variants</PackageId>
@@ -17,7 +17,7 @@
     <PackageReleaseNotes>Initial support for SpecFlow 3 and Core</PackageReleaseNotes>
     <PackageTags>specflow;bdd;gherkin;cucumber</PackageTags>
     <RepositoryUrl>https://github.com/TotalTest/SpecFlow.Contrib.Variants</RepositoryUrl>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
     <NoWarn>NU5128</NoWarn>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>

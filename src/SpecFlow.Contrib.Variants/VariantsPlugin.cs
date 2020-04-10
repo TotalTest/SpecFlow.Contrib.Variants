@@ -1,6 +1,7 @@
 ﻿using SpecFlow.Contrib.Variants;
 using SpecFlow.Contrib.Variants.Generator;
 using SpecFlow.Contrib.Variants.Providers;
+using System;
 using System.Text.RegularExpressions;
 using TechTalk.SpecFlow.Generator.CodeDom;
 using TechTalk.SpecFlow.Generator.Interfaces;
@@ -46,7 +47,18 @@ namespace SpecFlow.Contrib.Variants
             // Create custom unit test provider based on user defined config value
             //TODO: use this once dependency is resolved -> var generatorProvider = GetGeneratorProviderFromConfig(codeDomHelper, utp ?? _config?.PluginParameters?.UnitTestProvider ?? "");
             // https://github.com/dotnet/sdk/issues/9594
-            var generatorProvider = GetGeneratorProviderFromConfig(codeDomHelper, utp ?? GetJsonValueByRegex(projSettings.ConfigurationHolder.Content, "unittestprovider"));
+
+            if(string.IsNullOrEmpty(utp))
+            {
+                var c = objectContainer.Resolve<UnitTestProviderConfiguration>();
+                utp = c.UnitTestProvider;
+
+                if (string.IsNullOrEmpty(utp))
+                    throw new Exception("Unit test provider not detected, please install as a nuget package described here: https://github.com/SpecFlowOSS/SpecFlow/wiki/SpecFlow-and-.NET-Core");
+            }
+
+            //TODO: remove after proving => var generatorProvider = GetGeneratorProviderFromConfig(codeDomHelper, utp ?? GetJsonValueByRegex(projSettings.ConfigurationHolder.Content, "unittestprovider"));
+            var generatorProvider = GetGeneratorProviderFromConfig(codeDomHelper, utp);
             var specflowConfiguration = eventArgs.SpecFlowProjectConfiguration.SpecFlowConfiguration;
 
             // Create generator instance to be registered and replace original
