@@ -65,6 +65,12 @@ stages:
     dependsOn: build
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
     steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk'
+      inputs:
+        packageType: sdk
+        version: 3.1.101
+        installationPath: $(Agent.ToolsDirectory)/dotnet
     - task: NuGetCommand@2
       displayName: "Restore SharedBindings packages"
       inputs:
