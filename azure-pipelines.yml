@@ -9,8 +9,8 @@ variables:
   solution: '**\*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  packageVersion: '3.1.20-pre'
-  packageVersionPre: '3.1.20-develop'
+  packageVersion: '3.1.30-pre'
+  packageVersionPre: '3.1.30-develop'
   vmImage: 'windows-latest'
 
 stages:
@@ -82,20 +82,20 @@ stages:
       displayName: "Restore integration tests projects"
       inputs:
         command: 'restore'
-        projects: '**\*Core.*.IntegrationTests.csproj'
+        projects: '**\*.IntegrationTests.csproj'
         feedsToUse: 'select'
         vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
     - task: DotNetCoreCLI@2
       displayName: "Build integration tests projects"
       inputs:
         command: 'build'
-        projects: '**\*Core.*.IntegrationTests.csproj'
+        projects: '**\*.IntegrationTests.csproj'
     - task: VSTest@2
       displayName: "Run integration tests"
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: |
-          **\*Core.*.IntegrationTests.dll
+          **\*.IntegrationTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
         distributionBatchType: 'basedOnAssembly'

@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlow.Contrib.Variants",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlow.Contrib.Variants.Core.MsTestProvider.IntegrationTests", "tests\SpecFlow.Contrib.Variants.Core.MsTestProvider.IntegrationTests\SpecFlow.Contrib.Variants.Core.MsTestProvider.IntegrationTests.csproj", "{5B588966-2E60-4FD2-A739-A4B81823769A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Contrib.Variants.Core.NUnitTestProvider.IntegrationTests", "tests\SpecFlow.Contrib.Variants.Core.NUnitTestProvider.IntegrationTests\SpecFlow.Contrib.Variants.Core.NUnitTestProvider.IntegrationTests.csproj", "{F15D8EDA-A590-408D-AE00-33E01BA1615A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlow.Contrib.Variants.Core.NUnitTestProvider.IntegrationTests", "tests\SpecFlow.Contrib.Variants.Core.NUnitTestProvider.IntegrationTests\SpecFlow.Contrib.Variants.Core.NUnitTestProvider.IntegrationTests.csproj", "{F15D8EDA-A590-408D-AE00-33E01BA1615A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecFlow.Contrib.Variants.Core.XUnitTestProvider.IntegrationTests", "tests\SpecFlow.Contrib.Variants.Core.XUnitTestProvider.IntegrationTests\SpecFlow.Contrib.Variants.Core.XUnitTestProvider.IntegrationTests.csproj", "{65F3623D-DDA5-4512-AC83-6B4D72ACC3CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlow.Contrib.Variants.Core.XUnitTestProvider.IntegrationTests", "tests\SpecFlow.Contrib.Variants.Core.XUnitTestProvider.IntegrationTests\SpecFlow.Contrib.Variants.Core.XUnitTestProvider.IntegrationTests.csproj", "{65F3623D-DDA5-4512-AC83-6B4D72ACC3CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

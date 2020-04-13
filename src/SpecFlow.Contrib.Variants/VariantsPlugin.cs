@@ -3,6 +3,8 @@ using SpecFlow.Contrib.Variants.Generator;
 using SpecFlow.Contrib.Variants.Providers;
 using System;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using TechTalk.SpecFlow.Configuration;
 using TechTalk.SpecFlow.Generator.CodeDom;
 using TechTalk.SpecFlow.Generator.Interfaces;
 using TechTalk.SpecFlow.Generator.Plugins;
@@ -37,10 +39,16 @@ namespace SpecFlow.Contrib.Variants
 
             // Get variant key from config
             var projSettings = eventArgs.ObjectContainer.Resolve<ProjectSettings>();
-            if (projSettings.ConfigurationHolder.HasConfiguration)
+            if (projSettings.ConfigurationHolder.HasConfiguration && projSettings.ConfigurationHolder.ConfigSource == ConfigSource.Json)
             {
                 // TODO: use this once dependency is resolved ->  _config = JsonConvert.DeserializeObject<Configuration>(projSettings.ConfigurationHolder.Content);
                 var vk = GetJsonValueByRegex(projSettings.ConfigurationHolder.Content, "variantkey");
+                _variantKey = !string.IsNullOrEmpty(vk) ? vk : _variantKey;
+            }
+            else if (projSettings.ConfigurationHolder.HasConfiguration && projSettings.ConfigurationHolder.ConfigSource == ConfigSource.AppConfig)
+            {
+                var appconfig = projSettings.ConfigurationHolder.Content;
+                var vk = GetGeneratorPath(appconfig);
                 _variantKey = !string.IsNullOrEmpty(vk) ? vk : _variantKey;
             }
 
@@ -48,7 +56,7 @@ namespace SpecFlow.Contrib.Variants
             //TODO: use this once dependency is resolved -> var generatorProvider = GetGeneratorProviderFromConfig(codeDomHelper, utp ?? _config?.PluginParameters?.UnitTestProvider ?? "");
             // https://github.com/dotnet/sdk/issues/9594
 
-            if(string.IsNullOrEmpty(utp))
+            if (string.IsNullOrEmpty(utp))
             {
                 var c = objectContainer.Resolve<UnitTestProviderConfiguration>();
                 utp = c.UnitTestProvider;
@@ -100,6 +108,16 @@ namespace SpecFlow.Contrib.Variants
                 "xunit" => new XUnitProviderExtended(codeDomHelper, _variantKey),
                 _ => new MsTestProviderExtended(codeDomHelper, _variantKey),
             };
+
+        private string GetGeneratorPath(string config)
+        {
+            var browser = XElement.Parse(config);
+            var el = browser.Element("generator");
+            var attribute = el?.Attribute("path").Value ?? string.Empty;
+
+            return attribute.StartsWith("variantkey", StringComparison.InvariantCultureIgnoreCase)
+                ? Regex.Replace(attribute, "variantkey:", "", RegexOptions.IgnoreCase) : string.Empty;
+        }
     }
 }
 

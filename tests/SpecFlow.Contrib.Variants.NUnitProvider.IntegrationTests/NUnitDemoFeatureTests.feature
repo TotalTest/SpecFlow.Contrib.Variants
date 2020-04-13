@@ -1,5 +1,5 @@
-﻿@Browser:Chrome
-@Browser:Firefox
+﻿@Variant:Chrome
+@Variant:Firefox
 Feature: NUnitDemoFeatureTests
 	In order to verify the SpecFlow variants plugin for features
 	As a developer
@@ -7,18 +7,6 @@ Feature: NUnitDemoFeatureTests
 
 Background: 
 	Given I am on the input forms page
-
-Scenario: A single test without examples or tags
-	When check the checkbox
-	Then the checkbox text is 'Success - Check box is checked'
-
-@Option_1
-@Option_2
-@Option_3
-@Option_4
-Scenario: A test with non-variant tags
-	When I check all the option check boxes
-	Then the tags check boxes should be checked
 
 Scenario Outline: A test with variant tags and examples
 	And I drill into the '<Link>' link

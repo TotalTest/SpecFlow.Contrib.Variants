@@ -28,7 +28,9 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
             var ns = _scenarioContext["Namespace"].ToString().ToLowerInvariant();
             _baseDir = AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant();
             var driverDir = _baseDir.Replace(ns, GetType().Namespace.ToLowerInvariant());
-            driverDir = Directory.GetParent(Directory.GetParent(driverDir).FullName).FullName;
+
+            if (ns.Contains("core"))
+                driverDir = Directory.GetParent(Directory.GetParent(driverDir).FullName).FullName;
 
             switch (browser)
             {
