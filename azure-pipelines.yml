@@ -19,9 +19,13 @@ stages:
   pool:
     vmImage: '$(vmImage)'
   jobs:
+
+  # Build / run unit tests
   - job: build
     displayName: "Build & run unit tests"
     steps:
+
+    #Restore/build
     - task: NuGetCommand@2
       displayName: "Restore UnitTests packages"
       inputs:
@@ -34,6 +38,8 @@ stages:
       inputs:
         command: 'build'
         projects: '**\SpecFlow.Contrib.Variants.UnitTests.csproj'
+
+    # Run unit tests
     - task: VSTest@2
       displayName: "Run unit tests"
       inputs:
@@ -42,11 +48,15 @@ stages:
           **\*UnitTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
+
+  # Pack develop
   - job: pack_prerelease
     displayName: "Pack nupkg for DevOps feed"
     dependsOn: build
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
     steps:
+
+    # Pack and publish
     - task: DotNetCoreCLI@2
       displayName: "Pack main csproj"
       inputs:
@@ -60,17 +70,23 @@ stages:
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)'
         artifactName: prerelease
+
+  # Run integration tests / pack release
   - job: pack_test_release
     displayName: "Integration tests, pack nupkg for Nuget feed"
     dependsOn: build
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
     steps:
+
+    # Use specific core sdk for azure piplines build to work
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
       inputs:
         packageType: sdk
         version: 3.1.101
         installationPath: $(Agent.ToolsDirectory)/dotnet
+
+    # Restore shared integration tests project
     - task: NuGetCommand@2
       displayName: "Restore SharedBindings packages"
       inputs:
@@ -78,6 +94,27 @@ stages:
         restoreDirectory: '$(Build.Repository.LocalPath)\packages'
         feedsToUse: 'select'
         vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+    
+    # Core integration tests
+    - task: DotNetCoreCLI@2
+      displayName: "Restore core integration tests projects"
+      inputs:
+        command: 'restore'
+        projects: '**\*Core.*.IntegrationTests.csproj'
+        feedsToUse: 'select'
+        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+    - task: DotNetCoreCLI@2
+      displayName: "Build core integration tests projects"
+      inputs:
+        command: 'build'
+        projects: '**\*Core.*.IntegrationTests.csproj'
+    - task: DotNetCoreCLI@2
+      displayName: "Run core integration tests"
+      inputs:
+        command: 'test'
+        projects: '**\*Core.*.IntegrationTests.csproj'
+    
+    # Framework integration tests
     - task: NuGetCommand@2
       displayName: "Restore framework integration tests projects"
       inputs:
@@ -85,28 +122,23 @@ stages:
         restoreDirectory: '$(Build.Repository.LocalPath)\packages'
         feedsToUse: 'select'
         vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
-    - task: DotNetCoreCLI@2
-      displayName: "Restore core integration tests projects"
+    - task: MSBuild@1
+      displayName: "Build framework integration tests projects"
       inputs:
-        command: 'restore'
-        projects: '**\*Core*.IntegrationTests.csproj'
-        feedsToUse: 'select'
-        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
-    - task: DotNetCoreCLI@2
-      displayName: "Build integration tests projects"
-      inputs:
-        command: 'build'
-        projects: '**\*.IntegrationTests.csproj'
+        solution: '**/SpecFlow.Contrib.Variants.*Provider.IntegrationTests.csproj'
+        clean: true
     - task: VSTest@2
-      displayName: "Run integration tests"
+      displayName: "Run framework integration tests"
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: |
-          **\*.IntegrationTests.dll
+          **\SpecFlow.Contrib.Variants.*Provider.IntegrationTests.dll
           !**\*TestAdapter.dll
           !**\obj\**
         distributionBatchType: 'basedOnAssembly'
         uiTests: true
+
+    # Pack
     - task: DotNetCoreCLI@2
       displayName: "Pack main csproj"
       inputs:
