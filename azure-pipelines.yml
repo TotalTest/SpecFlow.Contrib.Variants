@@ -86,11 +86,18 @@ stages:
         version: 3.1.101
         installationPath: $(Agent.ToolsDirectory)/dotnet
 
-    # Restore shared integration tests project
+    # Restore framework integration tests project
     - task: NuGetCommand@2
       displayName: "Restore SharedBindings packages"
       inputs:
         restoreSolution: '**/SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings/packages.config'
+        restoreDirectory: '$(Build.Repository.LocalPath)\packages'
+        feedsToUse: 'select'
+        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+    - task: NuGetCommand@2
+      displayName: "Restore framework integration tests projects"
+      inputs:
+        restoreSolution: '**/SpecFlow.Contrib.Variants.*Provider.IntegrationTests/packages.config'
         restoreDirectory: '$(Build.Repository.LocalPath)\packages'
         feedsToUse: 'select'
         vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
@@ -107,36 +114,34 @@ stages:
       displayName: "Build core integration tests projects"
       inputs:
         command: 'build'
-        projects: '**\*Core.*.IntegrationTests.csproj'
-    - task: DotNetCoreCLI@2
-      displayName: "Run core integration tests"
-      inputs:
-        command: 'test'
-        projects: '**\*Core.*.IntegrationTests.csproj'
+        projects: '**\*.IntegrationTests.csproj'
+    #- task: DotNetCoreCLI@2
+    #  displayName: "Run core integration tests"
+    #  inputs:
+    #    command: 'test'
+    #    projects: '**\*Core.*.IntegrationTests.csproj'
     
     # Framework integration tests
-    - task: NuGetCommand@2
-      displayName: "Restore framework integration tests projects"
-      inputs:
-        restoreSolution: '**/SpecFlow.Contrib.Variants.*Provider.IntegrationTests/packages.config'
-        restoreDirectory: '$(Build.Repository.LocalPath)\packages'
-        feedsToUse: 'select'
-        vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
-    - task: MSBuild@1
-      displayName: "Build framework integration tests projects"
-      inputs:
-        solution: '**/SpecFlow.Contrib.Variants.*Provider.IntegrationTests.csproj'
-        clean: true
-    - task: VSTest@2
+    #- task: MSBuild@1
+    #  displayName: "Build framework integration tests projects"
+    #  inputs:
+    #    solution: '**/SpecFlow.Contrib.Variants.*Provider.IntegrationTests.csproj'
+    #    clean: true
+    - task: DotNetCoreCLI@2
       displayName: "Run framework integration tests"
       inputs:
-        testSelector: 'testAssemblies'
-        testAssemblyVer2: |
-          **\SpecFlow.Contrib.Variants.*Provider.IntegrationTests.dll
-          !**\*TestAdapter.dll
-          !**\obj\**
-        distributionBatchType: 'basedOnAssembly'
-        uiTests: true
+        command: 'test'
+        projects: '**\SpecFlow.Contrib.Variants.*Provider.IntegrationTests.csproj'
+    #- task: VSTest@2
+    #  displayName: "Run framework integration tests"
+    #  inputs:
+    #    testSelector: 'testAssemblies'
+    #    testAssemblyVer2: |
+    #      **\SpecFlow.Contrib.Variants.*Provider.IntegrationTests.dll
+    #      !**\*TestAdapter.dll
+    #      !**\obj\**
+    #    distributionBatchType: 'basedOnAssembly'
+    #    uiTests: true
 
     # Pack
     - task: DotNetCoreCLI@2
