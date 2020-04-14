@@ -5,7 +5,6 @@
   <Import Project="..\..\packages\Microsoft.CodeCoverage.16.5.0\build\netstandard1.0\Microsoft.CodeCoverage.props" Condition="Exists('..\..\packages\Microsoft.CodeCoverage.16.5.0\build\netstandard1.0\Microsoft.CodeCoverage.props')" />
   <Import Project="..\..\packages\SpecFlow.NUnit.3.1.74\build\SpecFlow.NUnit.props" Condition="Exists('..\..\packages\SpecFlow.NUnit.3.1.74\build\SpecFlow.NUnit.props')" />
   <Import Project="..\..\packages\NUnit.3.12.0\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.12.0\build\NUnit.props')" />
-  <Import Project="..\..\packages\SpecFlow.Contrib.Variants.3.0.9\build\SpecFlow.Contrib.Variants.props" Condition="Exists('..\..\packages\SpecFlow.Contrib.Variants.3.0.9\build\SpecFlow.Contrib.Variants.props')" />
   <Import Project="..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.74\build\SpecFlow.Tools.MsBuild.Generation.props" Condition="Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.74\build\SpecFlow.Tools.MsBuild.Generation.props')" />
   <Import Project="..\..\packages\NUnit3TestAdapter.3.16.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\packages\NUnit3TestAdapter.3.16.1\build\net35\NUnit3TestAdapter.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -168,8 +167,6 @@
     <Error Condition="!Exists('..\..\packages\SpecFlow.3.1.74\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.3.1.74\build\SpecFlow.targets'))" />
     <Error Condition="!Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.74\build\SpecFlow.Tools.MsBuild.Generation.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.74\build\SpecFlow.Tools.MsBuild.Generation.props'))" />
     <Error Condition="!Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.74\build\SpecFlow.Tools.MsBuild.Generation.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.74\build\SpecFlow.Tools.MsBuild.Generation.targets'))" />
-    <Error Condition="!Exists('..\..\packages\SpecFlow.Contrib.Variants.3.0.9\build\SpecFlow.Contrib.Variants.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Contrib.Variants.3.0.9\build\SpecFlow.Contrib.Variants.props'))" />
-    <Error Condition="!Exists('..\..\packages\SpecFlow.Contrib.Variants.3.0.9\build\SpecFlow.Contrib.Variants.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Contrib.Variants.3.0.9\build\SpecFlow.Contrib.Variants.targets'))" />
     <Error Condition="!Exists('..\..\packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.12.0\build\NUnit.props'))" />
     <Error Condition="!Exists('..\..\packages\SpecFlow.NUnit.3.1.74\build\SpecFlow.NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.NUnit.3.1.74\build\SpecFlow.NUnit.props'))" />
     <Error Condition="!Exists('..\..\packages\SpecFlow.NUnit.3.1.74\build\SpecFlow.NUnit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.NUnit.3.1.74\build\SpecFlow.NUnit.targets'))" />
@@ -182,7 +179,6 @@
   </Target>
   <Import Project="..\..\packages\SpecFlow.3.1.74\build\SpecFlow.targets" Condition="Exists('..\..\packages\SpecFlow.3.1.74\build\SpecFlow.targets')" />
   <Import Project="..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.74\build\SpecFlow.Tools.MsBuild.Generation.targets" Condition="Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.1.74\build\SpecFlow.Tools.MsBuild.Generation.targets')" />
-  <Import Project="..\..\packages\SpecFlow.Contrib.Variants.3.0.9\build\SpecFlow.Contrib.Variants.targets" Condition="Exists('..\..\packages\SpecFlow.Contrib.Variants.3.0.9\build\SpecFlow.Contrib.Variants.targets')" />
   <Import Project="..\..\packages\SpecFlow.NUnit.3.1.74\build\SpecFlow.NUnit.targets" Condition="Exists('..\..\packages\SpecFlow.NUnit.3.1.74\build\SpecFlow.NUnit.targets')" />
   <Import Project="..\..\packages\Microsoft.CodeCoverage.16.5.0\build\netstandard1.0\Microsoft.CodeCoverage.targets" Condition="Exists('..\..\packages\Microsoft.CodeCoverage.16.5.0\build\netstandard1.0\Microsoft.CodeCoverage.targets')" />
   <Import Project="..\..\packages\Microsoft.NET.Test.Sdk.16.5.0\build\net40\Microsoft.NET.Test.Sdk.targets" Condition="Exists('..\..\packages\Microsoft.NET.Test.Sdk.16.5.0\build\net40\Microsoft.NET.Test.Sdk.targets')" />
