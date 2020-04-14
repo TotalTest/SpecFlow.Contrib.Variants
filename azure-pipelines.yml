@@ -2,7 +2,7 @@
 # Versioning of package currently managed by variables
 
 trigger:
-- release
+#- release
 - develop
 
 variables:
@@ -25,7 +25,7 @@ stages:
     displayName: "Build & run unit tests"
     steps:
 
-    #Restore/build
+    # Restore / build
     - task: NuGetCommand@2
       displayName: "Restore UnitTests packages"
       inputs:
@@ -86,7 +86,7 @@ stages:
         version: 3.1.101
         installationPath: $(Agent.ToolsDirectory)/dotnet
 
-    # Restore framework integration tests project
+    # Restore integration tests projects
     - task: NuGetCommand@2
       displayName: "Restore SharedBindings packages"
       inputs:
@@ -101,8 +101,6 @@ stages:
         restoreDirectory: '$(Build.Repository.LocalPath)\packages'
         feedsToUse: 'select'
         vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
-    
-    # Core integration tests
     - task: DotNetCoreCLI@2
       displayName: "Restore core integration tests projects"
       inputs:
@@ -110,38 +108,18 @@ stages:
         projects: '**\*Core.*.IntegrationTests.csproj'
         feedsToUse: 'select'
         vstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
+    
+    # Build / run integration tests
     - task: DotNetCoreCLI@2
       displayName: "Build core integration tests projects"
       inputs:
         command: 'build'
         projects: '**\*.IntegrationTests.csproj'
-    #- task: DotNetCoreCLI@2
-    #  displayName: "Run core integration tests"
-    #  inputs:
-    #    command: 'test'
-    #    projects: '**\*Core.*.IntegrationTests.csproj'
-    
-    # Framework integration tests
-    #- task: MSBuild@1
-    #  displayName: "Build framework integration tests projects"
-    #  inputs:
-    #    solution: '**/SpecFlow.Contrib.Variants.*Provider.IntegrationTests.csproj'
-    #    clean: true
     - task: DotNetCoreCLI@2
-      displayName: "Run framework integration tests"
+      displayName: "Run integration tests"
       inputs:
         command: 'test'
-        projects: '**\SpecFlow.Contrib.Variants.*Provider.IntegrationTests.csproj'
-    #- task: VSTest@2
-    #  displayName: "Run framework integration tests"
-    #  inputs:
-    #    testSelector: 'testAssemblies'
-    #    testAssemblyVer2: |
-    #      **\SpecFlow.Contrib.Variants.*Provider.IntegrationTests.dll
-    #      !**\*TestAdapter.dll
-    #      !**\obj\**
-    #    distributionBatchType: 'basedOnAssembly'
-    #    uiTests: true
+        projects: '**\*.IntegrationTests.csproj'
 
     # Pack
     - task: DotNetCoreCLI@2
@@ -163,6 +141,8 @@ stages:
   pool:
     vmImage: '$(vmImage)'
   jobs:
+
+  # Push to Azure Devops
   - job: deploy_prerelease
     displayName: "Push nupkg to DevOps feed"
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))  
@@ -182,6 +162,8 @@ stages:
         nuGetFeedType: 'internal'
         publishVstsFeed: '8cc48bdf-30e3-409a-9f50-1d2e6944e896/ee5c684a-40df-48ba-b303-1a8a5ca628e5'
         allowPackageConflicts: true
+
+  # Push to nuget
   - job: deploy_release
     displayName: "Push nupkg to Nuget feed"
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))  
