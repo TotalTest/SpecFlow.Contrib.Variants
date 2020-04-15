@@ -18,7 +18,7 @@ It is also recommended that specflow.json is used over app.config. When using th
 https://specflow.org/documentation/configuration/
 
 ## 2. SpecFlow v2.4 notes
-As this only version of SpecFlow only works with app.config, the details for configuration if using this version can be found below.
+As this version of SpecFlow only works with app.config, the details for configuration if using this version can be found below.
 
 ## 3. Usage
 
