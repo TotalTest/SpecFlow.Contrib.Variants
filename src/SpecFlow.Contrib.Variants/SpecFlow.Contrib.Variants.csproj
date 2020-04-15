@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/TotalTest/SpecFlow.Contrib.Variants</PackageProjectUrl>
     <PackageIcon>Logo.png</PackageIcon>
     <Description>Extends SpecFlow to allow variants of a test to be run using tags</Description>
-    <PackageReleaseNotes>Initial support for SpecFlow 3 and Core</PackageReleaseNotes>
+    <PackageReleaseNotes>Full support for SpecFlow 3, core and framework</PackageReleaseNotes>
     <PackageTags>specflow;bdd;gherkin;cucumber</PackageTags>
     <RepositoryUrl>https://github.com/TotalTest/SpecFlow.Contrib.Variants</RepositoryUrl>
     <IncludeBuildOutput>true</IncludeBuildOutput>
