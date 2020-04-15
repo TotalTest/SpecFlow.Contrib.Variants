@@ -4,14 +4,25 @@
 
 # SpecFlow.Contrib.Variants
 SpecFlow plugin to allow variants of a test to be run using tags.
-For example (but not limited to) running scenarios or features against different browsers if performing UI tests. 
+For example (but not limited to) running scenarios or features against different browsers if performing UI tests.
+Supports MsTest, NUnit and xUnit
 
-## Usage - SpecFlow v3+
-_Coming soon_
+## 1. SpecFlow v3+ notes
+In line with SpecFlow's docs, it is required that one of the following unit test providers package is installed (apart for SpecRun which is not supported by this plugin):
 
-## Usage - SpecFlow v2.4
+SpecFlow.xUnit
+SpecFlow.MsTest
+SpecFlow.NUnit
 
-### 1. Installation
+It is also recommended that specflow.json is used over app.config. When using this plugin however, app.config is also supported for .net framework projects. Details about specific configuration is explained further below, note that only specflow.json is supported in .net core projects so app.config can't be used for those. Original docs can be found here: 
+https://specflow.org/documentation/configuration/
+
+## 2. SpecFlow v2.4 notes
+As this only version of SpecFlow only works with app.config, the details for configuration if using this version can be found below.
+
+## 3. Usage
+
+### 3.1 Installation
 
 Install plugin using Nuget Package Manager
 
@@ -19,7 +30,7 @@ Install plugin using Nuget Package Manager
 PM> Install-Package SpecFlow.Contrib.Variants
 ```
 
-### 2. Overview
+### 3.2 Overview
 Feature variant tags mean each scenario within that feature is run for each variant.
 \
 i.e 4 test cases for the below two scenarios:
@@ -53,25 +64,7 @@ Scenario: Simple scenario
 	Then the result should be something
 ```
 
-### 3. App.config
-Specify the plugin name and ensure the type is set to 'Generator'. The variant key can also be a custom value, the default key is 'Variant' if no parameters value is specified.
-
-e.g. 
-```XML
-<specFlow>
-  <unitTestProvider name="xunit" />
-  <plugins>
-    <add name="SpecFlow.Contrib.Variants" type="Generator" parameters="Browser" />
-  </plugins>
-</specFlow>
- ```
-The above will ensure the plugin is used and that 'Browser' is set as the variant key. This means any tags starting with `@Browser:` will be treated as variants. 
-
-A colon should be used as the seperator between the variant key and value. For example `@Browser:Chrome` will mean 'Chrome' is the variant value.
-
-The unitTestProvider can either be xunit, mstest or nunit.
-
-## 4. Access the variant
+### 3.3 Access the variant
 The variant key/value can then be accessed via the ScenarioContext static or injected class. This decision was made to cater for all supported test frameworks (NUnit, MsTest and XUnit).
 
 ```csharp
@@ -123,6 +116,49 @@ var browser = categories.First(a => a.ToString().StartsWith("Browser").ToString(
 ```
 
 See the integration test projects for full example.
+
+## 4. Configuration
+
+### 4.1 SpecFlow v3+
+__specflow.json__
+The default variant key is 'Variant' if nothing specific set. This means the tag `@Variant:Chrome` will be treated as a variant, where 'Chrome' is the variant value. However, the variant key can be customised in the specflow.json file:
+
+"pluginparameters": {
+    "variantkey": "Browser"
+  },
+  
+The above means that only tags the begin with `@Browser:` will be treated as variants.
+
+An example can be found [here]:(https://github.com/TotalTest/SpecFlow.Contrib.Variants/blob/master/tests/SpecFlow.Contrib.Variants.Core.MsTestProvider.IntegrationTests/specflow.json)
+
+__app.config__
+If using app.config (applicable only for .net framework). The custom variant key can be set in the following element and attribute:
+
+<generator path="VariantKey:Browser" />
+
+This isn't the ideal element to use but was the best possibility we had, the value is only treated as a variant if is starts with 'VariantKey:' meaning the generator element can be still be used as originally intended.
+
+An example can be found [here]:(https://github.com/TotalTest/SpecFlow.Contrib.Variants/blob/master/tests/SpecFlow.Contrib.Variants.MsTestProvider.IntegrationTests/App.config)
+
+### 4.2 SpecFlow v2.4 (app.config)
+Specify the plugin name and ensure the type is set to 'Generator'. The variant key can also be a custom value, the default key is 'Variant' if no parameters value is specified.
+
+e.g. 
+```XML
+<specFlow>
+  <unitTestProvider name="xunit" />
+  <plugins>
+    <add name="SpecFlow.Contrib.Variants" type="Generator" parameters="Browser" />
+  </plugins>
+</specFlow>
+ ```
+The above will ensure the plugin is used and that 'Browser' is set as the variant key. This means any tags starting with `@Browser:` will be treated as variants. 
+
+A colon should be used as the seperator between the variant key and value. For example `@Browser:Chrome` will mean 'Chrome' is the variant value.
+
+The unitTestProvider can either be xunit, mstest or nunit.
+
+
 
 ## License
 This project uses the [MIT](https://choosealicense.com/licenses/mit/) license.
