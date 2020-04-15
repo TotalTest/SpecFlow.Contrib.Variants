@@ -11,9 +11,7 @@ Supports MsTest, NUnit and xUnit
 In line with SpecFlow's docs, it is required that one of the following unit test providers package is installed (apart from SpecRun which is not supported by this plugin):
 
 - SpecFlow.xUnit
-\
 - SpecFlow.MsTest
-\
 - SpecFlow.NUnit
 
 It is also recommended that specflow.json is used over app.config. When using this plugin however, app.config is also supported for .net framework projects. Details about specific configuration is explained further below.
