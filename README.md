@@ -8,13 +8,17 @@ For example (but not limited to) running scenarios or features against different
 Supports MsTest, NUnit and xUnit
 
 ## 1. SpecFlow v3+ notes
-In line with SpecFlow's docs, it is required that one of the following unit test providers package is installed (apart for SpecRun which is not supported by this plugin):
+In line with SpecFlow's docs, it is required that one of the following unit test providers package is installed (apart from SpecRun which is not supported by this plugin):
 
-SpecFlow.xUnit
-SpecFlow.MsTest
-SpecFlow.NUnit
+- SpecFlow.xUnit
+\
+- SpecFlow.MsTest
+\
+- SpecFlow.NUnit
 
-It is also recommended that specflow.json is used over app.config. When using this plugin however, app.config is also supported for .net framework projects. Details about specific configuration is explained further below, note that only specflow.json is supported in .net core projects so app.config can't be used for those. Original docs can be found here: 
+It is also recommended that specflow.json is used over app.config. When using this plugin however, app.config is also supported for .net framework projects. Details about specific configuration is explained further below.
+\
+Note that only specflow.json is supported in .net core projects so app.config can't be used for those. Original docs can be found here: 
 https://specflow.org/documentation/configuration/
 
 ## 2. SpecFlow v2.4 notes
@@ -52,12 +56,13 @@ Scenario: Simple scenario two
 \
 Scenario variant tags mean the scenario is run for each of its variants.
 \
-i.e 4 test cases for the below scenario:
+i.e 3 test cases for the below scenario:
 ```gherkin
 Feature: AnExampleFeature
 
 @Browser:Chrome
 @Browser:Firefox
+@Browser:Edge
 Scenario: Simple scenario
 	Given something has happened
 	When I do something
@@ -65,7 +70,7 @@ Scenario: Simple scenario
 ```
 
 ### 3.3 Access the variant
-The variant key/value can then be accessed via the ScenarioContext static or injected class. This decision was made to cater for all supported test frameworks (NUnit, MsTest and XUnit).
+The variant key/value can then be accessed via the ScenarioContext static or injected class. This decision was made to cater for all supported test frameworks (NUnit, MsTest and xUnit).
 
 ```csharp
 [Binding]
@@ -102,7 +107,7 @@ public sealed class Hooks
 }
 ```
 
-It's also possible to use the in built contexts per test framework if desired (doesn't apply to XUnit, which is why ScenarioContext is recommended):
+It's also possible to use the in built contexts per test framework if desired (doesn't apply to xUnit, which is why ScenarioContext is recommended):
 
 __MsTest__
 ```csharp
@@ -121,24 +126,36 @@ See the integration test projects for full example.
 
 ### 4.1 SpecFlow v3+
 __specflow.json__
-The default variant key is 'Variant' if nothing specific set. This means the tag `@Variant:Chrome` will be treated as a variant, where 'Chrome' is the variant value. However, the variant key can be customised in the specflow.json file:
+\
+The default variant key is 'Variant' if nothing specific is set. This means the tag `@Variant:Chrome` will be treated as a variant, where 'Chrome' is the variant value. However, the variant key can be customised in the specflow.json file:
 
-"pluginparameters": {
+```json
+{
+  "pluginparameters": {
     "variantkey": "Browser"
-  },
-  
-The above means that only tags the begin with `@Browser:` will be treated as variants.
+  }
+}
+```
 
-An example can be found [here]:(https://github.com/TotalTest/SpecFlow.Contrib.Variants/blob/master/tests/SpecFlow.Contrib.Variants.Core.MsTestProvider.IntegrationTests/specflow.json)
+The above means that only tags that begin with `@Browser:` will be treated as variants.
+
+An example can be found [here](https://github.com/TotalTest/SpecFlow.Contrib.Variants/blob/master/tests/SpecFlow.Contrib.Variants.Core.MsTestProvider.IntegrationTests/specflow.json)
 
 __app.config__
-If using app.config (applicable only for .net framework). The custom variant key can be set in the following element and attribute:
+\
+If using app.config (applicable only for .net framework), the custom variant key can be set in the following generator element and path attribute:
 
-<generator path="VariantKey:Browser" />
-
+```XML
+<configSections>
+  <section name="specFlow" type="TechTalk.SpecFlow.Configuration.ConfigurationSectionHandler, TechTalk.SpecFlow" />
+</configSections>
+<specFlow>
+  <generator path="VariantKey:Browser" />
+</specFlow>
+```
 This isn't the ideal element to use but was the best possibility we had, the value is only treated as a variant if is starts with 'VariantKey:' meaning the generator element can be still be used as originally intended.
 
-An example can be found [here]:(https://github.com/TotalTest/SpecFlow.Contrib.Variants/blob/master/tests/SpecFlow.Contrib.Variants.MsTestProvider.IntegrationTests/App.config)
+An example can be found [here](https://github.com/TotalTest/SpecFlow.Contrib.Variants/blob/master/tests/SpecFlow.Contrib.Variants.MsTestProvider.IntegrationTests/App.config)
 
 ### 4.2 SpecFlow v2.4 (app.config)
 Specify the plugin name and ensure the type is set to 'Generator'. The variant key can also be a custom value, the default key is 'Variant' if no parameters value is specified.
