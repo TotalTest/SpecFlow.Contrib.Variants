@@ -151,7 +151,7 @@ If using app.config (applicable only for .net framework), the custom variant key
   <generator path="VariantKey:Browser" />
 </specFlow>
 ```
-This isn't the ideal element to use but was the best possibility we had, the value is only treated as a variant if is starts with 'VariantKey:' meaning the generator element can be still be used as originally intended.
+This isn't the ideal element to use but was the best possibility we had, the path value is only treated as a variant if it starts with 'VariantKey:' meaning the generator element can be still be used as originally intended.
 
 An example can be found [here](https://github.com/TotalTest/SpecFlow.Contrib.Variants/blob/master/tests/SpecFlow.Contrib.Variants.MsTestProvider.IntegrationTests/App.config)
 
