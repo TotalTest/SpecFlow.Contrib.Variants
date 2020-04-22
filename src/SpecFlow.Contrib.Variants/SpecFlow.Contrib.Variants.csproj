@@ -22,15 +22,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SpecFlow" Version="[3.1.62,3.1.89)" />
-    <PackageReference Include="SpecFlow.CustomPlugin" Version="[3.1.62,3.1.89)" PrivateAssets="All" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="[3.1.62,3.1.89)" PrivateAssets="All" />
+    <PackageReference Include="SpecFlow" Version="3.1.89" />
+    <PackageReference Include="SpecFlow.CustomPlugin" Version="3.1.89" PrivateAssets="All" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.1.89" PrivateAssets="All" />
   </ItemGroup>
 
   <Target Name="CopyFile" AfterTargets="Build">
   <ItemGroup>
     <None Include="build\**" Pack="true" PackagePath="build" />
-    <None Include="images\Logo.png" Pack="true" PackagePath=""/>
+    <None Include="images\Logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>

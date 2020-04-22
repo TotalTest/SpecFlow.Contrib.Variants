@@ -71,7 +71,7 @@ namespace SpecFlow.Contrib.Variants.Providers
             _codeDomHelper.AddAttribute(generationContext.TestInitializeMethod, "NUnit.Framework.SetUpAttribute");
         }
 
-        public void SetTestMethod(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string friendlyTestName)
+        public void SetTestMethod(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string friendlyTestName, string testDescription = null)
         {
             _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.TestAttribute");
             _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.DescriptionAttribute", new object[1] { friendlyTestName });
@@ -84,7 +84,7 @@ namespace SpecFlow.Contrib.Variants.Providers
             _codeDomHelper.AddAttributeForEachValue(testMethod, "NUnit.Framework.CategoryAttribute", _filteredCategories);
         }
 
-        public void SetRow(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, IEnumerable<string> arguments, IEnumerable<string> tags, bool isIgnored)
+        public void SetRow(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string scenarioTitle, IEnumerable<string> arguments, IEnumerable<string> tags, bool isIgnored)
         {
             // Get current variant
             var variant = arguments.FirstOrDefault(a => a.StartsWith(_variantKey));
@@ -133,7 +133,7 @@ namespace SpecFlow.Contrib.Variants.Providers
         {
         }
 
-        public void SetRowTest(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string scenarioTitle)
+        public void SetRowTest(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string scenarioTitle, string scenarioDescription = null)
         {
         }
     }

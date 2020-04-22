@@ -225,13 +225,13 @@ namespace SpecFlow.Contrib.Variants.Generator
                         {
                             var arguments = tableRow.Cells.Select(c => c.Value).ToList();
                             arguments.Add($"{_variantHelper.VariantKey}:{variant}");
-                            _testGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, arguments, example.Tags.GetTagsExcept("@Ignore"), example.Tags.HasTag("@Ignore"));
+                            _testGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, scenarioOutline.Name, arguments, example.Tags.GetTagsExcept("@Ignore"), example.Tags.HasTag("@Ignore"));
                         }
                     }
                     else
                     {
                         var arguments = tableRow.Cells.Select(c => c.Value).ToList();
-                        _testGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, arguments, example.Tags.GetTagsExcept("@Ignore"), example.Tags.HasTag("@Ignore"));
+                        _testGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, scenarioOutline.Name, arguments, example.Tags.GetTagsExcept("@Ignore"), example.Tags.HasTag("@Ignore"));
                     }
                     //NEW CODE END
                 }
