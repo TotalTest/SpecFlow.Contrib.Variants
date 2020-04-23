@@ -44,9 +44,9 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         }
 
         [Fact]
-        public void NUnitProviderExtended_ScenarioVariants_CorrectNumberOfTestCaseAttributes()
+        public void NUnitProviderExtended_ScenarioVariants_CorrectNumberOfTestCaseAttributesForRowTests()
         {
-            TestSetupForAttributes(out var scenario, out _, out var testCaseAttributes, out _);
+            TestSetupForAttributesForRowTests(out var scenario, out _, out var testCaseAttributes, out _);
 
             var expectedNumOfTestCaseAttributes = scenario.GetTagsByNameStart(SampleFeatureFile.Variant).Count
                 * scenario.GetExamplesTableBody().Count;
@@ -55,9 +55,23 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         }
 
         [Fact]
+        public void NUnitProviderExtended_ScenarioVariants_CorrectNumberOfTestCaseAttributesForNonRowTests()
+        {
+            TestSetupForAttributesForNonRowTests(out _, out var testMethods);
+
+            var result = testMethods.All(a =>
+            {
+                var attrs = a.GetMethodAttributes("NUnit.Framework.TestCaseAttribute");
+                return attrs.Count == 1;
+            });
+
+            Assert.True(result);
+        }
+
+        [Fact]
         public void NUnitProviderExtended_ScenarioVariants_TestCaseAttributesHaveCorrectArguments()
         {
-            TestSetupForAttributes(out _, out _, out var testCaseAttributes, out var tableBody);
+            TestSetupForAttributesForRowTests(out _, out _, out var testCaseAttributes, out var tableBody);
 
             var attributeCounter = 0;
             for (var i = 0; i < tableBody.Count; i++)
@@ -85,7 +99,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         [Fact]
         public void NUnitProviderExtended_ScenarioVariants_TestCaseAttributesHaveCorrectCategory()
         {
-            TestSetupForAttributes(out var scenario, out _, out var testCaseAttributes, out var tableBody);
+            TestSetupForAttributesForRowTests(out var scenario, out _, out var testCaseAttributes, out var tableBody);
 
             var attributeCounter = 0;
             for (var i = 0; i < tableBody.Count; i++)
@@ -111,7 +125,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         [Fact]
         public void NUnitProviderExtended_ScenarioVariants_TestCaseAttributesHaveCorrectTestName()
         {
-            TestSetupForAttributes(out _, out var testMethod, out var testCaseAttributes, out var tableBody);
+            TestSetupForAttributesForRowTests(out var scenario, out var testMethod, out var testCaseAttributes, out var tableBody);
 
             var attributeCounter = 0;
             for (var i = 0; i < tableBody.Count; i++)
@@ -124,7 +138,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
 
                     // Check forth argument is the category with the correct value
                     var currentVariant = SampleFeatureFile.Variants[j];
-                    var expTestName = $"{testMethod.Name} with {currentVariant} and {string.Join(", ", cells)}";
+                    var expTestName = $"{scenario.Name} with {currentVariant} and {string.Join(", ", cells)}";
                     var testNameAttr = attArg[cells.Count + 3];
 
                     Assert.Equal("TestName", testNameAttr.Name);
@@ -133,11 +147,33 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             }
         }
 
+        [Fact]
+        public void NUnitProviderExtended_ScenarioVariants_TestCaseAttributesHaveCorrectTestNameForNonRowTests()
+        {
+            TestSetupForAttributesForNonRowTests(out var scenario, out var testMethods);
+
+            for (var j = 0; j < SampleFeatureFile.Variants.Length; j++)
+            {
+                var testMethod = testMethods[j];
+                var testCaseAttributes = testMethod.GetMethodAttributes("NUnit.Framework.TestCaseAttribute");
+
+                var attArg = testCaseAttributes[0].Arguments.GetAttributeArguments();
+
+                // Check forth argument is the category with the correct value
+                var currentVariant = SampleFeatureFile.Variants[j];
+                var expTestName = $"{scenario.Name}: {currentVariant}";
+                var testNameAttr = attArg[0];
+
+                Assert.Equal("TestName", testNameAttr.Name);
+                Assert.Equal(expTestName, testNameAttr.GetArgumentValue().Replace("\"", ""));
+            }
+        }
+
         [Theory]
         [InlineData(SampleFeatureFile.ScenarioTitle_Plain, false, false)]
         [InlineData(SampleFeatureFile.ScenarioTitle_Tags, false)]
         [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData, true)]
-        public void MsTestProviderExtended_ScenarioVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline, bool hasVariants = true)
+        public void NUnitProviderExtended_ScenarioVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline, bool hasVariants = true)
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
@@ -271,7 +307,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         [Fact]
         public void NUnitProviderExtended_FeatureVariants_TestCaseAttributesHaveCorrectTestName()
         {
-            TestSetupForAttributesFeature(out _, out _, out var testMethod, out var testCaseAttributes, out var tableBody);
+            TestSetupForAttributesFeature(out _, out var scenario, out var testMethod, out var testCaseAttributes, out var tableBody);
 
             var attributeCounter = 0;
             for (var i = 0; i < tableBody.Count; i++)
@@ -284,7 +320,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
 
                     // Check forth argument is the category with the correct value
                     var currentVariant = SampleFeatureFile.Variants[j];
-                    var expTestName = $"{testMethod.Name} with {currentVariant} and {string.Join(", ", cells)}";
+                    var expTestName = $"{scenario.Name} with {currentVariant} and {string.Join(", ", cells)}";
                     var testNameAttr = attArg[cells.Count + 3];
 
                     Assert.Equal("TestName", testNameAttr.Name);
@@ -297,7 +333,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         [InlineData(SampleFeatureFile.ScenarioTitle_Plain, false)]
         [InlineData(SampleFeatureFile.ScenarioTitle_Tags, false)]
         [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData, true)]
-        public void MsTestProviderExtended_FeatureVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline)
+        public void NUnitProviderExtended_FeatureVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline)
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
             var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
@@ -355,7 +391,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             Assert.Equal(1, customComment2);
         }
 
-        private void TestSetupForAttributes(out ScenarioOutline scenario, out CodeTypeMember testMethod, out IList<CodeAttributeDeclaration> testCaseAttributes, out IList<TableRow> tableBody)
+        private void TestSetupForAttributesForRowTests(out ScenarioOutline scenario, out CodeTypeMember testMethod, out IList<CodeAttributeDeclaration> testCaseAttributes, out IList<TableRow> tableBody)
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
@@ -363,6 +399,14 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             testMethod = generatedCode.GetTestMethods(scenario).First();
             testCaseAttributes = testMethod.GetMethodAttributes("NUnit.Framework.TestCaseAttribute");
             tableBody = scenario.GetExamplesTableBody();
+        }
+
+        private void TestSetupForAttributesForNonRowTests(out Scenario scenario, out IList<CodeTypeMember> testMethods)
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
+            var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
+            scenario = document.GetScenario<Scenario>(SampleFeatureFile.ScenarioTitle_Tags);
+            testMethods = generatedCode.GetTestMethods(scenario);
         }
 
         private void TestSetupForAttributesFeature(out Feature feature, out ScenarioOutline scenario, out CodeTypeMember testMethod, out IList<CodeAttributeDeclaration> testCaseAttributes, out IList<TableRow> tableBody)

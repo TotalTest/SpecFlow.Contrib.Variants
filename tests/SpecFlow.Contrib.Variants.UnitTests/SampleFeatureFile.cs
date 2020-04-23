@@ -13,6 +13,9 @@
 
         public static readonly string FeatureFileWithScenarioVariantTags = $@"
             Feature: {FeatureTitle}
+            In order to test this plugin
+            As a unit test
+            I want to verify the outcome
             
             @Reg
             Scenario: {ScenarioTitle_Plain}
@@ -69,6 +72,9 @@
             @{Variant}:{Variants[2]}
             @{Variant}:{Variants[3]}
             Feature: {FeatureTitle}
+            In order to test this plugin
+            As a unit test
+            I want to verify the outcome
             
             Scenario: {ScenarioTitle_Plain}
                 Given some setup

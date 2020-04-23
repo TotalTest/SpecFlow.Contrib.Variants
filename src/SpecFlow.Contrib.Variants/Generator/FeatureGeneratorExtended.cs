@@ -382,9 +382,9 @@ namespace SpecFlow.Contrib.Variants.Generator
                 str = $"{scenarioDefinition.Name}: {variantName}";
             }
             if (rowTest)
-                _testGeneratorProvider.SetRowTest(generationContext, testMethod, str);
+                _testGeneratorProvider.SetRowTest(generationContext, testMethod, str, scenarioDefinition.Description);
             else
-                _testGeneratorProvider.SetTestMethod(generationContext, testMethod, str);
+                _testGeneratorProvider.SetTestMethod(generationContext, testMethod, str, scenarioDefinition.Description);
             _decoratorRegistry.DecorateTestMethod(generationContext, testMethod, scenarioDefinition.GetTags().ConcatTags(additionalTags).ConcatTags(_featureVariantTags), out List<string> unprocessedTags);
 
             if (!unprocessedTags.Any())

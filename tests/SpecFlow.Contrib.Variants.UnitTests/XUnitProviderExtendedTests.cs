@@ -142,7 +142,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         [InlineData(SampleFeatureFile.ScenarioTitle_Plain, false, false)]
         [InlineData(SampleFeatureFile.ScenarioTitle_Tags, false)]
         [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData, true)]
-        public void MsTestProviderExtended_ScenarioVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline, bool hasVariants = true)
+        public void XUnitProviderExtended_ScenarioVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline, bool hasVariants = true)
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<XUnitProviderExtended>(document);
@@ -316,7 +316,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         [InlineData(SampleFeatureFile.ScenarioTitle_Plain, false)]
         [InlineData(SampleFeatureFile.ScenarioTitle_Tags, false)]
         [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData, true)]
-        public void MsTestProviderExtended_FeatureVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline)
+        public void XUnitProviderExtended_FeatureVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline)
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithFeatureVariantTags);
             var generatedCode = SetupFeatureGenerator<XUnitProviderExtended>(document);

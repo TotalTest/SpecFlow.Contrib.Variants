@@ -82,13 +82,14 @@ namespace SpecFlow.Contrib.Variants.Providers
 
         public void SetTestMethod(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string friendlyTestName, string testDescription = null)
         {
+            var newTestDescription = string.IsNullOrEmpty(testDescription) ? friendlyTestName : testDescription;
             _codeDomHelper.AddAttribute(testMethod, "Xunit.FactAttribute", new CodeAttributeArgument[1]
             {
                 new CodeAttributeArgument("DisplayName", new CodePrimitiveExpression(friendlyTestName))
             });
 
             SetProperty(testMethod, "FeatureTitle", generationContext.Feature.Name);
-            SetDescription(testMethod, friendlyTestName);
+            SetDescription(testMethod, newTestDescription);
         }
 
         public void SetTestMethodCategories(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, IEnumerable<string> scenarioCategories)

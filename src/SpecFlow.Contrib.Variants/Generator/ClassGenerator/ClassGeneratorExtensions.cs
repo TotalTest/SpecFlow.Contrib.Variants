@@ -1,5 +1,4 @@
 ﻿using Gherkin.Ast;
-using SpecFlow.Contrib.Variants.Generator;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +6,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using TechTalk.SpecFlow.Configuration;
 using TechTalk.SpecFlow.Generator.CodeDom;
-using TechTalk.SpecFlow.Utils;
 
 namespace SpecFlow.Contrib.Variants.Generator.ClassGenerator
 {

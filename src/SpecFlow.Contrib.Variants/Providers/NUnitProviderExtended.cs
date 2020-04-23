@@ -26,8 +26,9 @@ namespace SpecFlow.Contrib.Variants.Providers
 
         public void SetTestClass(TestClassGenerationContext generationContext, string featureTitle, string featureDescription)
         {
-            _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.TestFixtureAttribute");
-            _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.DescriptionAttribute", new object[1] { featureTitle });
+            var newFeatureDescription = string.IsNullOrEmpty(featureDescription) ? featureTitle : featureDescription;
+            _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.TestFixtureAttribute", new CodeAttributeArgument("TestName", new CodePrimitiveExpression(featureTitle)));
+            _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.DescriptionAttribute", newFeatureDescription);
         }
 
         public void SetTestClassInitializeMethod(TestClassGenerationContext generationContext)
@@ -73,8 +74,9 @@ namespace SpecFlow.Contrib.Variants.Providers
 
         public void SetTestMethod(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string friendlyTestName, string testDescription = null)
         {
-            _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.TestAttribute");
-            _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.DescriptionAttribute", new object[1] { friendlyTestName });
+            var newTestDescription = string.IsNullOrEmpty(testDescription) ? friendlyTestName : testDescription;
+            _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.TestCaseAttribute", new CodeAttributeArgument("TestName", new CodePrimitiveExpression(friendlyTestName)));
+            _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.DescriptionAttribute", newTestDescription);
         }
 
         public void SetTestMethodCategories(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, IEnumerable<string> scenarioCategories)
@@ -109,8 +111,12 @@ namespace SpecFlow.Contrib.Variants.Providers
             // Filter arguments to build the nunit TestName attribute
             var list2 = arguments.Where(a => !a.StartsWith(_variantKey) && a != null).Select(arg => new CodeAttributeArgument(new CodePrimitiveExpression(arg))).ToList();
             var str = string.Concat(list2.Select(arg => string.Format("\"{0}\", ", ((CodePrimitiveExpression)arg.Value).Value))).TrimEnd(' ', ',').Replace('.', '_');
-            var testName = variant != null ? testMethod.Name + " with " + variant?.Split(':')[1] + " and " + str : testMethod.Name + " with " + str;
+            var testName = variant != null ? scenarioTitle + " with " + variant?.Split(':')[1] + " and " + str : scenarioTitle + " with " + str;
             list.Add(new CodeAttributeArgument("TestName", new CodePrimitiveExpression(testName)));
+
+            // Ignore test
+            if (isIgnored)
+                list.Add(new CodeAttributeArgument("Ignored", new CodePrimitiveExpression(true)));
 
             _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.TestCaseAttribute", list.ToArray());
 
