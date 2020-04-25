@@ -80,16 +80,15 @@ namespace SpecFlow.Contrib.Variants.Providers
             SetTestConstructor(generationContext, ctorMethod);
         }
 
-        public void SetTestMethod(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string friendlyTestName, string testDescription = null)
+        public void SetTestMethod(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string friendlyTestName)
         {
-            var newTestDescription = string.IsNullOrEmpty(testDescription) ? friendlyTestName : testDescription;
             _codeDomHelper.AddAttribute(testMethod, "Xunit.FactAttribute", new CodeAttributeArgument[1]
             {
                 new CodeAttributeArgument("DisplayName", new CodePrimitiveExpression(friendlyTestName))
             });
 
             SetProperty(testMethod, "FeatureTitle", generationContext.Feature.Name);
-            SetDescription(testMethod, newTestDescription);
+            SetDescription(testMethod, friendlyTestName);
         }
 
         public void SetTestMethodCategories(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, IEnumerable<string> scenarioCategories)
@@ -182,11 +181,11 @@ namespace SpecFlow.Contrib.Variants.Providers
         {
         }
 
-        public void SetRowTest(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string scenarioTitle, string scenarioDescription = null)
+        public void SetRowTest(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string scenarioDescription = null)
         {
         }
 
-        public void SetRow(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string scenarioTitle, IEnumerable<string> arguments, IEnumerable<string> tags, bool isIgnored)
+        public void SetRow(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, IEnumerable<string> arguments, IEnumerable<string> tags, bool isIgnored)
         {
         }
 

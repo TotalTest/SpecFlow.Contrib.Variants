@@ -225,13 +225,13 @@ namespace SpecFlow.Contrib.Variants.Generator
                         {
                             var arguments = tableRow.Cells.Select(c => c.Value).ToList();
                             arguments.Add($"{_variantHelper.VariantKey}:{variant}");
-                            _testGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, scenarioOutline.Name, arguments, example.Tags.GetTagsExcept("@Ignore"), example.Tags.HasTag("@Ignore"));
+                            _testGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, arguments, example.Tags.GetTagsExcept("@Ignore"), example.Tags.HasTag("@Ignore"));
                         }
                     }
                     else
                     {
                         var arguments = tableRow.Cells.Select(c => c.Value).ToList();
-                        _testGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, scenarioOutline.Name, arguments, example.Tags.GetTagsExcept("@Ignore"), example.Tags.HasTag("@Ignore"));
+                        _testGeneratorProvider.SetRow(generationContext, scenatioOutlineTestMethod, arguments, example.Tags.GetTagsExcept("@Ignore"), example.Tags.HasTag("@Ignore"));
                     }
                     //NEW CODE END
                 }
@@ -382,9 +382,9 @@ namespace SpecFlow.Contrib.Variants.Generator
                 str = $"{scenarioDefinition.Name}: {variantName}";
             }
             if (rowTest)
-                _testGeneratorProvider.SetRowTest(generationContext, testMethod, str, scenarioDefinition.Description);
+                _testGeneratorProvider.SetRowTest(generationContext, testMethod, str);
             else
-                _testGeneratorProvider.SetTestMethod(generationContext, testMethod, str, scenarioDefinition.Description);
+                _testGeneratorProvider.SetTestMethod(generationContext, testMethod, str);
             _decoratorRegistry.DecorateTestMethod(generationContext, testMethod, scenarioDefinition.GetTags().ConcatTags(additionalTags).ConcatTags(_featureVariantTags), out List<string> unprocessedTags);
 
             if (!unprocessedTags.Any())

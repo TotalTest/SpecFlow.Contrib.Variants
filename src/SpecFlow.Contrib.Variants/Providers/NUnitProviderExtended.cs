@@ -27,8 +27,8 @@ namespace SpecFlow.Contrib.Variants.Providers
         public void SetTestClass(TestClassGenerationContext generationContext, string featureTitle, string featureDescription)
         {
             var newFeatureDescription = string.IsNullOrEmpty(featureDescription) ? featureTitle : featureDescription;
-            _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.TestFixtureAttribute", new CodeAttributeArgument("TestName", new CodePrimitiveExpression(featureTitle)));
-            _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.DescriptionAttribute", newFeatureDescription);
+            _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.TestFixtureAttribute");
+            _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.DescriptionAttribute", featureTitle);
         }
 
         public void SetTestClassInitializeMethod(TestClassGenerationContext generationContext)
@@ -72,11 +72,10 @@ namespace SpecFlow.Contrib.Variants.Providers
             _codeDomHelper.AddAttribute(generationContext.TestInitializeMethod, "NUnit.Framework.SetUpAttribute");
         }
 
-        public void SetTestMethod(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string friendlyTestName, string testDescription = null)
+        public void SetTestMethod(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string friendlyTestName)
         {
-            var newTestDescription = string.IsNullOrEmpty(testDescription) ? friendlyTestName : testDescription;
-            _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.TestCaseAttribute", new CodeAttributeArgument("TestName", new CodePrimitiveExpression(friendlyTestName)));
-            _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.DescriptionAttribute", newTestDescription);
+            _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.TestAttribute");
+            _codeDomHelper.AddAttribute(testMethod, "NUnit.Framework.DescriptionAttribute", friendlyTestName);
         }
 
         public void SetTestMethodCategories(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, IEnumerable<string> scenarioCategories)
@@ -86,7 +85,7 @@ namespace SpecFlow.Contrib.Variants.Providers
             _codeDomHelper.AddAttributeForEachValue(testMethod, "NUnit.Framework.CategoryAttribute", _filteredCategories);
         }
 
-        public void SetRow(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string scenarioTitle, IEnumerable<string> arguments, IEnumerable<string> tags, bool isIgnored)
+        public void SetRow(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, IEnumerable<string> arguments, IEnumerable<string> tags, bool isIgnored)
         {
             // Get current variant
             var variant = arguments.FirstOrDefault(a => a.StartsWith(_variantKey));
@@ -111,7 +110,7 @@ namespace SpecFlow.Contrib.Variants.Providers
             // Filter arguments to build the nunit TestName attribute
             var list2 = arguments.Where(a => !a.StartsWith(_variantKey) && a != null).Select(arg => new CodeAttributeArgument(new CodePrimitiveExpression(arg))).ToList();
             var str = string.Concat(list2.Select(arg => string.Format("\"{0}\", ", ((CodePrimitiveExpression)arg.Value).Value))).TrimEnd(' ', ',').Replace('.', '_');
-            var testName = variant != null ? scenarioTitle + " with " + variant?.Split(':')[1] + " and " + str : scenarioTitle + " with " + str;
+            var testName = variant != null ? testMethod.Name + " with " + variant?.Split(':')[1] + " and " + str : testMethod.Name + " with " + str;
             list.Add(new CodeAttributeArgument("TestName", new CodePrimitiveExpression(testName)));
 
             // Ignore test
@@ -139,7 +138,7 @@ namespace SpecFlow.Contrib.Variants.Providers
         {
         }
 
-        public void SetRowTest(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string scenarioTitle, string scenarioDescription = null)
+        public void SetRowTest(TestClassGenerationContext generationContext, CodeMemberMethod testMethod, string scenarioTitle)
         {
         }
     }

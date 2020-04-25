@@ -61,7 +61,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
 
             var result = testMethods.All(a =>
             {
-                var attrs = a.GetMethodAttributes("NUnit.Framework.TestCaseAttribute");
+                var attrs = a.GetMethodAttributes("NUnit.Framework.TestAttribute");
                 return attrs.Count == 1;
             });
 
@@ -138,7 +138,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
 
                     // Check forth argument is the category with the correct value
                     var currentVariant = SampleFeatureFile.Variants[j];
-                    var expTestName = $"{scenario.Name} with {currentVariant} and {string.Join(", ", cells)}";
+                    var expTestName = $"{testMethod.Name} with {currentVariant} and {string.Join(", ", cells)}";
                     var testNameAttr = attArg[cells.Count + 3];
 
                     Assert.Equal("TestName", testNameAttr.Name);
@@ -148,24 +148,23 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         }
 
         [Fact]
-        public void NUnitProviderExtended_ScenarioVariants_TestCaseAttributesHaveCorrectTestNameForNonRowTests()
+        public void NUnitProviderExtended_ScenarioVariants_TestDescriptionAttributesHaveCorrectTestNameForNonRowTests()
         {
             TestSetupForAttributesForNonRowTests(out var scenario, out var testMethods);
 
             for (var j = 0; j < SampleFeatureFile.Variants.Length; j++)
             {
                 var testMethod = testMethods[j];
-                var testCaseAttributes = testMethod.GetMethodAttributes("NUnit.Framework.TestCaseAttribute");
+                var testCaseAttributes = testMethod.GetMethodAttributes("NUnit.Framework.DescriptionAttribute");
 
                 var attArg = testCaseAttributes[0].Arguments.GetAttributeArguments();
 
                 // Check forth argument is the category with the correct value
                 var currentVariant = SampleFeatureFile.Variants[j];
-                var expTestName = $"{scenario.Name}: {currentVariant}";
-                var testNameAttr = attArg[0];
+                var expTestDesc = $"{scenario.Name}: {currentVariant}";
+                var testDescAttr = attArg[0];
 
-                Assert.Equal("TestName", testNameAttr.Name);
-                Assert.Equal(expTestName, testNameAttr.GetArgumentValue().Replace("\"", ""));
+                Assert.Equal(expTestDesc, testDescAttr.GetArgumentValue().Replace("\"", ""));
             }
         }
 
@@ -320,7 +319,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
 
                     // Check forth argument is the category with the correct value
                     var currentVariant = SampleFeatureFile.Variants[j];
-                    var expTestName = $"{scenario.Name} with {currentVariant} and {string.Join(", ", cells)}";
+                    var expTestName = $"{testMethod.Name} with {currentVariant} and {string.Join(", ", cells)}";
                     var testNameAttr = attArg[cells.Count + 3];
 
                     Assert.Equal("TestName", testNameAttr.Name);
