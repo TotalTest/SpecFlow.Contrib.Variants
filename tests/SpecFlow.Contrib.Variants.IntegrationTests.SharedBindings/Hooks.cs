@@ -53,7 +53,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         {
             var co = new ChromeOptions();
             co.AddArgument("headless");
-            return new ChromeDriver(driverDir);
+            return new ChromeDriver(driverDir, co);
         }
 
         private IWebDriver SetupFirefoxDriver(string driverDir)
