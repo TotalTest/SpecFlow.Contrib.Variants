@@ -122,19 +122,19 @@ stages:
         projects: '**\*.IntegrationTests.csproj'
 
     # Pack
-    - task: DotNetCoreCLI@2
-      displayName: "Pack main csproj"
-      inputs:
-        command: 'pack'
-        packagesToPack: '**/SpecFlow.Contrib.Variants.csproj'
-        versioningScheme: 'byEnvVar'
-        packDirectory: '$(Build.ArtifactStagingDirectory)'
-        versionEnvVar: 'packageVersion'
-    - task: PublishBuildArtifacts@1
-      displayName: "Publish nupkg as artifact"
-      inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        artifactName: release
+    #- task: DotNetCoreCLI@2
+    #  displayName: "Pack main csproj"
+    #  inputs:
+    #    command: 'pack'
+    #    packagesToPack: '**/SpecFlow.Contrib.Variants.csproj'
+    #    versioningScheme: 'byEnvVar'
+    #    packDirectory: '$(Build.ArtifactStagingDirectory)'
+    #    versionEnvVar: 'packageVersion'
+    #- task: PublishBuildArtifacts@1
+    #  displayName: "Publish nupkg as artifact"
+    #  inputs:
+    #    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    #    artifactName: release
 
 
 - stage: deploy_package
@@ -165,21 +165,21 @@ stages:
         allowPackageConflicts: true
 
   # Push to nuget
-  - job: deploy_release
-    displayName: "Push nupkg to Nuget feed"
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))  
-    steps:
-    - task: DownloadBuildArtifacts@0
-      displayName: "Download nupkg artifact"
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'release'
-        downloadPath: '$(System.ArtifactsDirectory)'
-    - task: NuGetCommand@2
-      displayName: "Push to feed"
-      inputs:
-        command: 'push'
-        packagesToPush: '$(Build.ArtifactStagingDirectory)\release\*.nupkg;!$(Build.ArtifactStagingDirectory)\release\*.symbols.nupkg'
-        nuGetFeedType: 'external'
-        publishFeedCredentials: 'Nuget'
+  #- job: deploy_release
+  #  displayName: "Push nupkg to Nuget feed"
+  #  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))  
+  #  steps:
+  #  - task: DownloadBuildArtifacts@0
+  #    displayName: "Download nupkg artifact"
+  #    inputs:
+  #      buildType: 'current'
+  #      downloadType: 'single'
+  #      artifactName: 'release'
+  #      downloadPath: '$(System.ArtifactsDirectory)'
+  #  - task: NuGetCommand@2
+  #    displayName: "Push to feed"
+  #    inputs:
+  #      command: 'push'
+  #      packagesToPush: '$(Build.ArtifactStagingDirectory)\release\*.nupkg;!$(Build.ArtifactStagingDirectory)\release\*.symbols.nupkg'
+  #      nuGetFeedType: 'external'
+  #      publishFeedCredentials: 'Nuget'

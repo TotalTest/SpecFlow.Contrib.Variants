@@ -51,9 +51,14 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
 
         private IWebDriver SetupChromeDriver(string driverDir)
         {
+            //var co = new ChromeOptions();
+            //co.AddArgument("headless");
+            //return new ChromeDriver(driverDir, co);
+
+            var envChromeWebDriver = Environment.GetEnvironmentVariable("ChromeWebDriver");
             var co = new ChromeOptions();
             co.AddArgument("headless");
-            return new ChromeDriver(driverDir, co);
+            return new ChromeDriver(envChromeWebDriver, co);
         }
 
         private IWebDriver SetupFirefoxDriver(string driverDir)
@@ -61,7 +66,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
             var fo = new FirefoxOptions();
             fo.SetPreference("marionette", true);
             fo.AddArgument("--headless");
-            return new FirefoxDriver(driverDir, fo);
+            return new FirefoxDriver(driverDir, fo, TimeSpan.FromSeconds(180));
         }
 
         [AfterScenario]
@@ -69,14 +74,37 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         {
             if (_scenarioContext.TestError != null)
             {
+
                 var path = Path.Combine(_baseDir, "Screenshots");
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
-
-                ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile($@"{path}\{_scenarioContext.ScenarioInfo.Title}.jpg", ScreenshotImageFormat.Jpeg);
+                try
+                {
+                    ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile($@"{path}\{_scenarioContext.ScenarioInfo.Title}.jpg", ScreenshotImageFormat.Jpeg);
+                }
+                catch (WebDriverException wde)
+                {
+                    Console.WriteLine("Error trying to take a screen shot");
+                    Console.WriteLine($"Error message: {wde.Message}");
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Unexpected Error trying to take a screen shot");
+                    Console.WriteLine($"Error message: {e.Message}");
+                }
             }
 
-            _driver.Dispose();
+            try
+            {
+                _driver.Dispose();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Unexpected error disposing driver");
+                Console.WriteLine($"Error message: {e.Message}");
+            }
+
             _scenarioContext.ScenarioContainer.Dispose();
         }
 
