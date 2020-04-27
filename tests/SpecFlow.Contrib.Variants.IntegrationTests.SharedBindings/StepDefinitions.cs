@@ -59,7 +59,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
             _commonsPage.NavigateSidebar(link);
         }
 
-        [Then(@"the page should be '(.*)'")]
+        [Then("the page should be '(.*)'")]
         public void ThenThePageShouldBe(string site)
         {
             if (!string.Equals(_commonsPage.Url, site, StringComparison.InvariantCultureIgnoreCase))

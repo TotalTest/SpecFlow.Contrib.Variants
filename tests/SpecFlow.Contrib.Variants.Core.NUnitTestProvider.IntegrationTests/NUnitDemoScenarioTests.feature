@@ -19,13 +19,13 @@ Scenario: A test with non-variant tags
 	Then the tags check boxes should be checked
 
 @Browser:Chrome
-@Browser:Firefox
+@Browser:Edge
 Scenario: A test with variant tags
 	When check the checkbox
 	Then the checkbox text is 'Success - Check box is checked'
 
 @Browser:Chrome
-@Browser:Firefox
+@Browser:Edge
 Scenario Outline: A test with variant tags and examples
 	And I drill into the '<Link>' link
 	When I drill into the '<Sublink>' link

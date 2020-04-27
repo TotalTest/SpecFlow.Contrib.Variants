@@ -155,7 +155,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context.cs" />
     <Compile Include="GenerationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

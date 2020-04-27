@@ -26,20 +26,14 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         {
             _scenarioContext.TryGetValue("Browser", out var browser);
 
-            // TODO: remove when safe
-            //var ns = _scenarioContext["Namespace"].ToString().ToLowerInvariant();
-            //_baseDir = AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant();
-            //var driverDir = _baseDir.Replace(ns, GetType().Namespace.ToLowerInvariant());
-
-            //if (ns.Contains("core"))
-            //    driverDir = Directory.GetParent(Directory.GetParent(driverDir).FullName).FullName;
+            _baseDir = AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant();
 
             switch (browser)
             {
                 case "Chrome":
                     _driver = SetupChromeDriver();
                     break;
-                case "Firefox":
+                case "Edge":
                     _driver = SetupEdgeDriver();
                     break;
                 default:

@@ -1,5 +1,5 @@
 ﻿@Browser:Chrome
-@Browser:Firefox
+@Browser:Edge
 Feature: XUnitDemoFeatureTests
 	In order to verify the SpecFlow variants plugin for features
 	As a developer
