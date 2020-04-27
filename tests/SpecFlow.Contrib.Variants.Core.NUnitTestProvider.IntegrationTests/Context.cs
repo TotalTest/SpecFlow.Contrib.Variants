@@ -15,7 +15,8 @@ namespace SpecFlow.Contrib.Variants.Core.NUnitTestProvider.IntegrationTests
         [BeforeScenario]
         public void Before()
         {
-            _scenarioContext.Add("Namespace", GetType().Namespace);
+            // TODO: remove when safe
+            //_scenarioContext.Add("Namespace", GetType().Namespace);
 
             /// <summary>
             /// Example of accessing variant via NUnit TestContext

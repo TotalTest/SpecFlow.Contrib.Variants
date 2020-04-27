@@ -15,7 +15,8 @@ namespace SpecFlow.Contrib.Variants.XUnitProvider.IntegrationTests
         [BeforeScenario]
         public void Before()
         {
-            _scenarioContext.Add("Namespace", GetType().Namespace);
+            // TODO: remove when safe
+            //_scenarioContext.Add("Namespace", GetType().Namespace);
         }
     }
 }
