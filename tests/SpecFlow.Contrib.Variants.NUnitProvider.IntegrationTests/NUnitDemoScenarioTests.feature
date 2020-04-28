@@ -11,7 +11,7 @@ Scenario: A single test without examples or tags
 	Then the checkbox text is 'Success - Check box is checked'
 
 @Variant:Chrome
-@Browser:Edge
+@Variant:Edge
 Scenario: A test with variant tags
 	When check the checkbox
 	Then the checkbox text is 'Success - Check box is checked'

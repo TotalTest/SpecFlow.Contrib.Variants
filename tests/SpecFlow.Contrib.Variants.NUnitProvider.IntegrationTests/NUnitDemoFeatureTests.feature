@@ -1,5 +1,5 @@
 ﻿@Variant:Chrome
-@Browser:Edge
+@Variant:Edge
 Feature: NUnitDemoFeatureTests
 	In order to verify the SpecFlow variants plugin for features
 	As a developer
