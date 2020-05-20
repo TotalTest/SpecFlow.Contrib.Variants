@@ -164,7 +164,7 @@ namespace SpecFlow.Contrib.Variants.Generator
                 else
                     GenerateScenarioOutlineExamplesAsIndividualMethods(scenarioOutline, generationContext, outlineTestMethod, identifierMapping, null);
             }
-            //NEW CODE END    
+            //NEW CODE END
 
             var referenceExpression = new CodeVariableReferenceExpression("exampleTags");
             GenerateTestBody(generationContext, scenarioOutline, outlineTestMethod, referenceExpression, identifierMapping);
@@ -434,7 +434,7 @@ namespace SpecFlow.Contrib.Variants.Generator
             {
                 statements.Add(new CodeMethodInvokeExpression(referenceExpression, "AddRow", new CodeExpression[1]
                 {
-                    tableRow1.Cells.Select(c => c.Value).GetStringArrayExpression(paramToIdentifier)
+                    tableRow2.Cells.Select(c => c.Value).GetStringArrayExpression(paramToIdentifier)
                 }));
             }
             return referenceExpression;
