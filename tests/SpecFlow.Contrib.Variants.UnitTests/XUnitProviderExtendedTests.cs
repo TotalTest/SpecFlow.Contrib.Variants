@@ -1,4 +1,5 @@
 ﻿using Gherkin.Ast;
+using Gherkin.Pickles;
 using SpecFlow.Contrib.Variants.Generator;
 using SpecFlow.Contrib.Variants.Providers;
 using System;
@@ -364,6 +365,40 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             var ex = Assert.Throws<TestGeneratorException>(act);
 
             Assert.Equal("Variant tags were detected at feature and scenario level, please specify at one level or the other.", ex.Message);
+        }
+        #endregion
+
+        #region Regression tests
+        [Fact]
+        public void XUnitProviderExtended_Regression_InlineTablesGeneratedCorrectly()
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
+            var generatedCode = SetupFeatureGenerator<XUnitProviderExtended>(document);
+            var scenario = document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData);
+            var tableStep = scenario.Steps.First(a => a.Argument is DataTable).Argument as DataTable;
+            var tableRows = tableStep.Rows.ToList();
+
+            var methodStatements = ((CodeMemberMethod)generatedCode.GetRowTestBaseMethod(scenario)).Statements.Cast<CodeStatement>()
+                .SkipWhile(a =>
+                {
+                    var istr = a as CodeVariableDeclarationStatement;
+                    return istr == null || istr.Type.BaseType != "TechTalk.SpecFlow.Table";
+                }).Take(tableStep.Rows.Count()).ToList();
+
+            var expectedHeaders = tableRows[0].Cells;
+
+            var headerStatementArgs = ((CodeArrayCreateExpression)((CodeObjectCreateExpression)((CodeVariableDeclarationStatement)methodStatements[0]).InitExpression)
+                                    .Parameters[0]).Initializers.Cast<CodeExpression>().Select(a => a as CodePrimitiveExpression).Select(b => b.Value);
+
+            for (var i = 1; i < tableRows.Count; i++)
+            {
+                var cellValues = tableRows[i].Cells.Select(a => a.Value);
+
+                var cellStatementArgs = ((CodeArrayCreateExpression)((CodeMethodInvokeExpression)((CodeExpressionStatement)methodStatements[i]).Expression)
+                                    .Parameters[0]).Initializers.Cast<CodeExpression>().Select(a => a as CodePrimitiveExpression).Select(b => b.Value.ToString());
+
+                Assert.True(cellValues.SequenceEqual(cellStatementArgs));
+            }
         }
         #endregion
 
