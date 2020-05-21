@@ -15,7 +15,9 @@ namespace SpecFlow.Contrib.Variants.NUnitProvider.IntegrationTests
         [BeforeScenario]
         public void Before()
         {
-            _scenarioContext["Browser"] = _scenarioContext["Variant"];
+            string b;
+             _scenarioContext.TryGetValue("Variant", out b);
+            _scenarioContext["Browser"] = b;
 
             /// <summary>
             /// Example of accessing variant via NUnit TestContext
