@@ -375,27 +375,19 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<XUnitProviderExtended>(document);
             var scenario = document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData);
+            var baseMethod = generatedCode.GetRowTestBaseMethod(scenario);
             var tableStep = scenario.Steps.First(a => a.Argument is DataTable).Argument as DataTable;
             var tableRows = tableStep.Rows.ToList();
+            var methodStatements = baseMethod.GetMethodStatements().GetTableStatements(tableRows.Count);
 
-            var methodStatements = ((CodeMemberMethod)generatedCode.GetRowTestBaseMethod(scenario)).Statements.Cast<CodeStatement>()
-                .SkipWhile(a =>
-                {
-                    var istr = a as CodeVariableDeclarationStatement;
-                    return istr == null || istr.Type.BaseType != "TechTalk.SpecFlow.Table";
-                }).Take(tableStep.Rows.Count()).ToList();
-
-            var expectedHeaders = tableRows[0].Cells;
-
-            var headerStatementArgs = ((CodeArrayCreateExpression)((CodeObjectCreateExpression)((CodeVariableDeclarationStatement)methodStatements[0]).InitExpression)
-                                    .Parameters[0]).Initializers.Cast<CodeExpression>().Select(a => a as CodePrimitiveExpression).Select(b => b.Value);
+            var expectedHeaders = tableRows[0].Cells.Select(a => a.Value);
+            var headerStatementArgs = methodStatements[0].GetStepTableHeaderArgs();
+            Assert.True(expectedHeaders.SequenceEqual(headerStatementArgs));
 
             for (var i = 1; i < tableRows.Count; i++)
             {
                 var cellValues = tableRows[i].Cells.Select(a => a.Value);
-
-                var cellStatementArgs = ((CodeArrayCreateExpression)((CodeMethodInvokeExpression)((CodeExpressionStatement)methodStatements[i]).Expression)
-                                    .Parameters[0]).Initializers.Cast<CodeExpression>().Select(a => a as CodePrimitiveExpression).Select(b => b.Value.ToString());
+                var cellStatementArgs = methodStatements[i].GetStepTableCellArgs();
 
                 Assert.True(cellValues.SequenceEqual(cellStatementArgs));
             }

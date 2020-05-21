@@ -371,6 +371,36 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         }
         #endregion
 
+        #region Regression tests
+        [Fact]
+        public void NUnitProviderExtended_Regression_InlineTablesGeneratedCorrectly()
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
+            var generatedCode = SetupFeatureGenerator<NUnitProviderExtended>(document);
+            var scenario = document.GetScenario<ScenarioOutline>(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData);
+            var testMethods = generatedCode.GetTestMethods(scenario);
+            var tableStep = scenario.Steps.First(a => a.Argument is DataTable).Argument as DataTable;
+            var tableRows = tableStep.Rows.ToList();
+
+            foreach (var method in testMethods)
+            {
+                var methodStatements = method.GetMethodStatements().GetTableStatements(tableRows.Count);
+
+                var expectedHeaders = tableRows[0].Cells.Select(a => a.Value);
+                var headerStatementArgs = methodStatements[0].GetStepTableHeaderArgs();
+                Assert.True(expectedHeaders.SequenceEqual(headerStatementArgs));
+
+                for (var i = 1; i < tableRows.Count; i++)
+                {
+                    var cellValues = tableRows[i].Cells.Select(a => a.Value);
+                    var cellStatementArgs = methodStatements[i].GetStepTableCellArgs();
+
+                    Assert.True(cellValues.SequenceEqual(cellStatementArgs));
+                }
+            }
+        }
+        #endregion
+
         [Fact]
         public void NUnitProviderExtended_Generation_CustomGenerationApplied()
         {

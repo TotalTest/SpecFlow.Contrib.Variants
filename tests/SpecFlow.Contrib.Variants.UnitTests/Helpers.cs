@@ -89,5 +89,31 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         {
             return ((CodePrimitiveExpression)codeExpression.Value).Value.ToString();
         }
+
+        public static IList<CodeStatement> GetMethodStatements(this CodeTypeMember member)
+        {
+            return ((CodeMemberMethod)member).Statements.Cast<CodeStatement>().ToList();
+        }
+
+        public static IList<string> GetStepTableHeaderArgs(this CodeStatement statement)
+        {
+            return ((CodeArrayCreateExpression)((CodeObjectCreateExpression)((CodeVariableDeclarationStatement)statement).InitExpression)
+                .Parameters[0]).Initializers.Cast<CodeExpression>().Select(a => a as CodePrimitiveExpression).Select(b => b.Value.ToString()).ToList();
+        }
+
+        public static IList<string> GetStepTableCellArgs(this CodeStatement statement)
+        {
+            return ((CodeArrayCreateExpression)((CodeMethodInvokeExpression)((CodeExpressionStatement)statement).Expression)
+                .Parameters[0]).Initializers.Cast<CodeExpression>().Select(a => a as CodePrimitiveExpression).Select(b => b.Value.ToString()).ToList();
+        }
+
+        public static IList<CodeStatement> GetTableStatements(this IEnumerable<CodeStatement> statements, int rowCount)
+        {
+            return statements.SkipWhile(a =>
+            {
+                var istr = a as CodeVariableDeclarationStatement;
+                return istr == null || istr.Type.BaseType != "TechTalk.SpecFlow.Table";
+            }).Take(rowCount).ToList();
+        }
     }
 }
