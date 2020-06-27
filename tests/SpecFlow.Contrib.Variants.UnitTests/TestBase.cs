@@ -124,7 +124,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             }
         }
 
-        protected string GetScenarioContextVariantStatement(CodeTypeMember method, bool isBase = false, int statementLine = 2)
+        protected string GetScenarioContextVariantStatement(CodeTypeMember method, bool isBase = false, int statementLine = 5)
         {
             var statement = ((CodeMemberMethod)method).Statements.Cast<CodeStatement>().ToList()[statementLine] as CodeExpressionStatement;
             var expression = statement.Expression as CodeMethodInvokeExpression;

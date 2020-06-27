@@ -140,10 +140,10 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         }
 
         [Theory]
-        [InlineData(SampleFeatureFile.ScenarioTitle_Plain, false, false)]
-        [InlineData(SampleFeatureFile.ScenarioTitle_Tags, false)]
-        [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData, true)]
-        public void XUnitProviderExtended_ScenarioVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline, bool hasVariants = true)
+        [InlineData(SampleFeatureFile.ScenarioTitle_Plain, false, false, 4)]
+        [InlineData(SampleFeatureFile.ScenarioTitle_Tags, false, true, 3)]
+        [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData, true, true, 7)]
+        public void XUnitProviderExtended_ScenarioVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline, bool hasVariants, int lineNum)
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
             var generatedCode = SetupFeatureGenerator<XUnitProviderExtended>(document);
@@ -153,7 +153,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             {
                 var baseMethod = generatedCode.GetRowTestBaseMethod(scenario);
                 var expectedStatement = $"testRunner.ScenarioContext.Add(\"{SampleFeatureFile.Variant}\", \"{SampleFeatureFile.Variant.ToLowerInvariant()}\");";
-                var statement = GetScenarioContextVariantStatement(baseMethod, true, 4);
+                var statement = GetScenarioContextVariantStatement(baseMethod, true, lineNum);
                 Assert.Equal(expectedStatement, statement);
 
                 var rowMethods = generatedCode.GetRowTestMethods(scenario);
@@ -176,7 +176,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
                     for (var i = 0; i < testMethods.Count; i++)
                     {
                         var expectedStatement = $"testRunner.ScenarioContext.Add(\"{SampleFeatureFile.Variant}\", \"{SampleFeatureFile.Variants[i]}\");";
-                        var statement = GetScenarioContextVariantStatement(testMethods[i]);
+                        var statement = GetScenarioContextVariantStatement(testMethods[i], false, lineNum);
                         Assert.Equal(expectedStatement, statement);
                     }
                 }
@@ -327,7 +327,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             {
                 var baseMethod = generatedCode.GetRowTestBaseMethod(scenario);
                 var expectedStatement = $"testRunner.ScenarioContext.Add(\"{SampleFeatureFile.Variant}\", \"{SampleFeatureFile.Variant.ToLowerInvariant()}\");";
-                var statement = GetScenarioContextVariantStatement(baseMethod, true, 2);
+                var statement = GetScenarioContextVariantStatement(baseMethod, true, 5);
                 Assert.Equal(expectedStatement, statement);
 
                 var rowMethods = generatedCode.GetRowTestMethods(scenario);
@@ -348,7 +348,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
                 for (var i = 0; i < testMethods.Count; i++)
                 {
                     var expectedStatement = $"testRunner.ScenarioContext.Add(\"{SampleFeatureFile.Variant}\", \"{SampleFeatureFile.Variants[i]}\");";
-                    var statement = GetScenarioContextVariantStatement(testMethods[i]);
+                    var statement = GetScenarioContextVariantStatement(testMethods[i], false, 3);
                     Assert.Equal(expectedStatement, statement);
                 }
             }

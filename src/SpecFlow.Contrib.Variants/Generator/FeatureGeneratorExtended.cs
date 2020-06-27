@@ -3,6 +3,7 @@ using SpecFlow.Contrib.Variants.Generator;
 using SpecFlow.Contrib.Variants.Generator.ClassGenerator;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using TechTalk.SpecFlow;
@@ -296,6 +297,31 @@ namespace SpecFlow.Contrib.Variants.Generator
             GenerateTestBody(generationContext, scenario, testMethod, null, null);
         }
 
+        private void AddVariableForArguments(CodeMemberMethod testMethod, ParameterSubstitution paramToIdentifier)
+        {
+            var argumentsExpression = new CodeVariableDeclarationStatement(
+                typeof(OrderedDictionary),
+                GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME,
+                new CodeObjectCreateExpression(typeof(OrderedDictionary)));
+
+            testMethod.Statements.Add(argumentsExpression);
+
+            if (paramToIdentifier != null)
+            {
+                foreach (var parameter in paramToIdentifier)
+                {
+                    var addArgumentExpression = new CodeMethodInvokeExpression(
+                        new CodeMethodReferenceExpression(
+                            new CodeTypeReferenceExpression(new CodeTypeReference(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME)),
+                            nameof(OrderedDictionary.Add)),
+                        new CodePrimitiveExpression(parameter.Key),
+                        new CodeVariableReferenceExpression(parameter.Value));
+
+                    testMethod.Statements.Add(addArgumentExpression);
+                }
+            }
+        }
+
         private void GenerateTestBody(TestClassGenerationContext generationContext, StepsContainer scenario, CodeMemberMethod testMethod, CodeExpression additionalTagsExpression = null, ParameterSubstitution paramToIdentifier = null)
         {
             CodeExpression left;
@@ -321,11 +347,15 @@ namespace SpecFlow.Contrib.Variants.Generator
                     }))
                 }));
             }
-            testMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(ScenarioInfo), "scenarioInfo", new CodeObjectCreateExpression(typeof(ScenarioInfo), new CodeExpression[3]
+
+            AddVariableForArguments(testMethod, paramToIdentifier); //// NEW CODE
+
+            testMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(ScenarioInfo), "scenarioInfo", new CodeObjectCreateExpression(typeof(ScenarioInfo), new CodeExpression[4]
             {
                 new CodePrimitiveExpression(scenario.Name),
                 new CodePrimitiveExpression(scenario.Description),
-                left
+                left,
+                new CodeVariableReferenceExpression(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME)
             })));
             //_codeDomHelper.AddLineDirective(scenario, testMethod.Statements, _specFlowConfiguration);
             testMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), generationContext.ScenarioInitializeMethod.Name, new CodeExpression[1]
