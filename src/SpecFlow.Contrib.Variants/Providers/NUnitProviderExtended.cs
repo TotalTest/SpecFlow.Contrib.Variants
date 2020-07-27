@@ -98,13 +98,17 @@ namespace SpecFlow.Contrib.Variants.Providers
             list.Add(new CodeAttributeArgument(codeExpression));
             if (num != 0)
             {
-                CodeExpression codeExpression2 = new CodePrimitiveExpression(string.Join(",", tags.ToArray().Append(variant)));
+                var nt = tags.ToList();
+                nt.Add(variant);
+                CodeExpression codeExpression2 = new CodePrimitiveExpression(string.Join(",", nt.ToArray()));
                 list.Add(new CodeAttributeArgument("Category", codeExpression2));
             }
             else if (variant != null)
             {
+                var nft = _filteredCategories.ToList();
+                nft.Insert(0, variant);
                 // Add the current variant as the nunit Category attribute
-                list.Add(new CodeAttributeArgument("Category", new CodePrimitiveExpression(string.Join(",", _filteredCategories.ToArray().Prepend(variant)))));
+                list.Add(new CodeAttributeArgument("Category", new CodePrimitiveExpression(string.Join(",", nft.ToArray()))));
             }
 
             // Filter arguments to build the nunit TestName attribute

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net471;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <IsPackable>true</IsPackable>
     <AssemblyName>SpecFlow.Contrib.Variants.SpecFlowPlugin</AssemblyName>
@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/TotalTest/SpecFlow.Contrib.Variants</PackageProjectUrl>
     <PackageIcon>Logo.png</PackageIcon>
     <Description>Extends SpecFlow to allow variants of a test to be run using tags</Description>
-    <PackageReleaseNotes>Updated to support SpecFlow 3.3.30</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated to support SpecFlow 3.3.57</PackageReleaseNotes>
     <PackageTags>specflow;bdd;gherkin;cucumber</PackageTags>
     <RepositoryUrl>https://github.com/TotalTest/SpecFlow.Contrib.Variants</RepositoryUrl>
     <IncludeBuildOutput>true</IncludeBuildOutput>
@@ -22,9 +22,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SpecFlow" Version="3.3.30" />
-    <PackageReference Include="SpecFlow.CustomPlugin" Version="3.3.30" PrivateAssets="All" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.3.30" PrivateAssets="All" />
+    <PackageReference Include="SpecFlow" Version="3.3.57" />
+    <PackageReference Include="SpecFlow.CustomPlugin" Version="3.3.57" PrivateAssets="All" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.3.57" PrivateAssets="All" />
   </ItemGroup>
 
   <Target Name="CopyFile" AfterTargets="Build">
@@ -34,12 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="bin\$(Configuration)\net471\SpecFlow.Contrib.Variants.SpecFlowPlugin.*" Pack="true" PackagePath="build\net471" />
+    <None Include="bin\$(Configuration)\net461\SpecFlow.Contrib.Variants.SpecFlowPlugin.*" Pack="true" PackagePath="build\net461" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="bin\$(Configuration)\netstandard2.0\SpecFlow.Contrib.Variants.SpecFlowPlugin.dll" Pack="true" PackagePath="build\netstandard2.0" />
-    <None Include="bin\$(Configuration)\netstandard2.0\SpecFlow.Contrib.Variants.SpecFlowPlugin.pdb" Pack="true" PackagePath="build\netstandard2.0" />
+    <None Include="bin\$(Configuration)\netcoreapp2.1\SpecFlow.Contrib.Variants.SpecFlowPlugin.dll" Pack="true" PackagePath="build\netcoreapp2.1" />
+    <None Include="bin\$(Configuration)\netcoreapp2.1\SpecFlow.Contrib.Variants.SpecFlowPlugin.pdb" Pack="true" PackagePath="build\netcoreapp2.1" />
   </ItemGroup>
   </Target>
 
