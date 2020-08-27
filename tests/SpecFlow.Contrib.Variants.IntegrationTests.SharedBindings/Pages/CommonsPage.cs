@@ -17,5 +17,10 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings.Pages
         {
             _driver.FindElement(By.LinkText(link)).Click();
         }
+
+        public void Navigate()
+        {
+            _driver.Navigate().GoToUrl("http://the-internet.herokuapp.com/");
+        }
     }
 }

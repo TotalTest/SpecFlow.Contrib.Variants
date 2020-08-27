@@ -19,36 +19,31 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
             _commonsPage = commonsPage;
         }
 
-        [Given("I am on the input forms page")]
-        public void GivenIAmOnTheInputFormsPage()
+        [Given("I am on the home page")]
+        public void GivenIAmOnTheHomePage()
         {
-            _inputFormsPage.Navigate();
+            _commonsPage.Navigate();
         }
 
-        [When("check the checkbox")]
+        [When("I add element")]
         public void WhenCheckTheCheckbox()
         {
-            _inputFormsPage.CheckBox();
+            _inputFormsPage.AddElement();
         }
 
-        [Then("the checkbox text is '(.*)'")]
-        public void ThenTheCheckboxTextIs(string text)
+        [Then("the element is added")]
+        public void ThenTheElementIsAdded()
         {
-            if (!string.Equals(_inputFormsPage.CheckedText(), text, StringComparison.InvariantCultureIgnoreCase))
+            if (!_inputFormsPage.ElementAdded())
                 throw new Exception("Checked text was incorrect");
         }
 
-        [When("I check all the option check boxes")]
-        public void WhenICheckAllTheOptionCheckBoxes()
-        {
-            _inputFormsPage.CheckAll();
-        }
-
-        [Then("the tags check boxes should be checked")]
-        public void ThenTheTagsCheckBoxesShouldBeChecked()
+        [Then("the tags match the menu items")]
+        public void ThenTheTagsMatchTheMenuItems()
         {
             var tags = _scenarioContext.ScenarioInfo.Tags.Select(a => a.Replace("_", " ")).ToList();
-            if (!tags.All(a => _inputFormsPage.CheckboxByName(a)))
+            var items = _inputFormsPage.GetMenuItems();
+            if (!tags.All(a => items.Contains(a)))
                 throw new Exception("One or more checkboxes were not checked");
         }
 
