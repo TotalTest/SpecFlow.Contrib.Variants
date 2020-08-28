@@ -44,7 +44,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
             var tags = _scenarioContext.ScenarioInfo.Tags.Select(a => a.Replace("_", " ")).ToList();
             var items = _inputFormsPage.GetMenuItems();
             if (!tags.All(a => items.Contains(a)))
-                throw new Exception("One or more checkboxes were not checked");
+                throw new Exception("One or more tags were'nt displayed");
         }
 
         [Given("I drill into the '(.*)' link")]

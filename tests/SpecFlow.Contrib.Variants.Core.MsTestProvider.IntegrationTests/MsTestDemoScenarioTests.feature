@@ -13,7 +13,7 @@ Scenario: A single test without examples or tags
 
 @Home
 @About
-@Contact Us
+@Contact_Us
 @Portfolio
 @Gallery
 Scenario: A test with non-variant tags
