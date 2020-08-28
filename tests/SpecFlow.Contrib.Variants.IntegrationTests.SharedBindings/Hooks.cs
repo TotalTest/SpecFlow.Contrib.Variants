@@ -47,6 +47,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
 
         private IWebDriver SetupChromeDriver()
         {
+            return new ChromeDriver();
             var envChromeWebDriver = Environment.GetEnvironmentVariable("ChromeWebDriver");
             var co = new ChromeOptions();
             co.AddArgument("headless");
@@ -55,6 +56,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
 
         private IWebDriver SetupEdgeDriver()
         {
+            return new ChromeDriver();
             var envEdgeWebDriver = Environment.GetEnvironmentVariable("EdgeWebDriver");
             var ed = new EdgeOptions { UseChromium = true };
             return new EdgeDriver(envEdgeWebDriver, ed);

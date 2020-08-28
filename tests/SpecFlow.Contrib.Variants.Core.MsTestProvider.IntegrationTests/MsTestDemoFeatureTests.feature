@@ -17,7 +17,6 @@ Scenario: A single test without examples or tags
 @About
 @Contact_Us
 @Portfolio
-@Gallery
 Scenario: A test with non-variant tags
 	And I drill into the 'Disappearing Elements' link
 	Then the tags match the menu items
