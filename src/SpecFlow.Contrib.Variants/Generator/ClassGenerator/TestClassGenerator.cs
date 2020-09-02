@@ -85,12 +85,13 @@ namespace SpecFlow.Contrib.Variants.Generator.ClassGenerator
             var codeExpressionArray2 = codeExpressionArray1;
             CodeExpression runnerExpression = GetTestRunnerExpression();
             initializeMethod.Statements.Add(new CodeAssignStatement(runnerExpression, new CodeMethodInvokeExpression(new CodeTypeReferenceExpression(typeof(TestRunnerManager)), "GetTestRunner", codeExpressionArray2)));
-            initializeMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(FeatureInfo), "featureInfo", new CodeObjectCreateExpression(typeof(FeatureInfo), new CodeExpression[5]
+            initializeMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(FeatureInfo), "featureInfo", new CodeObjectCreateExpression(typeof(FeatureInfo), new CodeExpression[6]
             {
                 new CodeObjectCreateExpression(typeof(CultureInfo), new CodeExpression[1]
                 {
                      new CodePrimitiveExpression(GenerationContext.Feature.Language)
                 }),
+                new CodePrimitiveExpression(GenerationContext.Document.DocumentLocation.FeatureFolderPath),
                 new CodePrimitiveExpression(GenerationContext.Feature.Name),
                 new CodePrimitiveExpression(GenerationContext.Feature.Description),
                 new CodeFieldReferenceExpression(new CodeTypeReferenceExpression("ProgrammingLanguage"), _codeDomHelper.TargetLanguage.ToString()),

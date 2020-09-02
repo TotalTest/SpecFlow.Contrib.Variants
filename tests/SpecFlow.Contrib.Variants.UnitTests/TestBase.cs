@@ -25,7 +25,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             var parser = new SpecFlowGherkinParser(new CultureInfo("en-GB"));
             using (var reader = new StringReader(document))
             {
-                return parser.Parse(reader, null);
+                return parser.Parse(reader, new SpecFlowDocumentLocation("Test"));
             }
         }
 
