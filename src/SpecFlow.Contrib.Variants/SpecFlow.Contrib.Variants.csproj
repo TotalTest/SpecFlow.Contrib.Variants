@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/TotalTest/SpecFlow.Contrib.Variants</PackageProjectUrl>
     <PackageIcon>Logo.png</PackageIcon>
     <Description>Extends SpecFlow to allow variants of a test to be run using tags</Description>
-    <PackageReleaseNotes>Updated to support SpecFlow 3.4.3</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated to support SpecFlow 3.4.8</PackageReleaseNotes>
     <PackageTags>specflow;bdd;gherkin;cucumber</PackageTags>
     <RepositoryUrl>https://github.com/TotalTest/SpecFlow.Contrib.Variants</RepositoryUrl>
     <IncludeBuildOutput>true</IncludeBuildOutput>
@@ -22,9 +22,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SpecFlow" Version="3.4.3" />
-    <PackageReference Include="SpecFlow.CustomPlugin" Version="3.4.3" PrivateAssets="All" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.4.3" PrivateAssets="All" />
+    <PackageReference Include="SpecFlow" Version="3.4.8" />
+    <PackageReference Include="SpecFlow.CustomPlugin" Version="3.4.8" PrivateAssets="All" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.4.8" PrivateAssets="All" />
   </ItemGroup>
 
   <Target Name="CopyFile" AfterTargets="Build">
