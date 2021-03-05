@@ -23,6 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlow.Contrib.Variants.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlow.Contrib.Variants.Core.XUnitTestProvider.IntegrationTests", "tests\SpecFlow.Contrib.Variants.Core.XUnitTestProvider.IntegrationTests\SpecFlow.Contrib.Variants.Core.XUnitTestProvider.IntegrationTests.csproj", "{65F3623D-DDA5-4512-AC83-6B4D72ACC3CA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{45F2A8AB-CD4B-4E29-9460-28939B53D796}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
