@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using TechTalk.SpecFlow;
+using WebDriverManager;
+using WebDriverManager.DriverConfigs.Impl;
 
 namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
 {
@@ -47,17 +49,20 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
 
         private IWebDriver SetupChromeDriver()
         {
-            var envChromeWebDriver = Environment.GetEnvironmentVariable("ChromeWebDriver");
+            new DriverManager().SetUpDriver(new ChromeConfig());
+            //var envChromeWebDriver = Environment.GetEnvironmentVariable("ChromeWebDriver");
             var co = new ChromeOptions();
             co.AddArgument("headless");
-            return new ChromeDriver(envChromeWebDriver, co);
+            return new ChromeDriver(co);
         }
 
         private IWebDriver SetupEdgeDriver()
         {
-            var envEdgeWebDriver = Environment.GetEnvironmentVariable("EdgeWebDriver");
+            new DriverManager().SetUpDriver(new EdgeConfig());
+            //var envEdgeWebDriver = Environment.GetEnvironmentVariable("EdgeWebDriver");
             var ed = new EdgeOptions { UseChromium = true };
-            return new EdgeDriver(envEdgeWebDriver, ed);
+            ed.AddArgument("headless");
+            return new EdgeDriver(ed);
         }
 
         [AfterScenario]

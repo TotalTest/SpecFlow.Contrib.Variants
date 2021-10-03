@@ -21,7 +21,6 @@ namespace SpecFlow.Contrib.Variants
     {
         private string _variantKey = "Variant";
         private string utp;
-        //private Configuration _config;
 
         public void Initialize(GeneratorPluginEvents generatorPluginEvents, GeneratorPluginParameters generatorPluginParameters, UnitTestProviderConfiguration unitTestProviderConfiguration)
         {
@@ -41,7 +40,6 @@ namespace SpecFlow.Contrib.Variants
             var projSettings = eventArgs.ObjectContainer.Resolve<ProjectSettings>();
             if (projSettings.ConfigurationHolder.HasConfiguration && projSettings.ConfigurationHolder.ConfigSource == ConfigSource.Json)
             {
-                // TODO: use this once dependency is resolved ->  _config = JsonConvert.DeserializeObject<Configuration>(projSettings.ConfigurationHolder.Content);
                 var vk = GetJsonValueByRegex(projSettings.ConfigurationHolder.Content, "variantkey");
                 _variantKey = !string.IsNullOrEmpty(vk) ? vk : _variantKey;
             }
@@ -53,9 +51,6 @@ namespace SpecFlow.Contrib.Variants
             }
 
             // Create custom unit test provider based on user defined config value
-            //TODO: use this once dependency is resolved -> var generatorProvider = GetGeneratorProviderFromConfig(codeDomHelper, utp ?? _config?.PluginParameters?.UnitTestProvider ?? "");
-            // https://github.com/dotnet/sdk/issues/9594
-
             if (string.IsNullOrEmpty(utp))
             {
                 var c = objectContainer.Resolve<UnitTestProviderConfiguration>();
@@ -65,7 +60,6 @@ namespace SpecFlow.Contrib.Variants
                     throw new Exception("Unit test provider not detected, please install as a nuget package described here: https://github.com/SpecFlowOSS/SpecFlow/wiki/SpecFlow-and-.NET-Core");
             }
 
-            //TODO: remove after proving => var generatorProvider = GetGeneratorProviderFromConfig(codeDomHelper, utp ?? GetJsonValueByRegex(projSettings.ConfigurationHolder.Content, "unittestprovider"));
             var generatorProvider = GetGeneratorProviderFromConfig(codeDomHelper, utp);
             var specflowConfiguration = eventArgs.SpecFlowProjectConfiguration.SpecFlowConfiguration;
 
@@ -78,20 +72,6 @@ namespace SpecFlow.Contrib.Variants
             objectContainer.RegisterInstanceAs(customFeatureGenerator);
             objectContainer.RegisterInstanceAs<IFeatureGeneratorProvider>(customFeatureGeneratorProvider, "default");
         }
-
-        //private string GetUnitTestProviderFromConfig(string config)
-        //{
-        //    var reg = new Regex(@"(?<=unittestprovider\""\:\"").+?(?=\"")", RegexOptions.IgnoreCase);
-        //    var match = reg.Match(config.Replace(" ", ""));
-        //    return match.Success ? match.Value : "";
-        //}
-
-        //private string GetUnitVariantKeyFromConfig(string config)
-        //{
-        //    var reg = new Regex(@"(?<=variantkey\""\:\"").+?(?=\"")", RegexOptions.IgnoreCase);
-        //    var match = reg.Match(config.Replace(" ", ""));
-        //    return match.Success ? match.Value : "";
-        //}
 
         private string GetJsonValueByRegex(string config, string key)
         {
@@ -120,14 +100,3 @@ namespace SpecFlow.Contrib.Variants
         }
     }
 }
-
-    //public class Configuration
-    //{
-    //    public PluginParameters PluginParameters { get; set; }
-    //}
-
-    //public class PluginParameters
-    //{
-    //    public string VariantKey { get; set; }
-    //    public string UnitTestProvider { get; set; }
-    //}

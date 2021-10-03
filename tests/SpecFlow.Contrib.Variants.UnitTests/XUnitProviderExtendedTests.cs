@@ -1,5 +1,4 @@
 ﻿using Gherkin.Ast;
-using Gherkin.Pickles;
 using SpecFlow.Contrib.Variants.Generator;
 using SpecFlow.Contrib.Variants.Providers;
 using System;

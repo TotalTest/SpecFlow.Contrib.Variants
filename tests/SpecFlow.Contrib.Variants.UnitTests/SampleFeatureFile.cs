@@ -119,7 +119,7 @@
             @{Variant}:{Variants[1]}
             Feature: {FeatureTitle}
             
-            @{Variant}: Test
+            @{Variant}:Test
             @Config:Temp
             Scenario: {ScenarioTitle_Tags}
                 Given some setup
