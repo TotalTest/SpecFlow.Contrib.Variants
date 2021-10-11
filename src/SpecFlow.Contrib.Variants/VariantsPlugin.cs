@@ -93,7 +93,7 @@ namespace SpecFlow.Contrib.Variants
         {
             var browser = XElement.Parse(config);
             var el = browser.Element("generator");
-            var attribute = el?.Attribute("path").Value ?? string.Empty;
+            var attribute = el?.Attribute("path")?.Value ?? string.Empty;
 
             return attribute.StartsWith("variantkey", StringComparison.InvariantCultureIgnoreCase)
                 ? Regex.Replace(attribute, "variantkey:", "", RegexOptions.IgnoreCase) : string.Empty;

@@ -46,9 +46,14 @@ namespace SpecFlow.Contrib.Variants.Providers
             _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.IgnoreAttribute", new object[1] { "Ignored feature" });
         }
 
-        public void SetTestClassParallelize(TestClassGenerationContext generationContext)
+        //public void SetTestClassParallelize(TestClassGenerationContext generationContext)
+        //{
+        //    _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.ParallelizableAttribute");
+        //}
+
+        public void SetTestClassNonParallelizable(TestClassGenerationContext generationContext)
         {
-            _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.ParallelizableAttribute");
+            _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.NonParallelizableAttribute");
         }
 
         public void SetTestClassCleanupMethod(TestClassGenerationContext generationContext)

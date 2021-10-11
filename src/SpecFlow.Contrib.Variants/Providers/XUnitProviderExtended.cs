@@ -47,12 +47,17 @@ namespace SpecFlow.Contrib.Variants.Providers
                 SetProperty(generationContext.TestClass, "Category", featureCategory);
         }
 
-        public void SetTestClassParallelize(TestClassGenerationContext generationContext)
+        //public void SetTestClassParallelize(TestClassGenerationContext generationContext)
+        //{
+        //    _codeDomHelper.AddAttribute(generationContext.TestClass, "Xunit.CollectionAttribute", new CodeAttributeArgument[1]
+        //    {
+        //        new CodeAttributeArgument(new CodePrimitiveExpression(Guid.NewGuid()))
+        //    });
+        //}
+
+        public void SetTestClassNonParallelizable(TestClassGenerationContext generationContext)
         {
-            _codeDomHelper.AddAttribute(generationContext.TestClass, "Xunit.CollectionAttribute", new CodeAttributeArgument[1]
-            {
-                new CodeAttributeArgument(new CodePrimitiveExpression(Guid.NewGuid()))
-            });
+            _codeDomHelper.AddAttribute(generationContext.TestClass, "Xunit.CollectionAttribute", new CodeAttributeArgument(new CodePrimitiveExpression("SpecFlowNonParallelizableFeatures")));
         }
 
         public void SetTestClassCleanupMethod(TestClassGenerationContext generationContext)
