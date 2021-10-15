@@ -6,6 +6,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow.Generator;
+using TechTalk.SpecFlow.Generator.Interfaces;
 using TechTalk.SpecFlow.Parser;
 using Xunit;
 
@@ -13,6 +14,8 @@ namespace SpecFlow.Contrib.Variants.UnitTests
 {
     public class XUnitProviderExtendedTests : TestBase
     {
+        public static ProjectSettings ProjectSettings = new ProjectSettings { DefaultNamespace = "Test.Xunit" };
+
         #region Scenario tags test
         [Theory]
         [InlineData(SampleFeatureFile.ScenarioTitle_Plain)]
@@ -390,6 +393,17 @@ namespace SpecFlow.Contrib.Variants.UnitTests
 
                 Assert.True(cellValues.SequenceEqual(cellStatementArgs));
             }
+        }
+
+        [Fact]
+        public void XUnitProviderExtended_Regression_CollectionAttributeAppliedCorrectly()
+        {
+            var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithXunitCollection);
+            var generatedCode = SetupFeatureGenerator<XUnitProviderExtended>(document);
+            var attr = generatedCode.Types[0].GetMethodAttributes(SampleFeatureFile.XUnitCollectionAttribute.Replace(":", ".")).First();
+            var attrValue = attr.Arguments.GetAttributeArguments().First().GetArgumentValue();
+
+            Assert.Equal(SampleFeatureFile.XUnitCollectionAttributeValue, attrValue);
         }
         #endregion
 

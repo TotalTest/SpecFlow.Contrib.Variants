@@ -26,7 +26,7 @@ namespace SpecFlow.Contrib.Variants.Providers
 
         public void SetTestClass(TestClassGenerationContext generationContext, string featureTitle, string featureDescription)
         {
-            var newFeatureDescription = string.IsNullOrEmpty(featureDescription) ? featureTitle : featureDescription;
+            //var newFeatureDescription = string.IsNullOrEmpty(featureDescription) ? featureTitle : featureDescription;
             _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.TestFixtureAttribute");
             _codeDomHelper.AddAttribute(generationContext.TestClass, "NUnit.Framework.DescriptionAttribute", featureTitle);
         }

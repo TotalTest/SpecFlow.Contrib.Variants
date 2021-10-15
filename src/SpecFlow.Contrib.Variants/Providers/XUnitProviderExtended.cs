@@ -3,8 +3,10 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using TechTalk.SpecFlow.Generator;
 using TechTalk.SpecFlow.Generator.CodeDom;
+using TechTalk.SpecFlow.Generator.Interfaces;
 using TechTalk.SpecFlow.Generator.UnitTestProvider;
 
 namespace SpecFlow.Contrib.Variants.Providers
@@ -43,6 +45,10 @@ namespace SpecFlow.Contrib.Variants.Providers
 
         public void SetTestClassCategories(TestClassGenerationContext generationContext, IEnumerable<string> featureCategories)
         {
+            IEnumerable<string> list = featureCategories.Where(f => f.StartsWith("xunit:collection", StringComparison.InvariantCultureIgnoreCase)).ToList();
+            if (list.Any())
+                SetTestClassCollection(generationContext, list.FirstOrDefault());
+
             foreach (string featureCategory in featureCategories)
                 SetProperty(generationContext.TestClass, "Category", featureCategory);
         }
@@ -180,6 +186,13 @@ namespace SpecFlow.Contrib.Variants.Providers
             if (!nullable1.GetValueOrDefault())
                 return nullable2.GetValueOrDefault();
             return true;
+        }
+
+        private void SetTestClassCollection(TestClassGenerationContext generationContext, string collection)
+        {
+            string pattern = "(?<=xunit:collection[(])[A-Za-z0-9\\-_]+.*?(?=[)])";
+            string str = Regex.Match(collection, pattern, RegexOptions.IgnoreCase).Value;
+            _codeDomHelper.AddAttribute((CodeTypeMember)generationContext.TestClass, "Xunit.Collection", (object)str);
         }
 
         public void SetTestClass(TestClassGenerationContext generationContext, string featureTitle, string featureDescription)

@@ -11,6 +11,9 @@
 
         public static readonly string[] Variants = { "Chrome", "Firefox", "IE", "Opera" };
 
+        public static string XUnitCollectionAttribute = "Xunit:Collection";
+        public static string XUnitCollectionAttributeValue = "CustomCollection";
+
         public static readonly string FeatureFileWithScenarioVariantTags = $@"
             Feature: {FeatureTitle}
             In order to test this plugin
@@ -120,6 +123,29 @@
             Feature: {FeatureTitle}
             
             @{Variant}:Test
+            @Config:Temp
+            Scenario: {ScenarioTitle_Tags}
+                Given some setup
+                When something happens
+                Then there should be some
+            
+            @Reg
+            @Config:Temp
+            Scenario Outline: {ScenarioTitle_TagsAndExamples}
+                Given some setup
+                When <this> happens
+                Then <that> is the result
+            Examples:
+                | this | that |
+                | one  | 1    |
+                | two  | 2    |";
+
+        public static readonly string FeatureFileWithXunitCollection = $@"
+            @{Variant}:{Variants[0]}
+            @{Variant}:{Variants[1]}
+            @{XUnitCollectionAttribute}({XUnitCollectionAttributeValue})
+            Feature: {FeatureTitle}
+            
             @Config:Temp
             Scenario: {ScenarioTitle_Tags}
                 Given some setup
