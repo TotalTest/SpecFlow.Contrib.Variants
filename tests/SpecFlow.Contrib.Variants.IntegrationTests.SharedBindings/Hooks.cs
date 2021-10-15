@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using TechTalk.SpecFlow;
+using WebDriverManager;
+using WebDriverManager.DriverConfigs.Impl;
 
 namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
 {
@@ -47,20 +49,28 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
 
         private IWebDriver SetupChromeDriver()
         {
-            //new DriverManager().SetUpDriver(new ChromeConfig());
-            var envChromeWebDriver = Environment.GetEnvironmentVariable("ChromeWebDriver");
             var co = new ChromeOptions();
             co.AddArgument("headless");
+#if DEBUG
+            new DriverManager().SetUpDriver(new ChromeConfig());
+            return new ChromeDriver(co);
+#else
+            var envChromeWebDriver = Environment.GetEnvironmentVariable("ChromeWebDriver");
             return new ChromeDriver(envChromeWebDriver, co);
+#endif
         }
 
         private IWebDriver SetupEdgeDriver()
         {
-            //new DriverManager().SetUpDriver(new EdgeConfig());
-            var envEdgeWebDriver = Environment.GetEnvironmentVariable("EdgeWebDriver");
             var ed = new EdgeOptions { UseChromium = true };
             ed.AddArgument("headless");
+#if DEBUG
+            new DriverManager().SetUpDriver(new EdgeConfig());
+            return new EdgeDriver(ed);
+#else
+            var envEdgeWebDriver = Environment.GetEnvironmentVariable("EdgeWebDriver");
             return new EdgeDriver(envEdgeWebDriver, ed);
+#endif
         }
 
         [AfterScenario]
@@ -73,7 +83,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
                     Directory.CreateDirectory(path);
                 try
                 {
-                    ((ITakesScreenshot)_driver).GetScreenshot().SaveAsFile($@"{path}\{_scenarioContext.ScenarioInfo.Title}.jpg", ScreenshotImageFormat.Jpeg);
+                    ((ITakesScreenshot)_driver)?.GetScreenshot().SaveAsFile($@"{path}\{_scenarioContext.ScenarioInfo.Title}.jpg", ScreenshotImageFormat.Jpeg);
                 }
                 catch (Exception e)
                 {
@@ -84,7 +94,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
 
             try
             {
-                _driver.Dispose();
+                _driver?.Dispose();
             }
             catch (Exception e)
             {

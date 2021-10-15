@@ -17,5 +17,16 @@ namespace SpecFlow.Contrib.Variants.Core.MsTestProvider.IntegrationTests
 
             Assert.IsTrue(result);
         }
+
+        [TestMethod]
+        public void MsTest_GeneratedFeatures_NonParallelAttributeIsApplied()
+        {
+            var curDir = Directory.GetCurrentDirectory();
+            var feature = Directory.GetParent(curDir).Parent.Parent.GetFiles().First(a => a.FullName.EndsWith("MsTestNonParallelTests.feature.cs"));
+
+            var result = File.ReadLines(feature.FullName).Any(line => line.Contains("[Microsoft.VisualStudio.TestTools.UnitTesting.DoNotParallelizeAttribute()]"));
+
+            Assert.IsTrue(result);
+        }
     }
 }

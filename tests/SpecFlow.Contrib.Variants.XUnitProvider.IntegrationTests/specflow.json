@@ -1,6 +1,6 @@
 ﻿{
   "bindingCulture": {
-    "language" :"en-gb"
+    "language": "en-gb"
   },
   "language": {
     "feature": "en-gb"
@@ -10,5 +10,10 @@
   },
   "stepAssemblies": [
     { "assembly": "SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings" }
-  ]
+  ],
+  "generator": {
+    "addNonParallelizableMarkerForTags": [
+      "nonparallel"
+    ]
+  }
 }

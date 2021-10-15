@@ -16,5 +16,16 @@ namespace SpecFlow.Contrib.Variants.XUnitProvider.IntegrationTests
 
             Assert.True(result);
         }
+
+        [Fact]
+        public void XUnit_GeneratedFeatures_NonParallelAttributeIsApplied()
+        {
+            var curDir = Directory.GetCurrentDirectory();
+            var feature = Directory.GetParent(curDir).Parent.GetFiles().First(a => a.FullName.EndsWith("XUnitNonParallelTests.feature.cs"));
+
+            var result = File.ReadLines(feature.FullName).Any(line => line.Contains("[Xunit.CollectionAttribute(\"SpecFlowNonParallelizableFeatures\")]"));
+
+            Assert.True(result);
+        }
     }
 }
