@@ -1,4 +1,9 @@
 ﻿{
+  "generator": {
+    "addNonParallelizableMarkerForTags": [
+      "nonparallel"
+    ]
+  },
   "bindingCulture": {
     "language": "en-gb"
   },
@@ -10,10 +15,5 @@
   },
   "stepAssemblies": [
     { "assembly": "SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings" }
-  ],
-  "generator": {
-    "addNonParallelizableMarkerForTags": [
-      "nonparallel"
-    ]
-  }
+  ]
 }

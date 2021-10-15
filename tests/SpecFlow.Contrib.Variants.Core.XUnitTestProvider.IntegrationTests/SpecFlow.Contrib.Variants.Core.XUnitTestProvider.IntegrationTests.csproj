@@ -28,4 +28,10 @@
     <ProjectReference Include="..\SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings\SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="specflow.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

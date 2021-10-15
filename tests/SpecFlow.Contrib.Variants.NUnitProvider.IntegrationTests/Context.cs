@@ -1,4 +1,5 @@
-﻿using TechTalk.SpecFlow;
+﻿using NUnit.Framework;
+using TechTalk.SpecFlow;
 
 namespace SpecFlow.Contrib.Variants.NUnitProvider.IntegrationTests
 {
@@ -18,6 +19,7 @@ namespace SpecFlow.Contrib.Variants.NUnitProvider.IntegrationTests
             string b;
              _scenarioContext.TryGetValue("Variant", out b);
             _scenarioContext["Browser"] = b;
+            _scenarioContext.Add("Namespace", GetType().Namespace);
 
             /// <summary>
             /// Example of accessing variant via NUnit TestContext

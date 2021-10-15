@@ -16,6 +16,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
     {
         private readonly ScenarioContext _scenarioContext;
         private string _baseDir;
+        private string _driverDir;
         private IWebDriver _driver;
 
         public Hooks(ScenarioContext scenarioContext)
@@ -28,7 +29,9 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         {
             _scenarioContext.TryGetValue("Browser", out var browser);
 
-            _baseDir = AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant();
+            var ns = _scenarioContext["Namespace"].ToString().ToLowerInvariant();
+            _baseDir = AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant().Replace("net5\\", "");
+            _driverDir = _baseDir.Replace(ns, GetType().Namespace.ToLowerInvariant());
 
             switch (browser)
             {
@@ -52,8 +55,8 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
             var co = new ChromeOptions();
             co.AddArgument("headless");
 #if DEBUG
-            new DriverManager().SetUpDriver(new ChromeConfig());
-            return new ChromeDriver(co);
+            //new DriverManager().SetUpDriver(new ChromeConfig());
+            return new ChromeDriver(_driverDir, co);
 #else
             var envChromeWebDriver = Environment.GetEnvironmentVariable("ChromeWebDriver");
             return new ChromeDriver(envChromeWebDriver, co);
