@@ -13,10 +13,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="SpecFlow" Version="3.9.8" />
-    <PackageReference Include="SpecFlow.Contrib.Variants" Version="3.9.8-develop" />
-    <PackageReference Include="SpecFlow.NUnit" Version="3.9.8" />
-    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.8" />
+    <PackageReference Include="SpecFlow" Version="3.9.22" />
+    <PackageReference Include="SpecFlow.Contrib.Variants" Version="3.9.22-develop" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.9.22" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.22" />
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
   </ItemGroup>
 
