@@ -9,8 +9,8 @@ variables:
   solution: '**\*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  packageVersion: '3.9.8'
-  packageVersionPre: '3.9.8-develop'
+  packageVersion: '3.9.22'
+  packageVersionPre: '3.9.22-develop'
   vmImage: 'windows-latest'
 
 stages:

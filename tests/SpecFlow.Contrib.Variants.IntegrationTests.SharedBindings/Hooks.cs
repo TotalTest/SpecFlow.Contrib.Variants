@@ -65,7 +65,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
 
         private IWebDriver SetupEdgeDriver()
         {
-            var ed = new EdgeOptions { UseChromium = true };
+            var ed = new EdgeOptions();
             ed.AddArgument("headless");
 #if DEBUG
             new DriverManager().SetUpDriver(new EdgeConfig());
