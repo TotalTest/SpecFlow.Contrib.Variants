@@ -16,6 +16,7 @@ namespace SpecFlow.Contrib.Variants.Providers
         private readonly CodeDomHelper _codeDomHelper;
         private readonly string _variantKey;
         private CodeTypeDeclaration _currentFixtureDataTypeDeclaration;
+        private readonly CodeTypeReference _objectCodeTypeReference = new CodeTypeReference(typeof(object));
 
         public XUnitProviderExtended(CodeDomHelper codeDomHelper, string variantKey)
         {
@@ -36,13 +37,13 @@ namespace SpecFlow.Contrib.Variants.Providers
             generationContext.TestClass.Members.Add(_currentFixtureDataTypeDeclaration);
             var nestedTypeReference = _codeDomHelper.CreateNestedTypeReference(generationContext.TestClass, _currentFixtureDataTypeDeclaration.Name);
             var fixtureInterface = CreateFixtureInterface(generationContext, nestedTypeReference);
-            _codeDomHelper.SetTypeReferenceAsInterface(fixtureInterface);
+            generationContext.TestClass.BaseTypes.Add(_objectCodeTypeReference);
             generationContext.TestClass.BaseTypes.Add(fixtureInterface);
             var codeConstructor = new CodeConstructor { Attributes = MemberAttributes.Public };
             _currentFixtureDataTypeDeclaration.Members.Add(codeConstructor);
             codeConstructor.Statements.Add(new CodeMethodInvokeExpression(new CodeTypeReferenceExpression(new CodeTypeReference(generationContext.TestClass.Name)), generationContext.TestClassInitializeMethod.Name, new CodeExpression[0]));
         }
-
+        
         public void SetTestClassCategories(TestClassGenerationContext generationContext, IEnumerable<string> featureCategories)
         {
             IEnumerable<string> list = featureCategories.Where(f => f.StartsWith("xunit:collection", StringComparison.InvariantCultureIgnoreCase)).ToList();
