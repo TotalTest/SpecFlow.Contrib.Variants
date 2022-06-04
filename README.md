@@ -17,7 +17,7 @@ In line with SpecFlow's docs, it is required that one of the following unit test
 It is also recommended that specflow.json is used over app.config. When using this plugin however, app.config is also supported for .net framework projects. Details about specific configuration is explained further below.
 \
 Note that only specflow.json is supported in .net core projects so app.config can't be used for those. Original docs can be found here: 
-https://specflow.org/documentation/configuration/
+[SpecFlow Configuration](https://docs.specflow.org/projects/specflow/en/latest/Installation/Configuration.html)
 
 ## 2. SpecFlow v2.4 notes
 As this version of SpecFlow only works with app.config, the details for configuration if using this version can be found below.
