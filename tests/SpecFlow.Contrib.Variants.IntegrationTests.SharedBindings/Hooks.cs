@@ -31,7 +31,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
             _scenarioContext.TryGetValue("Browser", out var browser);
 
             var ns = _scenarioContext["Namespace"].ToString().ToLowerInvariant();
-            _baseDir = AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant().Replace("net5\\", "");
+            _baseDir = AppDomain.CurrentDomain.BaseDirectory.ToLowerInvariant().Replace("net6\\", "");
             _driverDir = _baseDir.Replace(ns, GetType().Namespace.ToLowerInvariant());
 
             switch (browser)
