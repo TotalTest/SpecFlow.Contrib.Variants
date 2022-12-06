@@ -55,26 +55,26 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         {
             var co = new ChromeOptions();
             co.AddArgument("headless");
-//#if DEBUG
+#if DEBUG
             new DriverManager().SetUpDriver(new ChromeConfig(), VersionResolveStrategy.MatchingBrowser);
             return new ChromeDriver(_driverDir, co);
-//#else
-//            var envChromeWebDriver = Environment.GetEnvironmentVariable("ChromeWebDriver");
-//            return new ChromeDriver(envChromeWebDriver, co);
-//#endif
+#else
+            var envChromeWebDriver = Environment.GetEnvironmentVariable("ChromeWebDriver");
+            return new ChromeDriver(envChromeWebDriver, co);
+#endif
         }
 
         private IWebDriver SetupEdgeDriver()
         {
             var ed = new EdgeOptions();
             ed.AddArgument("headless");
-//#if DEBUG
+#if DEBUG
             new DriverManager().SetUpDriver(new EdgeConfig(), VersionResolveStrategy.MatchingBrowser);
             return new EdgeDriver(ed);
-//#else
-//            var envEdgeWebDriver = Environment.GetEnvironmentVariable("EdgeWebDriver");
-//            return new EdgeDriver(envEdgeWebDriver, ed);
-//#endif
+#else
+            var envEdgeWebDriver = Environment.GetEnvironmentVariable("EdgeWebDriver");
+            return new EdgeDriver(envEdgeWebDriver, ed);
+#endif
         }
 
         [AfterScenario]
