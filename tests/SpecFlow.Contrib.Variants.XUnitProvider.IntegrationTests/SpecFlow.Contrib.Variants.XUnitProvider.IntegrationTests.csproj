@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\SpecFlow.Contrib.Variants.3.9.80-predevelop.1\build\SpecFlow.Contrib.Variants.props" Condition="Exists('..\..\packages\SpecFlow.Contrib.Variants.3.9.80-predevelop.1\build\SpecFlow.Contrib.Variants.props')" />
+  <Import Project="..\..\packages\xunit.core.2.4.2\build\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.4.2\build\xunit.core.props')" />
+  <Import Project="..\..\packages\Microsoft.NET.Test.Sdk.17.4.0\build\net462\Microsoft.NET.Test.Sdk.props" Condition="Exists('..\..\packages\Microsoft.NET.Test.Sdk.17.4.0\build\net462\Microsoft.NET.Test.Sdk.props')" />
+  <Import Project="..\..\packages\Microsoft.CodeCoverage.17.4.0\build\netstandard2.0\Microsoft.CodeCoverage.props" Condition="Exists('..\..\packages\Microsoft.CodeCoverage.17.4.0\build\netstandard2.0\Microsoft.CodeCoverage.props')" />
   <Import Project="..\..\packages\SpecFlow.xUnit.3.9.74\build\SpecFlow.xUnit.props" Condition="Exists('..\..\packages\SpecFlow.xUnit.3.9.74\build\SpecFlow.xUnit.props')" />
   <Import Project="..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.9.74\build\SpecFlow.Tools.MsBuild.Generation.props" Condition="Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.9.74\build\SpecFlow.Tools.MsBuild.Generation.props')" />
-  <Import Project="..\..\packages\SpecFlow.Contrib.Variants.3.9.74-predevelop\build\SpecFlow.Contrib.Variants.props" Condition="Exists('..\..\packages\SpecFlow.Contrib.Variants.3.9.74-predevelop\build\SpecFlow.Contrib.Variants.props')" />
   <Import Project="..\..\packages\xunit.runner.visualstudio.2.4.5\build\net462\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.4.5\build\net462\xunit.runner.visualstudio.props')" />
-  <Import Project="..\..\packages\Microsoft.NET.Test.Sdk.17.2.0\build\net45\Microsoft.NET.Test.Sdk.props" Condition="Exists('..\..\packages\Microsoft.NET.Test.Sdk.17.2.0\build\net45\Microsoft.NET.Test.Sdk.props')" />
-  <Import Project="..\..\packages\Microsoft.CodeCoverage.17.2.0\build\netstandard1.0\Microsoft.CodeCoverage.props" Condition="Exists('..\..\packages\Microsoft.CodeCoverage.17.2.0\build\netstandard1.0\Microsoft.CodeCoverage.props')" />
-  <Import Project="..\..\packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.4.1\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -48,23 +48,23 @@
     <Reference Include="BoDi, Version=1.5.0.0, Culture=neutral, PublicKeyToken=ff7cd5ea2744b496, processorArchitecture=MSIL">
       <HintPath>..\..\packages\BoDi.1.5.0\lib\net45\BoDi.dll</HintPath>
     </Reference>
-    <Reference Include="Cucumber.Messages, Version=16.0.1.0, Culture=neutral, PublicKeyToken=b10c5988214f940c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cucumber.Messages.16.0.1\lib\net45\Cucumber.Messages.dll</HintPath>
+    <Reference Include="Cucumber.Messages, Version=20.0.0.0, Culture=neutral, PublicKeyToken=b10c5988214f940c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Cucumber.Messages.20.0.0\lib\net45\Cucumber.Messages.dll</HintPath>
     </Reference>
-    <Reference Include="Gherkin, Version=23.0.1.0, Culture=neutral, PublicKeyToken=86496cfa5b4a5851, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Gherkin.23.0.1\lib\net45\Gherkin.dll</HintPath>
+    <Reference Include="Gherkin, Version=25.0.2.0, Culture=neutral, PublicKeyToken=86496cfa5b4a5851, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Gherkin.25.0.2\lib\net45\Gherkin.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Protobuf, Version=3.21.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Google.Protobuf.3.21.1\lib\net45\Google.Protobuf.dll</HintPath>
+    <Reference Include="Google.Protobuf, Version=3.21.10.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Google.Protobuf.3.21.10\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.CodeCoverage.Shim, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.CodeCoverage.17.2.0\lib\net45\Microsoft.VisualStudio.CodeCoverage.Shim.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.CodeCoverage.17.4.0\lib\net462\Microsoft.VisualStudio.CodeCoverage.Shim.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SpecFlow.Contrib.Variants.SpecFlowPlugin, Version=3.9.74.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SpecFlow.Contrib.Variants.3.9.74-predevelop\lib\net461\SpecFlow.Contrib.Variants.SpecFlowPlugin.dll</HintPath>
+    <Reference Include="SpecFlow.Contrib.Variants.SpecFlowPlugin, Version=3.9.80.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SpecFlow.Contrib.Variants.3.9.80-predevelop.1\lib\net461\SpecFlow.Contrib.Variants.SpecFlowPlugin.dll</HintPath>
     </Reference>
     <Reference Include="SpecFlow.Internal.Json, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SpecFlow.Internal.Json.1.0.8\lib\net45\SpecFlow.Internal.Json.dll</HintPath>
@@ -149,14 +149,14 @@
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\xunit.abstractions.2.0.3\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.assert, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.assert.2.4.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
+    <Reference Include="xunit.assert, Version=2.4.2.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.assert.2.4.2\lib\netstandard1.1\xunit.assert.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.core.2.4.1\lib\net452\xunit.core.dll</HintPath>
+    <Reference Include="xunit.core, Version=2.4.2.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.extensibility.core.2.4.2\lib\net452\xunit.core.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.execution.2.4.1\lib\net452\xunit.execution.desktop.dll</HintPath>
+    <Reference Include="xunit.execution.desktop, Version=2.4.2.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.extensibility.execution.2.4.2\lib\net452\xunit.execution.desktop.dll</HintPath>
     </Reference>
     <Reference Include="Xunit.SkippableFact, Version=1.4.0.0, Culture=neutral, PublicKeyToken=b2b52da82b58eb73, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xunit.SkippableFact.1.4.13\lib\net452\Xunit.SkippableFact.dll</HintPath>
@@ -186,7 +186,8 @@
     <None Include="XUnitNonParallelTests.feature" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+    <Analyzer Include="..\..\packages\xunit.analyzers.1.1.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+    <Analyzer Include="..\..\packages\xunit.analyzers.1.1.0\analyzers\dotnet\cs\xunit.analyzers.fixes.dll" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -194,26 +195,26 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.CodeCoverage.17.2.0\build\netstandard1.0\Microsoft.CodeCoverage.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeCoverage.17.2.0\build\netstandard1.0\Microsoft.CodeCoverage.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.CodeCoverage.17.2.0\build\netstandard1.0\Microsoft.CodeCoverage.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeCoverage.17.2.0\build\netstandard1.0\Microsoft.CodeCoverage.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.NET.Test.Sdk.17.2.0\build\net45\Microsoft.NET.Test.Sdk.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NET.Test.Sdk.17.2.0\build\net45\Microsoft.NET.Test.Sdk.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.NET.Test.Sdk.17.2.0\build\net45\Microsoft.NET.Test.Sdk.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NET.Test.Sdk.17.2.0\build\net45\Microsoft.NET.Test.Sdk.targets'))" />
     <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.4.5\build\net462\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.4.5\build\net462\xunit.runner.visualstudio.props'))" />
     <Error Condition="!Exists('..\..\packages\SpecFlow.3.9.74\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.3.9.74\build\SpecFlow.targets'))" />
-    <Error Condition="!Exists('..\..\packages\SpecFlow.Contrib.Variants.3.9.74-predevelop\build\SpecFlow.Contrib.Variants.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Contrib.Variants.3.9.74-predevelop\build\SpecFlow.Contrib.Variants.props'))" />
-    <Error Condition="!Exists('..\..\packages\SpecFlow.Contrib.Variants.3.9.74-predevelop\build\SpecFlow.Contrib.Variants.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Contrib.Variants.3.9.74-predevelop\build\SpecFlow.Contrib.Variants.targets'))" />
     <Error Condition="!Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.9.74\build\SpecFlow.Tools.MsBuild.Generation.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.9.74\build\SpecFlow.Tools.MsBuild.Generation.props'))" />
     <Error Condition="!Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.9.74\build\SpecFlow.Tools.MsBuild.Generation.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.9.74\build\SpecFlow.Tools.MsBuild.Generation.targets'))" />
     <Error Condition="!Exists('..\..\packages\SpecFlow.xUnit.3.9.74\build\SpecFlow.xUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.xUnit.3.9.74\build\SpecFlow.xUnit.props'))" />
     <Error Condition="!Exists('..\..\packages\SpecFlow.xUnit.3.9.74\build\SpecFlow.xUnit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.xUnit.3.9.74\build\SpecFlow.xUnit.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeCoverage.17.4.0\build\netstandard2.0\Microsoft.CodeCoverage.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeCoverage.17.4.0\build\netstandard2.0\Microsoft.CodeCoverage.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.CodeCoverage.17.4.0\build\netstandard2.0\Microsoft.CodeCoverage.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeCoverage.17.4.0\build\netstandard2.0\Microsoft.CodeCoverage.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.NET.Test.Sdk.17.4.0\build\net462\Microsoft.NET.Test.Sdk.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NET.Test.Sdk.17.4.0\build\net462\Microsoft.NET.Test.Sdk.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.NET.Test.Sdk.17.4.0\build\net462\Microsoft.NET.Test.Sdk.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.NET.Test.Sdk.17.4.0\build\net462\Microsoft.NET.Test.Sdk.targets'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.core.2.4.2\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.2\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.core.2.4.2\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.4.2\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\..\packages\SpecFlow.Contrib.Variants.3.9.80-predevelop.1\build\SpecFlow.Contrib.Variants.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Contrib.Variants.3.9.80-predevelop.1\build\SpecFlow.Contrib.Variants.props'))" />
+    <Error Condition="!Exists('..\..\packages\SpecFlow.Contrib.Variants.3.9.80-predevelop.1\build\SpecFlow.Contrib.Variants.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.Contrib.Variants.3.9.80-predevelop.1\build\SpecFlow.Contrib.Variants.targets'))" />
   </Target>
-  <Import Project="..\..\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
-  <Import Project="..\..\packages\Microsoft.CodeCoverage.17.2.0\build\netstandard1.0\Microsoft.CodeCoverage.targets" Condition="Exists('..\..\packages\Microsoft.CodeCoverage.17.2.0\build\netstandard1.0\Microsoft.CodeCoverage.targets')" />
-  <Import Project="..\..\packages\Microsoft.NET.Test.Sdk.17.2.0\build\net45\Microsoft.NET.Test.Sdk.targets" Condition="Exists('..\..\packages\Microsoft.NET.Test.Sdk.17.2.0\build\net45\Microsoft.NET.Test.Sdk.targets')" />
   <Import Project="..\..\packages\SpecFlow.3.9.74\build\SpecFlow.targets" Condition="Exists('..\..\packages\SpecFlow.3.9.74\build\SpecFlow.targets')" />
-  <Import Project="..\..\packages\SpecFlow.Contrib.Variants.3.9.74-predevelop\build\SpecFlow.Contrib.Variants.targets" Condition="Exists('..\..\packages\SpecFlow.Contrib.Variants.3.9.74-predevelop\build\SpecFlow.Contrib.Variants.targets')" />
   <Import Project="..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.9.74\build\SpecFlow.Tools.MsBuild.Generation.targets" Condition="Exists('..\..\packages\SpecFlow.Tools.MsBuild.Generation.3.9.74\build\SpecFlow.Tools.MsBuild.Generation.targets')" />
   <Import Project="..\..\packages\SpecFlow.xUnit.3.9.74\build\SpecFlow.xUnit.targets" Condition="Exists('..\..\packages\SpecFlow.xUnit.3.9.74\build\SpecFlow.xUnit.targets')" />
+  <Import Project="..\..\packages\Microsoft.CodeCoverage.17.4.0\build\netstandard2.0\Microsoft.CodeCoverage.targets" Condition="Exists('..\..\packages\Microsoft.CodeCoverage.17.4.0\build\netstandard2.0\Microsoft.CodeCoverage.targets')" />
+  <Import Project="..\..\packages\Microsoft.NET.Test.Sdk.17.4.0\build\net462\Microsoft.NET.Test.Sdk.targets" Condition="Exists('..\..\packages\Microsoft.NET.Test.Sdk.17.4.0\build\net462\Microsoft.NET.Test.Sdk.targets')" />
+  <Import Project="..\..\packages\xunit.core.2.4.2\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.4.2\build\xunit.core.targets')" />
+  <Import Project="..\..\packages\SpecFlow.Contrib.Variants.3.9.80-predevelop.1\build\SpecFlow.Contrib.Variants.targets" Condition="Exists('..\..\packages\SpecFlow.Contrib.Variants.3.9.80-predevelop.1\build\SpecFlow.Contrib.Variants.targets')" />
 </Project>
