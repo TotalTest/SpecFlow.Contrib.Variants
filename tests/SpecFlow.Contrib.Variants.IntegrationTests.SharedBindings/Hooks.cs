@@ -8,6 +8,7 @@ using System.Linq;
 using TechTalk.SpecFlow;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs.Impl;
+using WebDriverManager.Helpers;
 
 namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
 {
@@ -66,9 +67,9 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         private IWebDriver SetupEdgeDriver()
         {
             var ed = new EdgeOptions();
-            ed.AddArgument("headless");
+            //ed.AddArgument("headless");
 #if DEBUG
-            new DriverManager().SetUpDriver(new EdgeConfig());
+            new DriverManager().SetUpDriver(new EdgeConfig(), VersionResolveStrategy.MatchingBrowser);
             return new EdgeDriver(ed);
 #else
             var envEdgeWebDriver = Environment.GetEnvironmentVariable("EdgeWebDriver");
