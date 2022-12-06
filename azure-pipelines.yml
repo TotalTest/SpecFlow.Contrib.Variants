@@ -83,7 +83,7 @@ stages:
       displayName: 'Use .NET Core sdk'
       inputs:
         packageType: sdk
-        version: 5.0.100
+        #version: 5.0.100
         #installationPath: $(Agent.ToolsDirectory)/dotnet
 
     # Restore integration tests projects
