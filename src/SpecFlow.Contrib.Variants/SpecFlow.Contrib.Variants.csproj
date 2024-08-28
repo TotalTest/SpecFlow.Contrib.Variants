@@ -6,7 +6,7 @@
     <IsPackable>true</IsPackable>
     <AssemblyName>SpecFlow.Contrib.Variants.SpecFlowPlugin</AssemblyName>
     <PackageId>SpecFlow.Contrib.Variants</PackageId>
-    <Version>3.9.90-pre.1</Version>
+    <Version>3.9.90-pre.2</Version>
     <Authors>Total Test Ltd;Prab Gahir</Authors>
     <Copyright>Copyright 2022 Total Test Ltd</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
