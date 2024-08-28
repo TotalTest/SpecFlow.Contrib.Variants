@@ -14,7 +14,7 @@ namespace SpecFlow.Contrib.Variants.NUnitProvider.IntegrationTests
             var curDir = AssemblyHelper.GetAssemblyPath(typeof(GenerationTests).Assembly);
             var features = Directory.GetParent(curDir).Parent.Parent.GetFiles().Where(a => a.FullName.EndsWith(".feature.cs")).ToList();
 
-            var result = features.All(a => File.ReadLines(a.FullName).Any(line => line.Contains("// Generation customised by SpecFlow.Contrib.Variants")));
+            var result = features.All(a => File.ReadLines(a.FullName).Any(line => line == "// Generation customised by SpecFlow.Contrib.Variants v3.9.90-pre.1"));
 
             Assert.IsTrue(result);
         }

@@ -13,7 +13,7 @@ namespace SpecFlow.Contrib.Variants.MsTestProvider.IntegrationTests
             var curDir = Directory.GetCurrentDirectory();
             var features = Directory.GetParent(curDir).Parent.GetFiles().Where(a => a.FullName.EndsWith(".feature.cs")).ToList();
 
-            var result = features.All(a => File.ReadLines(a.FullName).Any(line => line.Contains("// Generation customised by SpecFlow.Contrib.Variants")));
+            var result = features.All(a => File.ReadLines(a.FullName).Any(line => line == "// Generation customised by SpecFlow.Contrib.Variants v3.9.90-pre.1"));
 
             Assert.IsTrue(result);
         }
