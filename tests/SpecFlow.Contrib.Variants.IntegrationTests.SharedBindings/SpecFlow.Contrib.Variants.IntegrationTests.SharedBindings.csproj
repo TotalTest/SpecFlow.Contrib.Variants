@@ -177,9 +177,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\SpecFlow.3.9.74\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.3.9.74\build\SpecFlow.targets'))" />
     <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.4.7.0\build\Selenium.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.4.7.0\build\Selenium.WebDriver.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.ChromeDriver.128.0.6613.8400\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.ChromeDriver.128.0.6613.8400\build\Selenium.WebDriver.ChromeDriver.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.ChromeDriver.127.0.6533.11900\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.ChromeDriver.127.0.6533.11900\build\Selenium.WebDriver.ChromeDriver.targets'))" />
   </Target>
   <Import Project="..\..\packages\SpecFlow.3.9.74\build\SpecFlow.targets" Condition="Exists('..\..\packages\SpecFlow.3.9.74\build\SpecFlow.targets')" />
   <Import Project="..\..\packages\Selenium.WebDriver.4.7.0\build\Selenium.WebDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.4.7.0\build\Selenium.WebDriver.targets')" />
-  <Import Project="..\..\packages\Selenium.WebDriver.ChromeDriver.128.0.6613.8400\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.ChromeDriver.128.0.6613.8400\build\Selenium.WebDriver.ChromeDriver.targets')" />
+  <Import Project="..\..\packages\Selenium.WebDriver.ChromeDriver.127.0.6533.11900\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.ChromeDriver.127.0.6533.11900\build\Selenium.WebDriver.ChromeDriver.targets')" />
 </Project>
