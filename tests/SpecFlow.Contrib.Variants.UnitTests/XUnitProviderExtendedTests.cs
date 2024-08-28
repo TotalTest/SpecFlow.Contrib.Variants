@@ -144,7 +144,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
         [Theory]
         [InlineData(SampleFeatureFile.ScenarioTitle_Plain, false, false, 4)]
         [InlineData(SampleFeatureFile.ScenarioTitle_Tags, false, true, 3)]
-        [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData, true, true, 7)]
+        [InlineData(SampleFeatureFile.ScenarioTitle_TagsExamplesAndInlineData, true, true, 6)]
         public void XUnitProviderExtended_ScenarioVariants_TestMethodHasInjectedVariant(string scenarioName, bool isoutline, bool hasVariants, int lineNum)
         {
             var document = CreateSpecFlowDocument(SampleFeatureFile.FeatureFileWithScenarioVariantTags);
@@ -329,7 +329,7 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             {
                 var baseMethod = generatedCode.GetRowTestBaseMethod(scenario);
                 var expectedStatement = $"testRunner.ScenarioContext.Add(\"{SampleFeatureFile.Variant}\", \"{SampleFeatureFile.Variant.ToLowerInvariant()}\");";
-                var statement = GetScenarioContextVariantStatement(baseMethod, true, 5);
+                var statement = GetScenarioContextVariantStatement(baseMethod, true, 4);
                 Assert.Equal(expectedStatement, statement);
 
                 var rowMethods = generatedCode.GetRowTestMethods(scenario);

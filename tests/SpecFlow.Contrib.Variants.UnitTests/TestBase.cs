@@ -155,5 +155,29 @@ namespace SpecFlow.Contrib.Variants.UnitTests
             var lastParam = expression.Parameters.Cast<CodeExpression>().Last(a => a is CodePrimitiveExpression) as CodePrimitiveExpression;
             return lastParam.Value.ToString();
         }
+
+        protected string GetScenarioInfoStatement(CodeTypeMember method, bool isBase = false, int statementLine = 5)
+        {
+            var statement = ((CodeMemberMethod)method).Statements.Cast<CodeStatement>().ToList()[statementLine] as CodeVariableDeclarationStatement;
+            var expression = statement.InitExpression as CodeMethodInvokeExpression;
+            if (!(expression.Method.TargetObject is CodePropertyReferenceExpression property))
+                return null;
+            var field = property.TargetObject as CodeFieldReferenceExpression;
+
+            string keyValue;
+            string keyName;
+            if (isBase)
+            {
+                keyName = ((CodePrimitiveExpression)expression.Parameters[0]).Value.ToString();
+                keyValue = ((CodeVariableReferenceExpression)expression.Parameters[1]).VariableName;
+            }
+            else
+            {
+                keyName = ((CodePrimitiveExpression)expression.Parameters[0]).Value.ToString();
+                keyValue = ((CodePrimitiveExpression)expression.Parameters[1]).Value.ToString();
+            }
+
+            return $"{field.FieldName}.{property.PropertyName}.{expression.Method.MethodName}(\"{keyName}\", \"{keyValue}\");";
+        }
     }
 }

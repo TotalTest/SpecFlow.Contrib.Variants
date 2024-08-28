@@ -1,6 +1,7 @@
 ﻿using Gherkin.Ast;
 using SpecFlow.Contrib.Variants.Generator;
 using SpecFlow.Contrib.Variants.Generator.ClassGenerator;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -350,18 +351,57 @@ namespace SpecFlow.Contrib.Variants.Generator
 
             AddVariableForArguments(testMethod, paramToIdentifier); //// NEW CODE
 
-            testMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(ScenarioInfo), "scenarioInfo", new CodeObjectCreateExpression(typeof(ScenarioInfo), new CodeExpression[4]
+            //// NEW CODE START
+            if (_setVariantToContextForOutlineTest)
             {
-                new CodePrimitiveExpression(scenario.Name),
-                new CodePrimitiveExpression(scenario.Description),
-                left,
-                new CodeVariableReferenceExpression(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME)
-            })));
-            //_codeDomHelper.AddLineDirective(scenario, testMethod.Statements, _specFlowConfiguration);
-            testMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), generationContext.ScenarioInitializeMethod.Name, new CodeExpression[1]
+                var scenarioInfoExpression = new CodeMethodInvokeExpression(new CodeMethodReferenceExpression(null, "string.Format"), new CodeExpression[3]
+                {
+                    new CodePrimitiveExpression("{0}: {1}"),
+                    new CodePrimitiveExpression(scenario.Name),
+                    new CodeVariableReferenceExpression(_variantHelper.VariantKey.ToLowerInvariant())
+                });
+
+                testMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(ScenarioInfo), "scenarioInfo", new CodeObjectCreateExpression(typeof(ScenarioInfo), new CodeExpression[4]
+                {
+                    scenarioInfoExpression,
+                    new CodePrimitiveExpression(scenario.Description),
+                    left,
+                    new CodeVariableReferenceExpression(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME)
+                })));
+
+            }
+            else if (_setVariantToContextForTest)
             {
-                new CodeVariableReferenceExpression("scenarioInfo")
-            }));
+                var scenarioInfoName = $"{scenario.Name}: {_variantValue}";
+                testMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(ScenarioInfo), "scenarioInfo", new CodeObjectCreateExpression(typeof(ScenarioInfo), new CodeExpression[4]
+                {
+                    new CodePrimitiveExpression(scenarioInfoName),
+                    new CodePrimitiveExpression(scenario.Description),
+                    left,
+                    new CodeVariableReferenceExpression(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME)
+                })));
+                //_codeDomHelper.AddLineDirective(scenario, testMethod.Statements, _specFlowConfiguration);
+                testMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), generationContext.ScenarioInitializeMethod.Name, new CodeExpression[1]
+                {
+                    new CodeVariableReferenceExpression("scenarioInfo")
+                }));
+            }
+            else
+            {
+                testMethod.Statements.Add(new CodeVariableDeclarationStatement(typeof(ScenarioInfo), "scenarioInfo", new CodeObjectCreateExpression(typeof(ScenarioInfo), new CodeExpression[4]
+                {
+                    new CodePrimitiveExpression(scenario.Name),
+                    new CodePrimitiveExpression(scenario.Description),
+                    left,
+                    new CodeVariableReferenceExpression(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME)
+                })));
+                //_codeDomHelper.AddLineDirective(scenario, testMethod.Statements, _specFlowConfiguration);
+                testMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), generationContext.ScenarioInitializeMethod.Name, new CodeExpression[1]
+                {
+                    new CodeVariableReferenceExpression("scenarioInfo")
+                }));
+            }
+            //// NEW CODE END
 
             //// NEW CODE START
             if (_setVariantToContextForOutlineTest)
