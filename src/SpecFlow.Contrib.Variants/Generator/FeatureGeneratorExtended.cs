@@ -35,7 +35,7 @@ namespace SpecFlow.Contrib.Variants.Generator
         private bool _setVariantToContextForOutlineTest;
         private bool _setVariantToContextForTest;
         private string _variantValue;
-        public const string CustomGeneratedComment = "Generation customised by SpecFlow.Contrib.Variants";
+        public const string CustomGeneratedComment = "Generation customised by SpecFlow.Contrib.Variants v3.9.90-pre.1";
         //NEW CODE END
 
         public FeatureGeneratorExtended(IUnitTestGeneratorProvider testGeneratorProvider, CodeDomHelper codeDomHelper, SpecFlowConfiguration specFlowConfiguration, IDecoratorRegistry decoratorRegistry, string variantKey)
@@ -368,6 +368,10 @@ namespace SpecFlow.Contrib.Variants.Generator
                     left,
                     new CodeVariableReferenceExpression(GeneratorConstants.SCENARIO_ARGUMENTS_VARIABLE_NAME)
                 })));
+                testMethod.Statements.Add(new CodeMethodInvokeExpression(new CodeThisReferenceExpression(), generationContext.ScenarioInitializeMethod.Name, new CodeExpression[1]
+                {
+                    new CodeVariableReferenceExpression("scenarioInfo")
+                }));
 
             }
             else if (_setVariantToContextForTest)

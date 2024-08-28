@@ -58,7 +58,7 @@ namespace SpecFlow.Contrib.Variants.IntegrationTests.SharedBindings
         public void ThenThePageShouldBe(string site)
         {
             if (!string.Equals(_commonsPage.Url, site, StringComparison.InvariantCultureIgnoreCase))
-                throw new Exception("The expected url was wrong");
+                throw new Exception($"The expected url was wrong");
         }
 
     }

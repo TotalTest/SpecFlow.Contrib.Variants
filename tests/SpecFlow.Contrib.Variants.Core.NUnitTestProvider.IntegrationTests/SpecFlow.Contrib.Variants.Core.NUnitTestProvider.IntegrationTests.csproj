@@ -14,7 +14,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
     <PackageReference Include="SpecFlow" Version="3.9.74" />
-    <PackageReference Include="SpecFlow.Contrib.Variants" Version="3.9.80-predevelop.1" />
+    <PackageReference Include="SpecFlow.Contrib.Variants" Version="3.9.90-pre.2" />
     <PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
     <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
     <PackageReference Include="System.Security.Permissions" Version="7.0.0" />
