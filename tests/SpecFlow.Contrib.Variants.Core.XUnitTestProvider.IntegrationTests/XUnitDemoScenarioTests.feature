@@ -33,5 +33,5 @@ Scenario Outline: A test with variant tags and examples
 	Then the page should be '<Site>'
 	Examples:
 	| Link       | Site                                         |
-	| Checkboxes | https://the-internet.herokuapp.com/checkboxes |
-	| Dropdown   | https://the-internet.herokuapp.com/dropdown   |
+	| Checkboxes | http://the-internet.herokuapp.com/checkboxes |
+	| Dropdown   | http://the-internet.herokuapp.com/dropdown   |
