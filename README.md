@@ -2,6 +2,9 @@
 ![Azure DevOps tests](https://img.shields.io/azure-devops/tests/totaltestltd/Total%20Test/5)
 ![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/specflow.contrib.variants)
 
+[![](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate/?business=7XN9X6CGVQPF2&no_recurring=0&currency_code=GBP)
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/prabgahir)
+
 # SpecFlow.Contrib.Variants
 SpecFlow plugin to allow variants of a test to be run using tags.
 For example (but not limited to) running scenarios or features against different browsers if performing UI tests.
